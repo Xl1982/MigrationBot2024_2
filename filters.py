@@ -30,11 +30,11 @@ class IsGroup(BoundFilter):
         return message.chat.type == 'group'
 
 
-
 class IsChannel(BoundFilter):
     async def check(self, message: types.Message):
         if message.forward_from_chat:
             return message.forward_from_chat.type == types.ChatType.CHANNEL
-class IsPrivate(BoundFilter):
+
+class isPrivate(BoundFilter):
     async def check(self, message: types.Message) -> bool:
         return message.chat.type == types.ChatType.PRIVATE

@@ -19,3 +19,11 @@ class UserPrivateState(StatesGroup):
 class AdminPrivateState(StatesGroup):
     # Состояния для администраторов в личных сообщениях
     AdminPrivateCommand = State()  # Состояние для обработки команд администратора в личных сообщениях
+
+class TranslatorMeeting(StatesGroup):
+    waiting_date = State()
+    waiting_location = State()
+    waiting_requirements = State()
+
+class DownloadState(StatesGroup):
+    WaitingForLink = State()

@@ -1,31 +1,26 @@
-import betterlogging as logging
-import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
-from aiogram.dispatcher.filters import Command, ContentTypeFilter
+from aiogram.dispatcher.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 import asyncio
 import datetime
 import re
 from aiogram.types import KeyboardButtonPollType
 from states import TranslatorMeeting
-from text_message import send_bot_message, message, welcome_message_privat
+
 from aiogram.utils import executor
+
+# Получение токена бота и идентификатора чата из конфигурационного файла
 from config import BOT_TOKEN, CHAT_ID_TORA, api_key, api_exchange, ADMINS_ID
-from keyboards import get_main_keyboard
+
 CHAT_ID = CHAT_ID_TORA
+
+
 # Импорт модулей для работы с погодой и обменным курсом
 from pogodaTor import WeatherAPI, weather_text
 from xchange010 import CurrencyConverter, exchange_text
-from money_sell import Money_sell_converter, money_sell_text
 
-# Настройка логгера
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-chat_id_group = CHAT_ID_TORA
 # Создание экземпляра бота
 bot = Bot(token=BOT_TOKEN)
 # Создание экземпляра диспетчера для обработки сообщений
@@ -42,23 +37,57 @@ async def send_weather_message():
 async def send_exchange_message():
     await bot.send_message(CHAT_ID, exchange_text)
 
-
 group_link = "https://t.me/torrevieja_migration"
-
 
 # Асинхронная функция для отправки текстового  информационного сообщения
 async def send_text_message():
+    message = f"""
+
+💬 Уважаемые участники!
+
+🙌 Приглашайте своих друзей и знакомых, чтобы расширить наше сообщество и сделать его еще интереснее.
+
+🔗[https://t.me/torrevieja_migration]({group_link})👥
+
+🌟 Наша группа - это место для активного общения, новых знакомств и полезных обменов информацией.
+
+📅 Также, будем рады, если вы будете делиться предстоящими событиями. Если у вас есть информация о концертах, выставках, фестивалях или других интересных мероприятиях, не стесняйтесь сообщать о них в нашей группе. 📣
+
+🤝 Мы приглашаем вас к обмену опытом и знаниями. Если у вас есть вопросы или нужен совет, не стесняйтесь задавать их в нашей группе. 💡
+
+📢 Присоединяйтесь к нам и вместе создадим динамичное и вдохновляющее сообщество! 💪
+
+🎉 Давайте сделаем нашу группу местом, где мы встречаемся, общаемся и узнаем интересные новости! 🌟
+
+#Community #Общение #Мероприятия #Знакомства
+"""
     await bot.send_message(CHAT_ID, message)
 
 
 ###### ХЕНДЛЕР ОТПРАВКИ РЕКЛАМЫ БОТА
-async def send_bot_message2():
+async def send_bot_message():
+    send_bot_message = """
+🎈🎉 *Добро пожаловать в Торревьеху!* 🎉🎈
+    
+🤖Мы рады представить нового бота!👥
+
+Для начала работы с ним перейдите по ссылке и нажмите https://t.me/Torrevieja_delivery_bot
+    
+После перехода, нажмите start
+Вы сможете
+    
+🔵 **Бесплатно:** 🔵
+1️⃣ 🌤 **Получить актуальную погоду в Торревьеха.** 
+2️⃣ 💱 **Получить актуальный курс валют.** 
+
+🔴 Платные услуги от проверенных профессионалов: 🔴
+3️⃣ 🚖 ** Заказать трансфер до аэропорта/другого города.** 
+4️⃣ 🗣 ** Назначить встречу с переводчиком* для подачи прописки, NIE, SIE, полиция.** 
+
+💰 **Оплата по факту оказания услуг.* Наличные и переводом. евро, рубли, гривна и доллары.** 
+"""
     await bot.send_message(CHAT_ID, send_bot_message)
 
-
-
-async def send_money_sell():
-    await bot.send_message(CHAT_ID, money_sell_text)
 
 
 
@@ -67,7 +96,13 @@ async def send_money_sell():
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_command(message: types.Message, state: FSMContext):
     await state.reset_state()
-    markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    weather_button = KeyboardButton('Погода')
+    exchange_button = KeyboardButton('Курс валют')
+    taxi_button = KeyboardButton('Заказать такси')
+    translator_button = KeyboardButton('Встреча с переводчиком')
+    markup.add(weather_button, exchange_button, taxi_button, translator_button)
+
     await message.answer("Привет! Что тебя интересует?", reply_markup=markup)
 
 
@@ -149,14 +184,19 @@ async def process_phone(message: types.Message, state: FSMContext):
     await state.finish()
 
     # Возвращение кнопок выбора услуг
-    markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    weather_button = KeyboardButton('Погода')
+    exchange_button = KeyboardButton('Курс валют')
+    taxi_button = KeyboardButton('Заказать такси')
+    translator_button = KeyboardButton('Встреча с переводчиком')
+    markup.add(weather_button, exchange_button, taxi_button, translator_button)
+
     await message.answer("Ваш заказ такси успешно оформлен! Что еще вас интересует?", reply_markup=markup)
 
     # Сброс состояния пользователя
     await state.finish()
 
     await message.answer("Ваш заказ такси успешно оформлен!")
-
 
 ####################### ХЕНДЛЕР ЗАКАЗА ПЕРЕВОДЧИКА
 
@@ -165,9 +205,7 @@ async def process_phone(message: types.Message, state: FSMContext):
 async def translator_command(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     user_username = message.from_user.username
-    await message.answer(
-        "Для оформления встречи с переводчиком, пожалуйста, укажите следующую информацию:\n Укажите 📅дату и 🕒время встречи.",
-        reply_markup=ReplyKeyboardRemove())
+    await message.answer("Для оформления встречи с переводчиком, пожалуйста, укажите следующую информацию:\n Укажите 📅дату и 🕒время встречи.",reply_markup=ReplyKeyboardRemove())
     await state.set_state("ожидание_даты")
     admin_message = f"Новая заявка на встречу с переводчиком!\n\nID: {user_id}\nUsername: @{user_username}"
     await bot.send_message(ADMINS_ID, admin_message)
@@ -205,121 +243,66 @@ async def process_requirements(message: types.Message, state: FSMContext):
     # Сброс состояния пользователя
     await state.finish()
 
+    # Возвращение кнопок выбора услуг
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    weather_button = KeyboardButton('Погода')
+    exchange_button = KeyboardButton('Курс валют')
+    taxi_button = KeyboardButton('Заказать такси')
+    translator_button = KeyboardButton('Встреча с переводчиком')
+    markup.add(weather_button, exchange_button, taxi_button, translator_button)
+
+    await message.answer("Ваша заявка на встречу с переводчиком успешно отправлена! Что еще вас интересует?", reply_markup=markup)
+
+    # Сброс состояния пользователя
+    await state.finish()
+
+
+
+
+
+
 
 ###################### ХЕНДЛЕР ОТПРАВКИ ПОГОДЫ И ВАЛЮТЫ ПО РАСПИСАНИЮ
 async def send_messages_periodically():
     while True:
         now = datetime.datetime.now()
-        if now.hour == 11 and now.minute == 00:
+        if now.hour == 10 and now.minute == 10:
             await send_weather_message()
             print("Отправлено сообщение о погоде")
 
-        elif now.hour == 10 and now.minute == 50:
+        elif now.hour == 12 and now.minute == 00:
             await send_exchange_message()
             print("Отправлено сообщение о курсе валют")
 
-        elif now.hour == 15 and now.minute == 00:
+        elif now.hour == 14 and now.minute == 00:
             await send_text_message()
             print("Отправлен призывное сообщение")
 
-        elif now.hour == 18 and now.minute == 00:
-            await send_bot_message2()
+        elif now.hour == 17 and now.minute == 00:
+            await send_bot_message()
             print("Отправлена реклама бота")
-
-
-
-        elif now.hour == 13 and now.minute == 33:
-            await send_money_sell()
-            print("Отправлена информация о покупке рублей")
-
-
-
-
 
         await asyncio.sleep(60)
 
 
-# ХЕНДЛЕР НАПИСАТЬ АДМИНУ
-@dp.message_handler(text='Написать админу')
-async def write_to_admin(message: types.Message, state: FSMContext):
-    await message.answer("Введите сообщение, которое вы хотите отправить админу.")
-    await state.set_state("ожидание_сообщения")
+#################### ХЕНДЛЕР ДЛЯ УДАЛЕНИЯ ССЫЛОК
+# @dp.message_handler(content_types=types.ContentType.TEXT)
+# async def handle_text_message(message: types.Message):
+#     # Проверяем, содержит ли сообщение ссылку
+#     if re.search(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', message.text):
+#         # Отправляем сообщение о запрете ссылок
+#         await message.reply("Ссылки запрещены в этом чате!\n"
+#                             "Кроме личных страниц в соцсетях!\n"
+#                             "Отправьте админу, он разместит https://t.me/Torrevija\n!")
+#
+#         # Удаляем сообщение с ссылкой
+#         await message.delete()
 
 
-@dp.message_handler(state="ожидание_сообщения")
-async def process_message_to_admin(message: types.Message, state: FSMContext):
-    user_id = message.from_user.id
-    user_username = message.from_user.username
-    user_message = message.text
-
-    # Отправка сообщения админу с информацией о пользователе и сообщении
-    admin_message = f"Сообщение от пользователя!\n\n" \
-                    f"ID: {user_id}\n" \
-                    f"Username: @{user_username}\n" \
-                    f"Сообщение: {user_message}\n"
-
-    await bot.send_message(ADMINS_ID, admin_message)
-    # Сброс состояния пользователя
-    await state.finish()
-
-    markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
-    await message.answer("Ваше сообщение успешно отправлено админу! Что еще вас интересует?", reply_markup=markup)
-
-    # Сброс состояния пользователя
-    await state.finish()
-
-# УДАЛЕНИЕ ПЕРЕСЛАННЫХ СООБШЕНИЙ
-@dp.message_handler()
-async def antiflood(message: types.Message):
-    if message.from_user.id != ADMINS_ID:
-        if message.forward_from is not None:
-            print("Received forwarded message:", message.text)
-
-            #await message.reply('You cant send forwarded messages.') #разкоменти эту строку если нужно писать сообщения на пересылки
-            await message.delete()
-# ЕСЛИ ХОЧЕШЬ УДАЛЯТЬ ССЫЛКИ РАСКОМЕНТИРУЙ СТРОКИ
-#         else:
-#             for entity in message.entities:
-#                 if entity.type in ["url", "text_link"]:
-#                     await message.reply('У вас нет возможности отправлять ссылки, но вы можете сделать это через бота отправив сообщение админу')
-#                     await message.delete()
-#     else:
-#         pass
-
-# ХЕНДЛЕР ПРИСОЕДИНЕНИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ К ГРУППЕ И ОТВЕТА ЕМУ В ЛИЧКУ
-@dp.message_handler(content_types=types.ContentType.NEW_CHAT_MEMBERS)
-async def handle_new_members(message: types.Message):
-    for new_member in message.new_chat_members:
-        try:
-            # Обрабатываем каждого нового участника чата
-            await process_new_member(new_member)
-        except Exception as e:
-            # Обработка исключений, если возникла ошибка при обработке нового участника
-            print(f"Ошибка при обработке нового участника: {e}")
-
-async def process_new_member(new_member: types.User):
-    try:
-        # Здесь можно выполнить необходимые действия с новым участником, например, отправить приветственное сообщение
-        await bot.send_message(chat_id=chat_id_group, text=f"Добро пожаловать в нашу группу, {new_member.first_name}! \U0001F44B\nРасскажи о себе, чем занимаешься, чем интересуешься? Прочти пожалуйста правила группы в закрепе(https://t.me/torrevieja_migration/727)")
 
 
-        send_run = True
-        print("send_run = True")
-
-        if send_run == True:
-            await bot.send_message(chat_id=new_member.id, text=welcome_message_privat)
-            print(welcome_message_privat)
-
-
-    except Exception as e:
-        # Обработка исключений, если возникла ошибка при отправке сообщений
-        print(f"Ошибка при отправке сообщений новому участнику: {e}")
-
-# Запуск бота
+# Точка входа в программу
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    logging.getLogger('aiogram').setLevel(logging.ERROR)
     loop = asyncio.get_event_loop()
     loop.create_task(send_messages_periodically())
-    loop.set_debug(True)  # Включаем режим отладки
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, loop=loop)

@@ -18,12 +18,17 @@ CHAT_ID = CHAT_ID_TORA
 # Импорт модулей для работы с погодой и обменным курсом
 from pogodaTor import WeatherAPI, weather_text
 from xchange010 import CurrencyConverter, exchange_text
-from money_sell import Money_sell_converter, money_sell_text
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ContentType
+from config import BOT_TOKEN, UKASSA_TOKEN, ADMINS
+
 
 # Настройка логгера
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+subscribers = []
+admins = ADMINS_ID
 
 chat_id_group = CHAT_ID_TORA
 # Создание экземпляра бота
@@ -56,19 +61,79 @@ async def send_bot_message2():
     await bot.send_message(CHAT_ID, send_bot_message)
 
 
-
-async def send_money_sell():
-    await bot.send_message(CHAT_ID, money_sell_text)
-
-
-
-
 # ХЕНДЛЕР КОМАНДЫ  /start
 @dp.message_handler(commands=['start'], chat_type=types.ChatType.PRIVATE)
 async def start_command(message: types.Message, state: FSMContext):
     await state.reset_state()
     markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
     await message.answer("Привет! Что тебя интересует?", reply_markup=markup)
+
+
+
+
+
+####################
+
+# Создание клавиатуры
+keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+pay_button = KeyboardButton('Оплатить')
+#cancel_button = KeyboardButton('Отмена')
+
+#keyboard.add(pay_button, cancel_button)
+keyboard.add(pay_button)
+# Создание клавиатуры для проверки подписки
+keyboard_check = ReplyKeyboardMarkup(resize_keyboard=True)
+btn_check = KeyboardButton('Проверить подписку')
+keyboard_check.add(btn_check)
+
+
+@dp.message_handler()
+async def process_start_command(message: types.Message):
+    if message.text == 'Оплатить':
+        await bot.send_invoice(chat_id=message.chat.id, title='Подписка', description='Подписка на бота',
+                               payload='payment', provider_token=UKASSA_TOKEN, currency='RUB',
+                               start_parameter='test_bot',
+                               prices=[{'label': 'Руб', 'amount': 10000}])  # Отправляем счет для оплаты
+    elif message.text == 'Отмена':
+        await message.reply("Вы отказались")
+    elif message.text == 'Проверить подписку':
+        id = str(message.from_user.id)
+        if id in admins:
+            await message.reply('Вы администратор')
+        elif id in subscribers:
+            await message.reply('Подписка активна')
+        else:
+            await message.reply('Подписка не активна', reply_markup=keyboard)
+    else:
+        id = str(message.from_user.id)
+        if id in subscribers or id in admins:
+            username = message.from_user.username
+            await message.reply(f"Добро пожаловать, {username}!", reply_markup=keyboard)
+        else:
+            await message.reply("Для начала работы подпишитесь", reply_markup=keyboard)
+
+
+@dp.pre_checkout_query_handler()
+async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
+    await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True)
+
+
+@dp.message_handler(content_types=ContentType.SUCCESSFUL_PAYMENT)
+async def process_pay(message: types.Message):
+    if message.successful_payment.invoice_payload == 'payment':
+        await bot.send_message(message.from_user.id, 'Вы подписались')
+        subscribers.append(str(message.from_user.id))
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ХЕНДЛЕР ПОЛЬЗОВАТЕЛЬСКОЙ КНОПКИ ПОГОДА
@@ -210,11 +275,11 @@ async def process_requirements(message: types.Message, state: FSMContext):
 async def send_messages_periodically():
     while True:
         now = datetime.datetime.now()
-        if now.hour == 11 and now.minute == 00:
+        if now.hour == 10 and now.minute == 00:
             await send_weather_message()
             print("Отправлено сообщение о погоде")
 
-        elif now.hour == 10 and now.minute == 50:
+        elif now.hour == 11 and now.minute == 00:
             await send_exchange_message()
             print("Отправлено сообщение о курсе валют")
 
@@ -225,16 +290,6 @@ async def send_messages_periodically():
         elif now.hour == 18 and now.minute == 00:
             await send_bot_message2()
             print("Отправлена реклама бота")
-
-
-
-        elif now.hour == 13 and now.minute == 33:
-            await send_money_sell()
-            print("Отправлена информация о покупке рублей")
-
-
-
-
 
         await asyncio.sleep(60)
 
@@ -300,20 +355,20 @@ async def handle_new_members(message: types.Message):
 async def process_new_member(new_member: types.User):
     try:
         # Здесь можно выполнить необходимые действия с новым участником, например, отправить приветственное сообщение
-        await bot.send_message(chat_id=chat_id_group, text=f"Добро пожаловать в нашу группу, {new_member.first_name}! \U0001F44B\nРасскажи о себе, чем занимаешься, чем интересуешься? Прочти пожалуйста правила группы в закрепе(https://t.me/torrevieja_migration/727)")
-
-
+        await bot.send_message(chat_id=chat_id_group, text=f"Поприветствуем нового пользователя!\U0001F44B\nHola, {new_member.first_name}! \U0001F44B\nРасскажи о себе, чем занимаешься, чем интересуешься?"
+                                                                                                                      f"Прочти пожалуйста правила группы в закрепе(https://t.me/torrevieja_migration/727)")
         send_run = True
         print("send_run = True")
-
         if send_run == True:
-            await bot.send_message(chat_id=new_member.id, text=welcome_message_privat)
-            print(welcome_message_privat)
+                await bot.send_message(chat_id=new_member.id, text=welcome_message_privat)
+                print(welcome_message_privat)
 
 
     except Exception as e:
         # Обработка исключений, если возникла ошибка при отправке сообщений
         print(f"Ошибка при отправке сообщений новому участнику: {e}")
+
+
 
 # Запуск бота
 if __name__ == '__main__':
