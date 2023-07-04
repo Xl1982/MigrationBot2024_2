@@ -48,7 +48,7 @@ async def download_content(message: types.Message, state: FSMContext):
             await message.reply(result)
         # Завершаем состояние и переходим к началу работы
         await state.finish()
-        await start_work(message)
+        await start_save_youtube(message)
     elif is_youtube_link(url):
         keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
         keyboard.add(KeyboardButton('Аудио'))
@@ -137,7 +137,7 @@ async def download_video_or_audio(message: types.Message, state: FSMContext):
 
         # Завершаем состояние и переходим к началу работы
         await state.finish()
-        await start_work(message)
+        await start_save_youtube(message)
 
     else:
         if message.text == 'Назад':
