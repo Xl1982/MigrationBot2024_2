@@ -51,7 +51,7 @@ async def send_message(message: types.Message, state: FSMContext):
     user_username = message.from_user.username
     user_id = message.from_user.id
     # пересылаем сообщение админу с username и id пользователя
-    await bot.send_message(ADMIN_ID, f"Сообщение от {message.from_user.full_name} (@{user_username}, {user_id}):\n{user_message}. "
+    await bot.send_message(ADMIN_ID, f"Сообщение от {message.from_user.full_name} (@{user_username}, {user_id}):\n<<{user_message}>>. "
                            f'\n\nДля отправки ответного сообщения введи @{user_id} <ответ>')
     # уведомляем пользователя о передаче сообщения
     await message.answer("Сообщение успешно отправлено админу. Пожалуйста, подожди, пока он свяжется с тобой.")
