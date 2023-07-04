@@ -1,4 +1,4 @@
-MAIN_TOKEN_BOT = 'input your token' # Тестирование
+MAIN_TOKEN_BOT = '' # Тестирование
 MAIN_ADMIN = 1387633357
 
 city = 'Torrevieja'
