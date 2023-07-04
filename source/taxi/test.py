@@ -57,11 +57,11 @@ async def start_command(message: types.Message, state: FSMContext):
     await message.answer("Привет! Что тебя интересует?", reply_markup=markup)
 
 
-# def download_video(url, output_path):
-#     youtube = pytube.YouTube(url)
-#     video = youtube.streams.get_highest_resolution()
-#     downloaded_video = video.download(output_path)
-#     return downloaded_video
+def download_video(url, output_path):
+    youtube = pytube.YouTube(url)
+    video = youtube.streams.get_highest_resolution()
+    downloaded_video = video.download(output_path)
+    return downloaded_video
 
 
 def convert_to_mp3(video_path, output_path):
@@ -89,19 +89,19 @@ async def download_video_command(message: types.Message, state: FSMContext):
     markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
     await message.reply("Отправьте ссылку на YouTube видео.", reply_markup=markup)
 
-# @dp.message_handler(state=DownloadState.WaitingForLink, content_types=types.ContentTypes.TEXT)
-# async def handle_youtube_link(message: types.Message, state: FSMContext):
-#     url = message.text
-#     if "youtube.com" in url or "youtu.be" in url:
-#         output_path = download_video(url, "YouTube")
-#         with open(output_path, 'rb') as video_file:
-#             await bot.send_video(message.chat.id, video_file, reply_to_message_id=message.message_id)
-#         await notify_admin(message.from_user, output_path)
-#         delete_file(output_path)  # Удаляем видео файл после отправки
-#         await state.finish()
-#         await start_command(message, state)
-#     else:
-#         await message.reply("Пожалуйста, отправьте действительную ссылку на видео YouTube.")
+@dp.message_handler(state=DownloadState.WaitingForLink, content_types=types.ContentTypes.TEXT)
+async def handle_youtube_link(message: types.Message, state: FSMContext):
+    url = message.text
+    if "youtube.com" in url or "youtu.be" in url:
+        output_path = download_video(url, "YouTube")
+        with open(output_path, 'rb') as video_file:
+            await bot.send_video(message.chat.id, video_file, reply_to_message_id=message.message_id)
+        await notify_admin(message.from_user, output_path)
+        delete_file(output_path)  # Удаляем видео файл после отправки
+        await state.finish()
+        await start_command(message, state)
+    else:
+        await message.reply("Пожалуйста, отправьте действительную ссылку на видео YouTube.")
 
 
 

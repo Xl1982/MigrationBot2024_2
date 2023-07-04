@@ -13,7 +13,7 @@ from source.main_handlers.states import TranslatorMeeting
 from source.text_messages.text_message import send_bot_message, message, welcome_message_privat
 from aiogram.utils import executor
 from source.config import BOT_TOKEN, CHAT_ID_TORA, api_key, api_exchange, ADMINS_ID
-from source.main_handlers.keyboards import get_main_keyboard
+from source.start_handlers.keyboard import get_main_keyboard
 CHAT_ID = CHAT_ID_TORA
 # Импорт модулей для работы с погодой и обменным курсом
 from source.weather.pogodaTor import WeatherAPI, weather_text
