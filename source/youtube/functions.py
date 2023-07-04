@@ -1,10 +1,5 @@
 import yt_dlp
-import os
 import re
-import asyncio
-
-from aiogram.types import ReplyKeyboardRemove
-from pytube import YouTube
 
 from source.bot_init import dp, bot
 

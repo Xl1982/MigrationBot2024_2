@@ -1,6 +1,4 @@
-import asyncio
 import os
-import yt_dlp
 
 from aiogram import types
 from aiogram.dispatcher import FSMContext
