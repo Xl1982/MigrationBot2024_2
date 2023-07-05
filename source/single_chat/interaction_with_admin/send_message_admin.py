@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from aiogram.dispatcher import FSMContext
 
-from source.start_handlers.start_handler import start_work
+from source.single_chat.start_handlers.start_handler import start_work
 from source.config import MAIN_ADMIN
 from source.bot_init import dp, bot
 

@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from source.start_handlers.keyboard import *
+from source.single_chat.start_handlers.keyboard import *
 from source.bot_init import dp, bot
 
 
