@@ -11,7 +11,7 @@ from source.config import MAIN_ADMIN
 
 
 #ХЕНДЛЕР ЗАКАЗА ТАКСИ
-@dp.message_handler(text='Заказать такси')
+@dp.message_handler(lambda message: message.chat.type == types.ChatType.PRIVATE, text='Заказать такси')
 async def taxi_command(message: types.Message, state: FSMContext):
 
     user_id = message.from_user.id

@@ -5,7 +5,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 
-from source.config import MAIN_TOKEN_BOT, ADMINS_ID
+from source.config import MAIN_TOKEN_BOT, MAIN_ADMIN
 from .functions import download_video, download_audio, download_music, is_youtube_link, is_youtube_music_link, check_audio_size, check_video_url, check_video_size
 from .states import DownloadState
 from source.bot_init import dp, bot
@@ -14,15 +14,14 @@ from source.single_chat.start_handlers.start_handler import start_work
 
 MAX_FILE_SIZE_MB = 50
 TOKEN = MAIN_TOKEN_BOT
-# ADMIN_ID = ADMINS_ID  # замените на ID администратора
 
-# async def notify_admin(user, file_path):
-#     username = user.username if user.username else f"id{user.id}"
-#     await bot.send_message(ADMIN_ID, f"Пользователь {username} скачал файл {file_path}")
+async def notify_admin(user, file_path):
+    username = user.username if user.username else f"id{user.id}"
+    await bot.send_message(MAIN_ADMIN, f"Пользователь {username} скачал файл {file_path}")
 
 
 # Старт ветки с ютубом
-@dp.message_handler(lambda message: message.text == 'Скачать с youtube')
+@dp.message_handler(lambda message: message.text == 'Скачать с youtube' and message.chat.type == types.ChatType.PRIVATE)
 async def start_save_youtube(message: types.Message):
     keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Назад'))
     await message.reply("Отправь ссылку на трек или видео из ютуба для его загрузки в телеграм.", reply_markup=keyboard)

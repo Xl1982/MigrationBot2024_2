@@ -5,8 +5,8 @@ from source.single_chat.start_handlers.keyboard import *
 from source.bot_init import dp, bot
 
 
-@dp.message_handler(lambda message: message.text == 'Назад')
-@dp.message_handler(commands=['start'])
+@dp.message_handler(lambda message: message.text == 'Назад' and message.chat.type == types.ChatType.PRIVATE)
+@dp.message_handler(lambda message: message.chat.type == types.ChatType.PRIVATE, commands=['start'])
 async def start_work(message: types.Message):
     markup = get_main_keyboard()
     await message.answer('Привет! Я бот, который поможет тебе сориетироваться после переезда! '

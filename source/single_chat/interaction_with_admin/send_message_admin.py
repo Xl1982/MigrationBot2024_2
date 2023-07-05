@@ -25,7 +25,7 @@ ADMIN_ID = MAIN_ADMIN
 
 
 # обработчик текста 'Написать админу'
-@dp.message_handler(lambda message: message.text == "Написать админу")
+@dp.message_handler(lambda message: message.text == "Написать админу" and message.chat.type == types.ChatType.PRIVATE)
 async def write_admin(message: types.Message):
     # проверяем, не забанен ли пользователь
     if not is_banned(message.from_user.id):
@@ -59,7 +59,8 @@ async def send_message(message: types.Message, state: FSMContext):
     await dp.current_state(user=message.from_user.id).reset_state()
 
 # обработчик сообщений от админа
-@dp.message_handler(lambda message: message.from_user.id == ADMIN_ID and message.text.startswith('@'))
+@dp.message_handler(lambda message: message.from_user.id == ADMIN_ID and message.text.startswith('@') and
+                    message.chat.type == types.ChatType.PRIVATE)
 async def reply_user(message: types.Message):
     # получаем текст сообщения от админа
     admin_message = message.text
