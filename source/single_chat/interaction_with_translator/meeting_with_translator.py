@@ -10,7 +10,7 @@ from source.config import MAIN_ADMIN
 
 
 
-#ХЕНДЛЕР ЗАКАЗА ТАКСИ
+#ХЕНДЛЕР ЗАКАЗА ПЕРЕВОДЧИКА
 @dp.message_handler(text='Встреча с переводчиком')
 async def taxi_command(message: types.Message, state: FSMContext):
 
@@ -23,21 +23,6 @@ async def taxi_command(message: types.Message, state: FSMContext):
     await state.set_state("translator:where")
     admin_message = f"Идёт заполнение заявки на встречу с переводчиком!\n\nID: {user_id}\nUsername: @{user_username}"
     await bot.send_message(MAIN_ADMIN, admin_message)
-
-
-# @dp.message_handler(state="translator:where")
-# async def process_origin(message: types.Message, state: FSMContext):
-#     origin = message.text
-#     if origin == "Назад":
-#         # Возвращаемся к выбору услуг или выходим из режима заполнения заявки
-#         await start_work(message) # Вызываем функцию начала работы
-#         # Сбрасываем состояние пользователя
-#         await state.finish()
-#     else:
-#         # Сохраняем адрес отправления и переходим к следующему этапу
-#         await state.update_data(origin=origin)
-#         await message.answer("Куда поедете?")
-#         await state.set_state("ожидание_куда")
 
 
 @dp.message_handler(state="translator:where")
@@ -78,7 +63,7 @@ async def process_time(message: types.Message, state: FSMContext):
             await message.answer("Вы вернулись на предыдущий шаг. Укажите место встречи?", reply_markup=keyboard)
             await state.set_state("translator:where")
     else:
-        # Сохраняем время поездки и переходим к следующему этапу
+        # Сохраняем время встречи и переходим к следующему этапу
         await state.update_data(time=time)
         await message.answer("Введите ваш номер телефона для связи?")
         await state.set_state("translator:number_phone")
@@ -95,7 +80,7 @@ async def process_phone(message: types.Message, state: FSMContext):
             # Сбрасываем состояние пользователя
             await state.finish()
         else:
-            # Возвращаемся к указанию даты и времени поездки
+            # Возвращаемся к указанию даты и времени встречи
             keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Назад'))
             await message.answer("Вы вернулись на предыдущий шаг. Введите время и дату встречи?", reply_markup=keyboard)
             await state.set_state("translator:what_time")
