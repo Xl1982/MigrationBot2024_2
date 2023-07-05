@@ -1,6 +1,5 @@
 from aiogram import types
 from aiogram.utils.exceptions import BotBlocked, CantInitiateConversation
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from datetime import datetime, timedelta
 
