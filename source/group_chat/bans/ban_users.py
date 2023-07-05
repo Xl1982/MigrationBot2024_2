@@ -74,7 +74,7 @@ async def unban_user(message: types.Message):
             # Возвращаем его в чат
             await bot.unban_chat_member(message.chat.id, user_id)
             # Отправляем сообщение об успешном разбане
-            await message.reply(f"Пользователь {user_id} возвращен в чат.")
+            await message.reply(f"Пользователь {user_id} может вернуться в чат.")
             # Пытаемся отправить ему уведомление в личные сообщения с ссылкой на чат
             try:
                 await bot.send_message(user_id, f"Вы были разбанены в чате {message.chat.title}")
