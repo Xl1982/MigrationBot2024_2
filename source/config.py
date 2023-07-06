@@ -1,7 +1,14 @@
-MAIN_TOKEN_BOT = '5367458503:AAF4i_Atjfb-0ObdBHetooVyPJuZ5jVOaXk'
-#'6273983990:AAGNUQpjEen2GKcfJYtcHygvolZkzxg8Fpk' # Тестирование
-MAIN_ADMIN = 1387633357
-ADMIN_LINK = 'https://t.me/legannyst'
+
+
+'''
+Вставь выше свои данные, просто будем комментить туда-сюда я думаю, либо я потом сделаю подгрузку из getenv
+
+Данные ОЛЕГА
+'''
+# MAIN_TOKEN_BOT = '5367458503:AAF4i_Atjfb-0ObdBHetooVyPJuZ5jVOaXk'
+# #'6273983990:AAGNUQpjEen2GKcfJYtcHygvolZkzxg8Fpk' # Тестирование
+# # MAIN_ADMIN = 1387633357
+# ADMIN_LINK = 'https://t.me/legannyst'
 
 city = 'Torrevieja'
 BOT_TOKEN = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # https://t.me/Torrevieja_delivery_bot
