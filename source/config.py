@@ -1,4 +1,5 @@
-MAIN_TOKEN_BOT = '6273983990:AAGNUQpjEen2GKcfJYtcHygvolZkzxg8Fpk' # Тестирование
+MAIN_TOKEN_BOT = '5367458503:AAF4i_Atjfb-0ObdBHetooVyPJuZ5jVOaXk'
+#'6273983990:AAGNUQpjEen2GKcfJYtcHygvolZkzxg8Fpk' # Тестирование
 MAIN_ADMIN = 1387633357
 ADMIN_LINK = 'https://t.me/legannyst'
 

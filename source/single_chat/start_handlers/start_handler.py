@@ -18,3 +18,10 @@ async def start_work(message: types.Message):
     await message.answer('Привет! Я бот, который поможет тебе сориетироваться после переезда! '
                         'Нажми на кнопку для выбора интересующей тебя услуги:', reply_markup=markup)
     
+
+@dp.callback_query_handler(lambda c: c.data == 'exit', state='*')
+async def old_user_hello(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.finish()
+    markup = get_main_keyboard()
+    await callback_query.answer()
+    await callback_query.message.answer('Выбери действие нажав на кнопку на клавиатуре:', reply_markup=markup)
