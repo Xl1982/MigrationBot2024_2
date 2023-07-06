@@ -3,8 +3,11 @@ from aiogram.dispatcher import FSMContext
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
+from database.operations.taxi_orders import TaxiOrder
+
 from source.single_chat.start_handlers.start_handler import start_work
 from source.single_chat.start_handlers.keyboard import get_main_keyboard
+
 from source.bot_init import dp, bot
 from source.config import MAIN_ADMIN
 
@@ -104,19 +107,33 @@ async def process_phone(message: types.Message, state: FSMContext):
         await state.update_data(phone=phone)
         user_data = await state.get_data()
 
+        # Получаем текущее время с помощью модуля datetime
+        from datetime import datetime
+        order_time = datetime.now()
+
         # Отправка сообщения админу с информацией о заказе
         admin_message = f"Новый заказ такси!\n\n" \
                         f"Откуда: {user_data['origin']}\n" \
                         f"Куда: {user_data['destination']}\n" \
-                        f"Время: {user_data['time']}\n" \
+                        f"Время: {order_time}\n" \
                         f"Телефон: {user_data['phone']}\n"
 
         await bot.send_message(MAIN_ADMIN, admin_message)
+        
+        # Получаем user_id по chat_id
+        user_id = message.from_user.id
+        
+        # Получаем order_from и order_to из user_data
+        order_from = user_data['origin']
+        order_to = user_data['destination']
+        
+        # Добавляем заказ в базу данных с помощью метода add_order
+        taxi_order = TaxiOrder()
+        taxi_order.add_order(user_id, order_time, order_from, order_to, phone)
+
         # Сброс состояния пользователя
         await state.finish()
 
         # Возвращение кнопок выбора услуг
         markup = get_main_keyboard()  # Используем функцию для получения клавиатуры
         await message.answer("Ваш заказ такси успешно оформлен! Что еще вас интересует?", reply_markup=markup)
-
-

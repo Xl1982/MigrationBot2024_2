@@ -6,6 +6,8 @@ from source.single_chat.start_handlers.start_handler import start_work
 from source.config import MAIN_ADMIN
 from source.bot_init import dp, bot
 
+from database.operations.users import User
+
 ADMIN_ID = MAIN_ADMIN
 
 
@@ -21,14 +23,17 @@ ADMIN_ID = MAIN_ADMIN
 Однако необходимо оставить такой простор для базы данных, где мы и будем отмечать блокировку пользователя.
 Сейчас базы данных нет, потому будет функция которая говорит что пользователя мы забанили, но действий в базу данных не внесли.
 Это уже будет потом реализовано
+
+P.S. - Сделано в связи с подключением Postgres 
 '''
 
 
 # обработчик текста 'Написать админу'
 @dp.message_handler(lambda message: message.text == "Написать админу" and message.chat.type == types.ChatType.PRIVATE)
 async def write_admin(message: types.Message):
+    user = User()
     # проверяем, не забанен ли пользователь
-    if not is_banned(message.from_user.id):
+    if not user.check_ban_status(user_id=message.from_user.id):
         keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton('Назад'))
         await message.answer("Пожалуйста, напиши текст сообщения для админа.", reply_markup=keyboard)
         # устанавливаем состояние для пользователя
@@ -74,7 +79,8 @@ async def reply_user(message: types.Message):
             # проверяем, что команда бана это "бан"
             if reply_text_or_ban == "бан":
                 # баним пользователя по его id (пока без базы данных)
-                ban_user(user_id)
+                user = User()
+                user.toggle_ban_status(user_id)
                 # уведомляем админа об успешной блокировке пользователя
                 await message.answer(f"Пользователь с id {user_id} успешно забанен.")
             else:
@@ -90,12 +96,3 @@ async def reply_user(message: types.Message):
                                "Должно быть @<user_id> <text>")
         print(f'Ошибка при отправке ответа админа пользователю - {e}')
 
-# функция, которая проверяет, забанен ли пользователь или нет
-def is_banned(user_id):
-    # пока без базы данных, просто возвращаем False
-    return False
-
-# функция, которая банит пользователя по его id
-def ban_user(user_id):
-    # пока без базы данных, просто печатаем сообщение
-    print(f"User {user_id} is banned.")

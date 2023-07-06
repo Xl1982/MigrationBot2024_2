@@ -1,6 +1,6 @@
-MAIN_TOKEN_BOT = '' # Тестирование
-MAIN_ADMIN = 1234567891
-ADMIN_LINK = ''
+MAIN_TOKEN_BOT = '6273983990:AAGNUQpjEen2GKcfJYtcHygvolZkzxg8Fpk' # Тестирование
+MAIN_ADMIN = 1387633357
+ADMIN_LINK = 'https://t.me/legannyst'
 
 city = 'Torrevieja'
 BOT_TOKEN = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # https://t.me/Torrevieja_delivery_bot
