@@ -1,0 +1,12 @@
+file1.txt
+
+exchange_rates.txt
+
+venv/
+*.cfg
+
+**/__pycache__/
+
+.vscode
+
+desktop.ini

@@ -1,16 +1,16 @@
-# This is a sample Python script.
+from source.bot_init import dp, bot
+from source.single_chat.youtube import youtube_music
+from source.single_chat.start_handlers import start_handler
+from source.single_chat.taxi import called_taxi
+from source.single_chat.interaction_with_admin import send_message_admin
+from source.single_chat.interaction_with_translator import meeting_with_translator
+from source.single_chat.weather import send_weather_info
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from source.single_chat.admin_commands import start, taxi_orders
 
+from source.group_chat.bans import ban_users
+from source.group_chat.timeouts import timeout_in_group
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    from aiogram import executor
+    executor.start_polling(dp, skip_updates=True)
