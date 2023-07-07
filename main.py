@@ -8,6 +8,7 @@ from source.single_chat.weather import send_weather_info
 
 from source.single_chat.admin_commands import start, taxi_orders
 
+from source.group_chat.admin_commands import weather_send_in_group
 from source.group_chat.bans import ban_users
 from source.group_chat.timeouts import timeout_in_group
 

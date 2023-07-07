@@ -1,8 +1,8 @@
 file1.txt
-
 exchange_rates.txt
 
 venv/
+
 *.cfg
 
 **/__pycache__/
@@ -10,3 +10,5 @@ venv/
 .vscode
 
 desktop.ini
+
+testing.py
