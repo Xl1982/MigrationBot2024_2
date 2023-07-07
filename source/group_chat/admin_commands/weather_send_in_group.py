@@ -87,16 +87,16 @@ async def check_weather_time(chat_id):
         target_time = datetime.time(8, 50)  # Заданное время (8:50 утра)
 
         # Проверяем, соответствует ли текущее время заданному времени
-        if now.time() >= target_time:
+        if now.time() == target_time:
             # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
             await send_weather_forecast(chat_id)
 
             print("Отправка сообщения с прогнозом погоды...")
 
-            await asyncio.sleep(5)
+            await asyncio.sleep(60)
         else:
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
-            await asyncio.sleep(5)
+            await asyncio.sleep(60)
 
 
 @dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 
