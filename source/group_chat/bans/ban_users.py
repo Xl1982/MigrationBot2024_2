@@ -51,7 +51,7 @@ async def ban_user(message: types.Message):
             await bot.kick_chat_member(message.chat.id, user_id)
             # Отправляем сообщение об успешном бане
             await message.reply(f"Пользователь {user_id} исключен из чата.\n"
-                                f"Чтобы вернуть его в чат, используйте команду \n/unban {user_id}")
+                                f"Чтобы дать ему возможность вернуться в чат, используйте команду \n/unban {user_id}")
         else:
             # Отправляем сообщение об ошибке
             await message.reply("Вы не можете банить администраторов или владельца чата.")
@@ -77,7 +77,8 @@ async def unban_user(message: types.Message):
             await message.reply(f"Пользователь {user_id} может вернуться в чат.")
             # Пытаемся отправить ему уведомление в личные сообщения с ссылкой на чат
             try:
-                await bot.send_message(user_id, f"Вы были разбанены в чате {message.chat.title}")
+                updated_chat = await bot.get_chat(message.chat.id)
+                await bot.send_message(user_id, f"Вы были разбанены в чате {message.chat.title}. Ссылка приглашение - {updated_chat.invite_link}")
             except BotBlocked:
                 # Если бот заблокирован пользователем, отправляем сообщение об этом в общий чат
                 await message.reply(f"Пользователь {user_id} заблокировал бота и не получил уведомление о разбане.")
