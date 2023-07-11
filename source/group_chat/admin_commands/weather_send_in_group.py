@@ -79,7 +79,6 @@ async def send_weather_forecast(chat_id: int):
     await bot.send_message(chat_id, forecast_message, parse_mode=types.ParseMode.MARKDOWN)
 
 
-
 # Функция для проверки текущего времени
 async def check_weather_time(chat_id):
     while config_chat['weather_message']:
