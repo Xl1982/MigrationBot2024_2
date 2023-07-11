@@ -135,7 +135,7 @@ async def handle_weather_time(callback_query: types.CallbackQuery, state: FSMCon
         response += f"🌫️ <b>Видимость:</b> {forecast['visibility']} м"
 
         # Добавляем смайлы и выделение жирным шрифтом
-        response = f"⏰ {selected_time} - {forecast['wish']} ⏰\n\n" + response
+        # response = f"⏰ {selected_time} - {forecast['wish']} ⏰\n\n" + response
 
         await bot.send_message(callback_query.from_user.id, response, parse_mode="HTML")
         await state.finish()
