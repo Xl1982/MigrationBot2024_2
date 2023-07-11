@@ -8,8 +8,9 @@ def get_main_keyboard():
     translator_button = KeyboardButton('Встреча с переводчиком')
     admin_button = KeyboardButton('Написать админу')
     youtube_button = KeyboardButton('Скачать с youtube')
+    autobus_button = KeyboardButton('Расписание автобусов')
     #pay_button = KeyboardButton('Оплатить')
     # markup.add(weather_button, exchange_button, taxi_button, translator_button, admin_button, pay_button)
 
-    markup.add(weather_button, exchange_button, taxi_button, translator_button, admin_button, youtube_button)
+    markup.add(weather_button, exchange_button, taxi_button, autobus_button, translator_button, admin_button, youtube_button)
     return markup
