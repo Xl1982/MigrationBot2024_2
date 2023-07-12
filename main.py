@@ -6,7 +6,7 @@ from source.single_chat.interaction_with_admin import send_message_admin
 from source.single_chat.interaction_with_translator import meeting_with_translator
 from source.single_chat.weather import send_weather_info
 
-from source.single_chat.admin_commands import start, taxi_orders
+from source.single_chat.admin_commands import start, taxi_orders, translator_orders
 
 from source.group_chat.timeouts import welcome_message_timeout
 from source.group_chat.admin_commands import weather_send_in_group

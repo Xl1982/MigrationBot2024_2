@@ -1,7 +1,10 @@
+import datetime
 
 from aiogram.dispatcher import FSMContext
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+
+from database.operations.translator_orders import TranslatorOrder
 
 from source.single_chat.start_handlers.start_handler import start_work
 from source.single_chat.start_handlers.keyboard import get_main_keyboard
@@ -85,6 +88,7 @@ async def process_phone(message: types.Message, state: FSMContext):
             await message.answer("Вы вернулись на предыдущий шаг. Введите время и дату встречи?", reply_markup=keyboard)
             await state.set_state("translator:what_time")
     else:
+        translator_order = TranslatorOrder()
         # Сохраняем номер телефона и завершаем заполнение заявки
         await state.update_data(phone=phone)
         user_data = await state.get_data()
@@ -95,6 +99,8 @@ async def process_phone(message: types.Message, state: FSMContext):
                         f"Время: {user_data['time']}\n" \
                         f"Телефон: {user_data['phone']}\n"
 
+        order_time = datetime.datetime.now()
+        translator_order.add_order(message.from_user.id, order_time, user_data['destination'], user_data["phone"])
         await bot.send_message(MAIN_ADMIN, admin_message)
         # Сброс состояния пользователя
         await state.finish()

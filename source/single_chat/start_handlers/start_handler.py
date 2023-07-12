@@ -27,7 +27,7 @@ async def old_user_hello(callback_query: types.CallbackQuery, state: FSMContext)
     await callback_query.message.answer('Выбери действие нажав на кнопку на клавиатуре:', reply_markup=markup)
 
 
-@dp.callback_query_handler(lambda message: message.text == 'Расписание автобуса')
+@dp.message_handler(lambda message: message.text == 'Расписание автобуса')
 async def send_bus_timetable(message: types.Message):
     link_to_timetable = 'https://telegra.ph/Raspisanie-avtobusov-v-gorode-Terreveha-07-10'
 
