@@ -84,8 +84,8 @@ async def check_weather_time(chat_id):
     while config_chat['weather_message']:
         print('Проверка погоды')
         now = datetime.datetime.now()
-        target_time_one = datetime.time(11, 30)  # Заданное время (8:50 утра)
-        target_time_two = datetime.time(11, 32)
+        target_time_one = datetime.time(11, 40)  # Заданное время (8:50 утра)
+        target_time_two = datetime.time(11, 42)
 
         # Проверяем, соответствует ли текущее время заданному времени
         if target_time_one < now.time() < target_time_two:
@@ -105,11 +105,14 @@ async def check_weather_time(chat_id):
 async def weather_send_message_on(message: types.Message):
     config_chat['weather_message'] = True
     config_chat['chat_id'] = message.chat.id
-    
-    await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
-
+    print("Попытка запустить функцию для рассылки погоды")
     # Запускаем функцию проверки времени с передачей chat_id
     asyncio.ensure_future(check_weather_time(message.chat.id))
+
+    await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
+
+    print("Функция выполнилась, погода должна рассылаться")
+
 
 
 @dp.message_handler(lambda message: message.chat.type in (types.ChatType.SUPERGROUP, types.ChatType.GROUP) and
