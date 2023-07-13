@@ -84,8 +84,8 @@ async def check_weather_time(chat_id):
     while config_chat['weather_message']:
         print('Проверка погоды')
         now = datetime.datetime.now()
-        target_time_one = datetime.time(11, 40)  # Заданное время (8:50 утра)
-        target_time_two = datetime.time(11, 42)
+        target_time_one = datetime.time(8, 50)  # Заданное время (8:50 утра)
+        target_time_two = datetime.time(8, 52)
 
         # Проверяем, соответствует ли текущее время заданному времени
         if target_time_one < now.time() < target_time_two:
