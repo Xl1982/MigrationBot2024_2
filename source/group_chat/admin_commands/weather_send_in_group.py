@@ -82,17 +82,19 @@ async def send_weather_forecast(chat_id: int):
 # Функция для проверки текущего времени
 async def check_weather_time(chat_id):
     while config_chat['weather_message']:
+        print('Проверка погоды')
         now = datetime.datetime.now()
-        target_time = datetime.time(8, 50)  # Заданное время (8:50 утра)
+        target_time_one = datetime.time(11, 30)  # Заданное время (8:50 утра)
+        target_time_two = datetime.time(11, 32)
 
         # Проверяем, соответствует ли текущее время заданному времени
-        if now.time() == target_time:
+        if target_time_one < now.time() < target_time_two:
             # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
             await send_weather_forecast(chat_id)
 
             print("Отправка сообщения с прогнозом погоды...")
 
-            await asyncio.sleep(60)
+            await asyncio.sleep(300)
         else:
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
