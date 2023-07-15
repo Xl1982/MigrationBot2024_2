@@ -1,11 +1,12 @@
 import datetime
 import asyncio
+import pytz
 
 from aiogram import types
 
 from source.bot_init import dp, bot
 from source.single_chat.weather.get_weather_info import get_weather_forecast
-
+from source.logger_bot import logger
 
 from .config_chat import config_chat
 
@@ -81,9 +82,10 @@ async def send_weather_forecast(chat_id: int):
 
 # Функция для проверки текущего времени
 async def check_weather_time(chat_id):
+    logger.info('Проверка погоды запущена')
     while config_chat['weather_message']:
-        print('Проверка погоды')
-        now = datetime.datetime.now()
+        
+        now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))
         target_time_one = datetime.time(8, 50)  # Заданное время (8:50 утра)
         target_time_two = datetime.time(8, 52)
 
@@ -92,7 +94,7 @@ async def check_weather_time(chat_id):
             # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
             await send_weather_forecast(chat_id)
 
-            print("Отправка сообщения с прогнозом погоды...")
+            logger.info('Отправка сообщения с прогнозом погоды')
 
             await asyncio.sleep(300)
         else:
@@ -100,23 +102,23 @@ async def check_weather_time(chat_id):
             await asyncio.sleep(60)
 
 
-@dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 
-                    message.text == '/weather on')
-async def weather_send_message_on(message: types.Message):
-    config_chat['weather_message'] = True
-    config_chat['chat_id'] = message.chat.id
-    print("Попытка запустить функцию для рассылки погоды")
-    # Запускаем функцию проверки времени с передачей chat_id
-    asyncio.ensure_future(check_weather_time(message.chat.id))
+# @dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 
+#                     message.text == '/weather on')
+# async def weather_send_message_on(message: types.Message):
+#     config_chat['weather_message'] = True
+#     config_chat['chat_id'] = message.chat.id
+#     print("Попытка запустить функцию для рассылки погоды")
+#     # Запускаем функцию проверки времени с передачей chat_id
+#     asyncio.ensure_future(check_weather_time(message.chat.id))
 
-    await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
+#     await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
 
-    print("Функция выполнилась, погода должна рассылаться")
+#     print("Функция выполнилась, погода должна рассылаться")
 
 
 
-@dp.message_handler(lambda message: message.chat.type in (types.ChatType.SUPERGROUP, types.ChatType.GROUP) and
-                    message.text == '/weather off')
-async def weather_send_message_off(message: types.Message):
-    config_chat['weather_message'] = False
-    await message.answer('Рассылка погоды выключена. Используй команду "/weather on"')
+# @dp.message_handler(lambda message: message.chat.type in (types.ChatType.SUPERGROUP, types.ChatType.GROUP) and
+#                     message.text == '/weather off')
+# async def weather_send_message_off(message: types.Message):
+#     config_chat['weather_message'] = False
+#     await message.answer('Рассылка погоды выключена. Используй команду "/weather on"')

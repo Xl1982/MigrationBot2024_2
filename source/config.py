@@ -1,8 +1,9 @@
 
-MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I'
-MAIN_ADMIN = '1120233842'
-ADMIN_LINK = 'https://t.me/May1298'
-
+# MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I'
+# MAIN_ADMIN = '1120233842'
+# ADMIN_LINK = 'https://t.me/May1298'
+# CHAT_ID_TORA = -1001874062984 #https://t.me/torrevieja_migration
+# EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 
 
 '''
@@ -14,6 +15,8 @@ ADMIN_LINK = 'https://t.me/May1298'
 # MAIN_TOKEN_BOT = '6273983990:AAHscC2ETkVtptAYkDfSckhFJ-Hmk6l9YOs' # Тестирование в чате
 # MAIN_ADMIN = 1387633357
 # ADMIN_LINK = 'https://t.me/legannyst'
+# CHAT_ID_TORA = -1001966380038
+# EXCHANGE_TOKEN = '028bff5f7414df842c38e390'
 
 city = 'Torrevieja'
 BOT_TOKEN = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # https://t.me/Torrevieja_delivery_bot
@@ -27,7 +30,7 @@ ADMINS = [6212366189, 1120233842, 5944354415, 6084814775,]
 api_key = '80730760f799bc84a6bc9a06'
 SBER_TEST_API = '401643678:TEST:121fbfe0-df60-46f3-8903-53733347015e'
 CHAT_ID_BI = "-1001836452977" # https://t.me/bipolarka_chat1
-CHAT_ID_TORA = "-1001874062984" #https://t.me/torrevieja_migration
+
 GPTID = "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"
 api_exchange = "aa4a1f593531b2babb06ac66"
 WEATHER_API = '4fe671035ef5e6e022ec583b2f079f16'
