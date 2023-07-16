@@ -16,10 +16,11 @@ times_to_send = {
         datetime.time(12, 30),
     ],
     'current_currency':[
-        datetime.time(10, 0)
+        datetime.time(10, 0),
     ],
     'text_messages':[
-        datetime.time(13, 0),
+        # datetime.time(13, 0),
+        datetime.time(20, 25),
         datetime.time(16, 0),
     ],
 }

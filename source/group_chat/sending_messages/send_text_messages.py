@@ -10,26 +10,31 @@ from source.logger_bot import logger
 
 async def send_text_message():
     text_messages = times_to_send['text_messages']  # Список временных значений для сообщений из файла конфигурации
-    
+
     logger.info('Проверка времени для вывода текстового сообщения')
     while config_chat['text_message']:
-        now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))  # Получение текущего времени в часовом поясе 'Europe/Madrid'
+        now = datetime.datetime.now()
         current_time = now.time()
 
-        if current_time in text_messages:
-            index = text_messages.index(current_time)
-            if index == 0:
-                message = send_bot_message
-            elif index == 1:
-                message = message
+        for message_time in text_messages:
+            # Используйте метод datetime.combine для преобразования времени в дату и время
+            lower_bound = datetime.datetime.combine(now.date(), message_time) - datetime.timedelta(minutes=2)
+            upper_bound = datetime.datetime.combine(now.date(), message_time) + datetime.timedelta(minutes=2)
 
-            # Отправка сообщения в чат
-            await bot.send_message(config_chat['chat_id'], message)
+            # Сравните текущее время с нижней и верхней границами
+            if lower_bound <= now <= upper_bound:
+                index = text_messages.index(message_time)
+                if index == 0:
+                    message_to_send = send_bot_message
+                elif index == 1:
+                    message_to_send = message
 
-            # Логирование отправки сообщения
-            logger.info(f"Отправлено текстовое сообщение: {message}")
+                # Отправка сообщения в чат
+                await bot.send_message(config_chat['chat_id'], message_to_send)
+
+                # Логирование отправки сообщения
+                logger.info(f"Отправлено текстовое сообщение: {message_to_send}")
 
         # Ожидание 1 минуты перед проверкой времени снова
         await asyncio.sleep(60)
-
 
