@@ -6,10 +6,10 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 
 
 from source.config import MAIN_TOKEN_BOT, MAIN_ADMIN
-from .functions import download_video, download_audio, download_music, is_youtube_link, is_youtube_music_link, check_audio_size, check_video_url, check_video_size
+from ...modules.youtube_functions import download_video, download_audio, download_music, is_youtube_link, is_youtube_music_link, check_audio_size, check_video_url, check_video_size
 from .states import DownloadState
 from source.bot_init import dp, bot
-from source.single_chat.start_handlers.start_handler import start_work
+from source.single_chat.start_handler import start_work
 
 
 MAX_FILE_SIZE_MB = 50

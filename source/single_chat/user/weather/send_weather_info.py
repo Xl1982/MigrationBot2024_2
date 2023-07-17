@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram import types
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-from source.single_chat.start_handlers.start_handler import old_user_hello
+from source.single_chat.start_handler import old_user_hello
 from source.bot_init import dp, bot
 from source.group_chat.sending_messages.weather_send_in_group import send_weather_forecast
 

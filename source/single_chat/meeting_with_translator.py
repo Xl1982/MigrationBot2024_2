@@ -6,8 +6,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemo
 
 from database.operations.translator_orders import TranslatorOrder
 
-from source.single_chat.start_handlers.start_handler import start_work
-from source.single_chat.start_handlers.keyboard import get_main_keyboard
+from source.single_chat.start_handler import start_work
+from source.single_chat.keyboard import get_main_keyboard
 from source.bot_init import dp, bot
 from source.config import MAIN_ADMIN
 

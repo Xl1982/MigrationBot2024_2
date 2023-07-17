@@ -5,7 +5,7 @@ import pytz
 from aiogram import types
 
 from source.bot_init import dp, bot
-from source.single_chat.weather.get_weather_info import get_weather_forecast
+from source.modules.get_weather_info import get_weather_forecast
 from source.logger_bot import logger
 from source.config import city_rus
 

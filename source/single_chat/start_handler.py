@@ -4,7 +4,7 @@ from aiogram.dispatcher import FSMContext
 from database.operations.users import User
 
 from source.group_chat.sending_messages.money_sell import CurrencyConverter
-from source.single_chat.start_handlers.keyboard import *
+from source.single_chat.keyboard import *
 from source.bot_init import dp, bot
 
 
