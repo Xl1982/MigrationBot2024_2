@@ -7,6 +7,7 @@ from aiogram import types
 from source.bot_init import dp, bot
 from source.single_chat.weather.get_weather_info import get_weather_forecast
 from source.logger_bot import logger
+from source.config import city_rus
 
 from .config_chat import config_chat
 
@@ -31,7 +32,7 @@ async def send_weather_forecast(chat_id: int):
         is_first_day = (i == 0)
 
         # Получаем прогноз погоды для выбранного дня и времени
-        forecast = get_weather_forecast(target_date, datetime.time(9, 0), city_name='Torrevieja')
+        forecast = get_weather_forecast(target_date, datetime.time(12, 0), city_name='Torrevieja')
 
         # Проверяем, есть ли доступный прогноз погоды для выбранного дня
         if forecast:
@@ -51,17 +52,16 @@ async def send_weather_forecast(chat_id: int):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                # Выводим полную информацию для первого дня
-                message = f"🌍 ***{target_date.strftime('%d.%m.%Y')}***\n"
-                message += f"{weather_emoji} Погода в городе Torrevieja:\n"
-                message += f"🌡️ Температура воздуха: {first_time_forecast['temperature']}°C\n"
-                message += f"💧 Влажность: {first_time_forecast['humidity']}%\n"
-                message += f"🌬️ Давление: {first_time_forecast['pressure']} мм.рт.ст\n"
-                message += f"💨 Скорость ветра: {first_time_forecast['wind_speed']} м/c\n"
-                message += f"☁️ Облачность: {first_time_forecast['cloudiness']}%\n"
-                message += f"🌅 Время восхода солнца: {first_time_forecast['sunrise'].strftime('%H:%M')}\n"
-                message += f"🌇 Время заката солнца: {first_time_forecast['sunset'].strftime('%H:%M')}\n"
-                message += f"🌞 Хорошего дня!\n"
+                message = f'🌍 ***{target_date.strftime("%d.%m.%Y")}***\n' \
+                            f'{weather_emoji} Погода в городе {city_rus}:\n' \
+                            f'🌡️ Температура воздуха: {first_time_forecast["temperature"]}°C\n' \
+                            f'💧 Влажность: {first_time_forecast["humidity"]}%\n' \
+                            f'🌬️ Давление: {first_time_forecast["pressure"]} мм.рт.ст\n' \
+                            f'💨 Скорость ветра: {first_time_forecast["wind_speed"]} м/c\n' \
+                            f'☁️ Облачность: {first_time_forecast["cloudiness"]}%\n' \
+                            f'🌅 Время восхода солнца: {first_time_forecast["sunrise"].strftime("%H:%M")}\n' \
+                            f'🌇 Время заката солнца: {first_time_forecast["sunset"].strftime("%H:%M")}\n' \
+                            f'🌞 Хорошего дня!\n'
                 forecast_message += f"{message}{'-' * 52}\n\n"
             else:
                 # Выводим краткую информацию для остальных дней
@@ -85,7 +85,7 @@ async def check_weather_time(chat_id):
     logger.info('Проверка погоды запущена')
     while config_chat['weather_message']:
         
-        now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))
+        now = datetime.datetime.now()
         target_time_one = datetime.time(8, 50)  # Заданное время (8:50 утра)
         target_time_two = datetime.time(8, 52)
 
@@ -96,7 +96,7 @@ async def check_weather_time(chat_id):
 
             logger.info('Отправка сообщения с прогнозом погоды')
 
-            await asyncio.sleep(300)
+            await asyncio.sleep(10)
         else:
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)

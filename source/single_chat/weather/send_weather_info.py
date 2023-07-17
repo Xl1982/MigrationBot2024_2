@@ -7,6 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from source.single_chat.start_handlers.start_handler import old_user_hello
 from .get_weather_info import get_weather_forecast
 from source.bot_init import dp, bot
+from source.config import city_rus
 
 # Словарь для перевода дней недели с английского на русский
 days_of_week = {
@@ -125,19 +126,15 @@ async def handle_weather_time(callback_query: types.CallbackQuery, state: FSMCon
         return
 
     if forecast:
-        response = f"Прогноз погоды для {selected_day.strftime('%d-%m-%Y')} {target_time.strftime('%H:%M')}:\n"
-        response += f"🌍 Город: Торревьеха\n"
-        response += f"🌡️ <b>Температура:</b> {forecast['temperature']}°C\n"
-        response += f"💧 <b>Влажность:</b> {forecast['humidity']}%\n"
-        response += f"💨 <b>Скорость ветра:</b> {forecast['wind_speed']} м/с\n"
-        response += f"🧭 <b>Направление ветра:</b> {forecast['wind_direction']}\n"
-        response += f"⛅ <b>Давление:</b> {forecast['pressure']} гПа\n"
-        response += f"🌫️ <b>Видимость:</b> {forecast['visibility']} м"
-
-        # Добавляем смайлы и выделение жирным шрифтом
-        # response = f"⏰ {selected_time} - {forecast['wish']} ⏰\n\n" + response
-
-        await bot.send_message(callback_query.from_user.id, response, parse_mode="HTML")
+        weather_text = f'🌍 ***{datetime.now().strftime("%d.%m.%Y %H:%M")}***\n' \
+                    f'🌤️ Погода в городе {city_rus} на завтрашний день:\n' \
+                    f'🌡️ Температура воздуха: {forecast["temperature"]}°C\n' \
+                    f'💧 Влажность: {forecast["humidity"]}%\n' \
+                    f'💨 Скорость ветра: {forecast["wind_speed"]} м/c\n' \
+                    f'🧭 Направление ветра: {forecast["wind_direction"]}°\n' \
+                    f'🌞 Хорошего дня!'
+        
+        await bot.send_message(callback_query.from_user.id, weather_text, parse_mode="HTML")
         await state.finish()
         await old_user_hello(callback_query, state)
         await bot.delete_message(callback_query.message.chat.id, callback_query.message.message_id)

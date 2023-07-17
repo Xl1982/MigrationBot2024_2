@@ -20,6 +20,7 @@ ADMIN_LINK = 'https://t.me/legannyst'
 # EXCHANGE_TOKEN = '028bff5f7414df842c38e390'
 
 city = 'Torrevieja'
+city_rus = 'Торревьеха'
 BOT_TOKEN = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # https://t.me/Torrevieja_delivery_bot
 BOT_TOKEN_GREEN = "5999451135:AAEZNGUw2pGw-f9w5xicTEl3nPG48Qyczak" #https://t.me/greenmagazin_bot
 #BOT_TOKEN = '5929960744:AAHhZq9mJy1ALXidm0Ww9F6iRKihBP6fK0s' #https://t.me/Torrevija_bot
