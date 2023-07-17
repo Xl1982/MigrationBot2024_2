@@ -11,8 +11,10 @@ from source.single_chat import send_message_admin
 from source.single_chat import meeting_with_translator
 from source.single_chat import send_weather_info
 
+
 from source.single_chat.admin_commands import start, taxi_orders, translator_orders
 
+from source.group_chat import delete_replays
 from source.group_chat.sending_messages.config_chat import config_chat
 from source.group_chat.sending_messages.weather_send_in_group import check_weather_time
 from source.group_chat.sending_messages.purchase_currency import send_purchase_currency_notification
