@@ -16,8 +16,8 @@ async def send_currency_notification():
     sleep_minutes = 5  # Время сна после отправки сообщения в минутах
 
     while config_chat['purchase_message']:
-        # now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))  # Получение текущего времени в часовом поясе 'Europe/Madrid'
-        now = datetime.datetime.now()
+        now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))  # Получение текущего времени в часовом поясе 'Europe/Madrid'
+        # now = datetime.datetime.now()
         current_time = now.time()  # Получение объекта time из текущего времени
 
         # Проверка соответствия текущего времени диапазону вокруг целевого времени с учетом отклонения
