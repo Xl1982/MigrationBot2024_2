@@ -13,7 +13,7 @@ from .config_chat import config_chat
 
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
-async def send_weather_forecast(chat_id: int):
+async def send_weather_forecast(chat_id: int, hour=9):
     # Создаем список с доступными временными значениями для выбора
     times = ["09:00", "12:00", "15:00", "18:00", "21:00"]
 
@@ -32,7 +32,7 @@ async def send_weather_forecast(chat_id: int):
         is_first_day = (i == 0)
 
         # Получаем прогноз погоды для выбранного дня и времени
-        forecast = get_weather_forecast(target_date, datetime.time(12, 0), city_name='Torrevieja')
+        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name='Torrevieja')
 
         # Проверяем, есть ли доступный прогноз погоды для выбранного дня
         if forecast:
