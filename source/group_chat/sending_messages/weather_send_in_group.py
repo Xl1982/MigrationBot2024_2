@@ -52,7 +52,7 @@ async def send_weather_forecast(chat_id: int, hour=9):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                message = f'🌍 ***{target_date.strftime("%d.%m.%Y")}***\n' \
+                message = f'🌍 ***{datetime.datetime.now().strftime("%d.%m.%Y %H:%M")}***\n' \
                             f'{weather_emoji} Погода в городе {city_rus}:\n' \
                             f'🌡️ Температура воздуха: {first_time_forecast["temperature"]}°C\n' \
                             f'💧 Влажность: {first_time_forecast["humidity"]}%\n' \

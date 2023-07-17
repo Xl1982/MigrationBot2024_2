@@ -77,7 +77,7 @@ class MoneySellConverter:
         # Формирование текста с обменным курсом
         self.money_sell_text = (
             f"Срочно купим за Евро рубли и гривны\n"
-            f"Цена на {formatted_datetime}\n"
+            f"Цена на {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}\n"
             f"💶 За 1 🇪🇺EUR купим: {rub_to_eur:.2f} 🇷🇺RUB\n"
             f"💶 За 1 🇪🇺EUR купим: {uah_to_eur:.2f} 🇺🇦UAH\n"
         )
@@ -137,7 +137,7 @@ class CurrencyConverter:
         rub_to_eur = 1 / eur_to_rub
         uah_to_eur = 1 / eur_to_uah
 
-        self.exchange_text = (f"Курс 🇪🇺EUR на {formatted_datetime}\n"
+        self.exchange_text = (f"Курс 🇪🇺EUR на {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}\n"
             f"💶 Чтобы купить 1 🇪🇺EUR, нужно отдать: {usd_to_eur:.2f} 🇺🇸USD\n"
             f"💶 Чтобы купить 1 🇪🇺EUR, нужно отдать: {rub_to_eur:.2f} 🇷🇺RUB\n"
             f"💶 Чтобы купить 1 🇪🇺EUR, нужно отдать: {uah_to_eur:.2f} 🇺🇦UAH\n")
