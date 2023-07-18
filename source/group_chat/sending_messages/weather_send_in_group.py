@@ -93,7 +93,7 @@ async def check_weather_time(chat_id):
             target_time_combine = datetime.datetime.combine(now.date(), target_time)
 
             time_lower_bound = target_time_combine - datetime.timedelta(hours=10, minutes=2)
-            time_upper_bound = target_time_combine + datetime.timedelta(hours=12, minutes=2)
+            time_upper_bound = target_time_combine + datetime.timedelta(hours=10, minutes=2)
 
             # Проверяем, соответствует ли текущее время заданному времени
             if time_lower_bound.time() < current_time < time_upper_bound.time():
