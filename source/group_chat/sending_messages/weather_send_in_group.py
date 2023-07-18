@@ -96,7 +96,7 @@ async def check_weather_time(chat_id):
 
             logger.info('Отправка сообщения с прогнозом погоды')
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(300)
         else:
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
