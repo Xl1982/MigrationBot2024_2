@@ -1,3 +1,5 @@
+# Получаем текущее время с помощью модуля datetime
+from datetime import datetime
 
 from aiogram.dispatcher import FSMContext
 from aiogram import types
@@ -107,15 +109,13 @@ async def process_phone(message: types.Message, state: FSMContext):
         await state.update_data(phone=phone)
         user_data = await state.get_data()
 
-        # Получаем текущее время с помощью модуля datetime
-        from datetime import datetime
         order_time = datetime.now()
 
         # Отправка сообщения админу с информацией о заказе
         admin_message = f"Новый заказ такси!\n\n" \
                         f"Откуда: {user_data['origin']}\n" \
                         f"Куда: {user_data['destination']}\n" \
-                        f"Время: {order_time}\n" \
+                        f"Время: {user_data['time']}\n" \
                         f"Телефон: {user_data['phone']}\n"
 
         await bot.send_message(MAIN_ADMIN, admin_message)

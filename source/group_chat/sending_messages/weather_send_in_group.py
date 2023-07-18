@@ -13,7 +13,7 @@ from .config_chat import config_chat, times_to_send
 
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
-async def send_weather_forecast(chat_id: int, hour=9):
+async def send_weather_forecast(chat_id: int, hour=12):
     # Создаем список с доступными временными значениями для выбора
     times = ["09:00", "12:00", "15:00", "18:00", "21:00"]
 
@@ -92,8 +92,8 @@ async def check_weather_time(chat_id):
             current_time = now.time()
             target_time_combine = datetime.datetime.combine(now.date(), target_time)
 
-            time_lower_bound = target_time_combine - datetime.timedelta(hours=10, minutes=2)
-            time_upper_bound = target_time_combine + datetime.timedelta(hours=10, minutes=2)
+            time_lower_bound = target_time_combine - datetime.timedelta(minutes=2)
+            time_upper_bound = target_time_combine + datetime.timedelta(minutes=2)
 
             # Проверяем, соответствует ли текущее время заданному времени
             if time_lower_bound.time() < current_time < time_upper_bound.time():
@@ -102,8 +102,7 @@ async def check_weather_time(chat_id):
 
                 logger.info('Отправка сообщения с прогнозом погоды')
 
-                # await asyncio.sleep(300)
-                await asyncio.sleep(60)
+                await asyncio.sleep(300)
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
 

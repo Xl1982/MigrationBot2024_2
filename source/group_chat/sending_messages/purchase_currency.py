@@ -25,8 +25,8 @@ async def send_purchase_currency_notification():
         # Проверка соответствия текущего времени диапазону вокруг целевого времени с учетом отклонения
         for target_time in target_times:
             target_time_with_deviation = datetime.datetime.combine(now.date(), target_time) + datetime.timedelta(minutes=random.choice(deviation_minutes))
-            time_lower_bound = target_time_with_deviation - datetime.timedelta(hours=10, minutes=2)
-            time_upper_bound = target_time_with_deviation + datetime.timedelta(hours=10, minutes=2)
+            time_lower_bound = target_time_with_deviation - datetime.timedelta(minutes=2)
+            time_upper_bound = target_time_with_deviation + datetime.timedelta(minutes=2)
             if time_lower_bound.time() < current_time < time_upper_bound.time():
                 # Создание экземпляра класса CurrencyConverter
                 converter = MoneySellConverter()
@@ -41,8 +41,7 @@ async def send_purchase_currency_notification():
                 logger.info(f"Отправлено уведомление о покупке валюты: {currency_text}")
 
                 # Переход в режим сна на указанное время
-                # await asyncio.sleep(sleep_minutes * 60)
-                await asyncio.sleep(60)
+                await asyncio.sleep(sleep_minutes * 60)
 
         # Ожидание 1 минуты перед проверкой времени снова
         await asyncio.sleep(60)
