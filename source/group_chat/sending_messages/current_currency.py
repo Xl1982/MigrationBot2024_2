@@ -39,7 +39,8 @@ async def send_currency_notification():
                 logger.info(f"Отправлено уведомление о курсе валют: {exchange_text}")
 
                 # Переход в режим сна на указанное время
-                await asyncio.sleep(sleep_minutes * 60)
+                # await asyncio.sleep(sleep_minutes * 60)
+                await asyncio.sleep(60)
 
         # Ожидание 1 минуты перед проверкой времени снова
         await asyncio.sleep(60)

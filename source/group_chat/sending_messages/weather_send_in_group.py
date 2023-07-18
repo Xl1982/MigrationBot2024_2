@@ -9,7 +9,7 @@ from source.modules.get_weather_info import get_weather_forecast
 from source.logger_bot import logger
 from source.config import city_rus
 
-from .config_chat import config_chat
+from .config_chat import config_chat, times_to_send
 
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
@@ -85,19 +85,25 @@ async def check_weather_time(chat_id):
     logger.info('Проверка погоды запущена')
     while config_chat['weather_message']:
         
-        now = datetime.datetime.now()
-        target_time_one = datetime.time(8, 50)  # Заданное время (8:50 утра)
-        target_time_two = datetime.time(8, 52)
+        target_times = times_to_send['weather_message']
 
-        # Проверяем, соответствует ли текущее время заданному времени
-        if target_time_one < now.time() < target_time_two:
-            # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
-            await send_weather_forecast(chat_id)
+        for target_time in target_times:
+            now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))
+            current_time = now.time()
+            target_time_combine = datetime.datetime.combine(now.date(), target_time)
 
-            logger.info('Отправка сообщения с прогнозом погоды')
+            time_lower_bound = target_time_combine - datetime.timedelta(hours=10, minutes=2)
+            time_upper_bound = target_time_combine + datetime.timedelta(hours=12, minutes=2)
 
-            await asyncio.sleep(300)
-        else:
+            # Проверяем, соответствует ли текущее время заданному времени
+            if time_lower_bound.time() < current_time < time_upper_bound.time():
+                # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
+                await send_weather_forecast(chat_id)
+
+                logger.info('Отправка сообщения с прогнозом погоды')
+
+                # await asyncio.sleep(300)
+                await asyncio.sleep(60)
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
 

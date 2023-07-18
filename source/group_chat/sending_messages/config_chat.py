@@ -22,4 +22,7 @@ times_to_send = {
         datetime.time(13, 0),
         datetime.time(16, 0),
     ],
+    'weather_message': [
+        datetime.time(13, 0)
+    ]
 }
