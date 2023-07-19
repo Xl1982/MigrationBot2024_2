@@ -1,5 +1,4 @@
 import asyncio
-import multiprocessing
 
 from aiogram.utils import executor
 
@@ -11,7 +10,6 @@ from source.single_chat import send_message_admin
 from source.single_chat import meeting_with_translator
 from source.single_chat import send_weather_info
 
-
 from source.single_chat.admin_commands import start, taxi_orders, translator_orders
 
 from source.group_chat import delete_replays
@@ -22,10 +20,9 @@ from source.group_chat.sending_messages.current_currency import send_currency_no
 from source.group_chat.sending_messages.send_text_messages import send_text_message
 from source.group_chat import welcome_message_timeout
 from source.group_chat.sending_messages import weather_send_in_group
-from source.group_chat.admin_commands import ban_users
+from source.group_chat.admin_commands import add_chat_id, ban_users
 from source.group_chat import welcome_message_timeout
-from source.group_chat.admin_commands import send_messages_in_chats
-
+from source.group_chat.admin_commands import send_messages_in_chats, add_chat_id
 
 # Запуск бота
 if __name__ == '__main__':
