@@ -24,11 +24,11 @@ from source.group_chat import welcome_message_timeout
 from source.group_chat.sending_messages import weather_send_in_group
 from source.group_chat.admin_commands import ban_users
 from source.group_chat import welcome_message_timeout
+from source.group_chat.admin_commands import send_messages_in_chats
 
 
 # Запуск бота
 if __name__ == '__main__':
-    # Создание и запуск тасков для выполнения функций check_weather_time и send_currency_notification
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.create_task(check_weather_time(chat_id=config_chat['chat_id']))

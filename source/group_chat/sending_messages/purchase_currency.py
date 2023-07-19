@@ -7,6 +7,7 @@ from .money_sell import MoneySellConverter
 from source.bot_init import dp, bot
 from source.group_chat.sending_messages.config_chat import config_chat
 from source.logger_bot import logger
+from source.config import ADMIN_LINK
 
 from source.group_chat.sending_messages.config_chat import times_to_send
 
@@ -33,6 +34,8 @@ async def send_purchase_currency_notification():
 
                 # Вызов метода convert_currency для получения текста с обменным курсом
                 currency_text, _, _, _ = converter.convert_currency(margin_coefficient=1.2)
+
+                currency_text += f'\nКонтактные данные: {ADMIN_LINK}'
 
                 # Отправка уведомления в чат
                 await bot.send_message(config_chat['chat_id'], currency_text)

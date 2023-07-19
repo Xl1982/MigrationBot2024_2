@@ -12,6 +12,7 @@ def make_keyboard():
     keyboard.add(types.InlineKeyboardButton("Забаненные в личке", callback_data="banned"))
     keyboard.add(types.InlineKeyboardButton("Список заказов такси", callback_data="taxi"))
     keyboard.add(types.InlineKeyboardButton("Список заказов для переводчика", callback_data="translator"))
+    keyboard.add(types.InlineKeyboardButton('Отправить сообщение в группы', callback_data='send_messages'))
     # Возвращаем клавиатуру
     return keyboard
 

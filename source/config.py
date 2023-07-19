@@ -1,11 +1,14 @@
 
 MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I'
 # MAIN_ADMIN = '1120233842'
-ADMIN_LINK = 'https://t.me/May1298'
+# ADMIN_LINK = 'https://t.me/May1298'
 # CHAT_ID_TORA = -1001874062984 #https://t.me/torrevieja_migration
 CHAT_ID_TORA = -1001526626022 # Тестовый чат 
 EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
-
+CHATS_ID = [
+    -1001526626022, # Тестовый чат,
+    -1001966380038 # Второй тестовый чат
+]
 
 '''
 Вставь выше свои данные, просто будем комментить туда-сюда я думаю, либо я потом сделаю подгрузку из getenv
