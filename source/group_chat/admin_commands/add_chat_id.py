@@ -6,7 +6,6 @@ from source.bot_init import dp, bot
 from source.data.classes.add_chat import ChatManager
 
 
-
 @dp.message_handler(lambda message: message.chat.type in [types.ChatType.GROUP, types.ChatType.SUPERGROUP],
                     commands=['add_chat'])
 async def add_chat_into_config(message: types.Message):
