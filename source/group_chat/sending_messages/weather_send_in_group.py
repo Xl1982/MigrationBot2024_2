@@ -4,13 +4,16 @@ import pytz
 
 from aiogram import types
 
+from source.group_chat.sending_messages.weather_api import WeatherAPI
 from source.bot_init import dp, bot
 from source.modules.get_weather_info import get_weather_forecast
 from source.logger_bot import logger
-from source.config import city_rus
+from source.config import city_rus, city, WEATHER_API
 
 from .config_chat import config_chat, times_to_send
 
+
+api = WeatherAPI(api_key=WEATHER_API)
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
 async def send_weather_forecast(chat_id: int, hour=12):
@@ -52,17 +55,8 @@ async def send_weather_forecast(chat_id: int, hour=12):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                message = f'🌍 ***{datetime.datetime.now().strftime("%d.%m.%Y %H:%M")}***\n' \
-                            f'{weather_emoji} Погода в городе {city_rus}:\n' \
-                            f'🌡️ Температура воздуха: {first_time_forecast["temperature"]}°C\n' \
-                            f'💧 Влажность: {first_time_forecast["humidity"]}%\n' \
-                            f'🌬️ Давление: {first_time_forecast["pressure"]} мм.рт.ст\n' \
-                            f'💨 Скорость ветра: {first_time_forecast["wind_speed"]} м/c\n' \
-                            f'☁️ Облачность: {first_time_forecast["cloudiness"]}%\n' \
-                            f'🌅 Время восхода солнца: {first_time_forecast["sunrise"].strftime("%H:%M")}\n' \
-                            f'🌇 Время заката солнца: {first_time_forecast["sunset"].strftime("%H:%M")}\n' \
-                            f'🌞 Хорошего дня!\n'
-                forecast_message += f"{message}{'-' * 52}\n\n"
+                forecast = api.get_weather(city)
+                forecast_message += f"{forecast}\n{'-' * 52}\n\n"
             else:
                 # Выводим краткую информацию для остальных дней
                 simplified_message = f'{"-" * 52}\n'
