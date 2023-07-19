@@ -1,17 +1,22 @@
 import datetime
 import asyncio
+import pytz
 
 from aiogram import types
 
+from source.group_chat.sending_messages.weather_api import WeatherAPI
 from source.bot_init import dp, bot
-from source.single_chat.weather.get_weather_info import get_weather_forecast
+from source.modules.get_weather_info import get_weather_forecast
+from source.logger_bot import logger
+from source.config import city_rus, city, WEATHER_API
+
+from .config_chat import config_chat, times_to_send
 
 
-from .config_chat import config_chat
-
+api = WeatherAPI(api_key=WEATHER_API)
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
-async def send_weather_forecast(chat_id: int):
+async def send_weather_forecast(chat_id: int, hour=12):
     # Создаем список с доступными временными значениями для выбора
     times = ["09:00", "12:00", "15:00", "18:00", "21:00"]
 
@@ -30,7 +35,7 @@ async def send_weather_forecast(chat_id: int):
         is_first_day = (i == 0)
 
         # Получаем прогноз погоды для выбранного дня и времени
-        forecast = get_weather_forecast(target_date, datetime.time(9, 0), city_name='Torrevieja')
+        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name='Torrevieja')
 
         # Проверяем, есть ли доступный прогноз погоды для выбранного дня
         if forecast:
@@ -50,18 +55,8 @@ async def send_weather_forecast(chat_id: int):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                # Выводим полную информацию для первого дня
-                message = f"🌍 ***{target_date.strftime('%d.%m.%Y')}***\n"
-                message += f"{weather_emoji} Погода в городе Torrevieja:\n"
-                message += f"🌡️ Температура воздуха: {first_time_forecast['temperature']}°C\n"
-                message += f"💧 Влажность: {first_time_forecast['humidity']}%\n"
-                message += f"🌬️ Давление: {first_time_forecast['pressure']} мм.рт.ст\n"
-                message += f"💨 Скорость ветра: {first_time_forecast['wind_speed']} м/c\n"
-                message += f"☁️ Облачность: {first_time_forecast['cloudiness']}%\n"
-                message += f"🌅 Время восхода солнца: {first_time_forecast['sunrise'].strftime('%H:%M')}\n"
-                message += f"🌇 Время заката солнца: {first_time_forecast['sunset'].strftime('%H:%M')}\n"
-                message += f"🌞 Хорошего дня!\n"
-                forecast_message += f"{message}{'-' * 52}\n\n"
+                forecast = api.get_weather(city)
+                forecast_message += f"{forecast}\n{'-' * 52}\n\n"
             else:
                 # Выводим краткую информацию для остальных дней
                 simplified_message = f'{"-" * 52}\n'
@@ -81,37 +76,48 @@ async def send_weather_forecast(chat_id: int):
 
 # Функция для проверки текущего времени
 async def check_weather_time(chat_id):
+    logger.info('Проверка погоды запущена')
     while config_chat['weather_message']:
-        now = datetime.datetime.now()
-        target_time = datetime.time(8, 50)  # Заданное время (8:50 утра)
+        
+        target_times = times_to_send['weather_message']
 
-        # Проверяем, соответствует ли текущее время заданному времени
-        if now.time() == target_time:
-            # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
-            await send_weather_forecast(chat_id)
+        for target_time in target_times:
+            now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))
+            current_time = now.time()
+            target_time_combine = datetime.datetime.combine(now.date(), target_time)
 
-            print("Отправка сообщения с прогнозом погоды...")
+            time_lower_bound = target_time_combine - datetime.timedelta(minutes=2)
+            time_upper_bound = target_time_combine + datetime.timedelta(minutes=2)
 
-            await asyncio.sleep(60)
-        else:
+            # Проверяем, соответствует ли текущее время заданному времени
+            if time_lower_bound.time() < current_time < time_upper_bound.time():
+                # Здесь вызываем функцию для отправки прогноза погоды в указанный чат
+                await send_weather_forecast(chat_id)
+
+                logger.info('Отправка сообщения с прогнозом погоды')
+
+                await asyncio.sleep(300)
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
 
 
-@dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 
-                    message.text == '/weather on')
-async def weather_send_message_on(message: types.Message):
-    config_chat['weather_message'] = True
-    config_chat['chat_id'] = message.chat.id
-    
-    await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
+# @dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 
+#                     message.text == '/weather on')
+# async def weather_send_message_on(message: types.Message):
+#     config_chat['weather_message'] = True
+#     config_chat['chat_id'] = message.chat.id
+#     print("Попытка запустить функцию для рассылки погоды")
+#     # Запускаем функцию проверки времени с передачей chat_id
+#     asyncio.ensure_future(check_weather_time(message.chat.id))
 
-    # Запускаем функцию проверки времени с передачей chat_id
-    asyncio.ensure_future(check_weather_time(message.chat.id))
+#     await message.answer('Рассылка погоды включена. Ежедневно - в 8:50 утра.')
+
+#     print("Функция выполнилась, погода должна рассылаться")
 
 
-@dp.message_handler(lambda message: message.chat.type in (types.ChatType.SUPERGROUP, types.ChatType.GROUP) and
-                    message.text == '/weather off')
-async def weather_send_message_off(message: types.Message):
-    config_chat['weather_message'] = False
-    await message.answer('Рассылка погоды выключена. Используй команду "/weather on"')
+
+# @dp.message_handler(lambda message: message.chat.type in (types.ChatType.SUPERGROUP, types.ChatType.GROUP) and
+#                     message.text == '/weather off')
+# async def weather_send_message_off(message: types.Message):
+#     config_chat['weather_message'] = False
+#     await message.answer('Рассылка погоды выключена. Используй команду "/weather on"')

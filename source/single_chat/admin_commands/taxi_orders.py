@@ -15,7 +15,7 @@ from source.single_chat.admin_commands.start import info_handler
 def make_back_button():
     # Создаем объект инлайн клавиатуры
     keyboard = types.InlineKeyboardMarkup() 
-    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit'))
+    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_admin'))
     # Возвращаем клавиатуру
     return keyboard
 
@@ -27,7 +27,7 @@ def make_taxi_keyboard():
     keyboard.add(types.InlineKeyboardButton("Последний заказ", callback_data="last_order"))
     keyboard.add(types.InlineKeyboardButton("Количество заказов", callback_data="order_count"))
     keyboard.add(types.InlineKeyboardButton("Выбрать количество заказов", callback_data="choose_orders"))
-    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit'))
+    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_admin'))
     # Возвращаем клавиатуру
     return keyboard
 
@@ -50,7 +50,7 @@ def make_pagination_keyboard(limit, offset, total_orders):
     
     # Добавляем кнопки в клавиатуру
     keyboard.add(*buttons)
-    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit'))
+    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_admin'))
 
     # Возвращаем клавиатуру
     return keyboard
@@ -60,7 +60,7 @@ def make_pagination_keyboard(limit, offset, total_orders):
 class OrderStates(StatesGroup):
     waiting_for_count = State()
 
-@dp.callback_query_handler(lambda c: c.data == 'exit', state=OrderStates.waiting_for_count)
+@dp.callback_query_handler(lambda c: c.data == 'exit_admin', state=OrderStates.waiting_for_count)
 async def exit_from_taxi_info(callback: types.CallbackQuery, state: FSMContext):
     # Удаляем сообщение с предыдущей клавиатурой
     await bot.delete_message(callback.message.chat.id, callback.message.message_id)
@@ -68,7 +68,7 @@ async def exit_from_taxi_info(callback: types.CallbackQuery, state: FSMContext):
     await state.finish()
 
 
-@dp.callback_query_handler(lambda c: c.data == 'exit')
+@dp.callback_query_handler(lambda c: c.data == 'exit_admin')
 async def exit_from_taxi_info(callback: types.CallbackQuery):
     # Удаляем сообщение с предыдущей клавиатурой
     await bot.delete_message(callback.message.chat.id, callback.message.message_id)
@@ -79,6 +79,7 @@ async def exit_from_taxi_info(callback: types.CallbackQuery):
 # Регистрируем обработчик для коллбэк-запроса с данными 'taxi'
 @dp.callback_query_handler(lambda c: c.data == 'taxi')
 async def give_choose_taxi(callback: types.CallbackQuery):
+    await callback.answer()
     # Отправляем сообщение с текстом и инлайн клавиатурой
     await bot.send_message(callback.from_user.id, "Выберите действие с заказами такси:", reply_markup=make_taxi_keyboard())
     # Удаляем сообщение с предыдущей клавиатурой

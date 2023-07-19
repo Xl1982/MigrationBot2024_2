@@ -145,7 +145,7 @@ async def unmute_user(message: types.Message):
         # Если команда принимает ID пользователя в качестве аргумента
         else:
             # Получаем ID пользователя из аргумента
-            user_id = message.get_args()
+            user_id = int(message.get_args())
             # Проверяем, что аргумент не пустой
             if user_id:
                 # Возвращаем ему полные права в чате

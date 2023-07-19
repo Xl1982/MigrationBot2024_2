@@ -55,7 +55,7 @@ try:
     cur.execute("""
         CREATE TABLE IF NOT EXISTS translator_orders ( 
             order_id SERIAL PRIMARY KEY, 
-            user_id INT REFERENCES users(user_id),
+            user_id BIGINT REFERENCES users(user_id),
             order_time TIMESTAMP NOT NULL, 
             meeting_place VARCHAR(255) NOT NULL, 
             phone_number VARCHAR(20) NOT NULL 
