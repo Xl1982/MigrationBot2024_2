@@ -1,9 +1,9 @@
 
-MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I'
-MAIN_ADMIN = '1120233842'
-ADMIN_LINK = 'https://t.me/May1298'
+# MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I'
+# MAIN_ADMIN = '1120233842'
+# ADMIN_LINK = 'https://t.me/May1298'
 # CHAT_ID_TORA = -1001874062984 #https://t.me/torrevieja_migration
-CHAT_ID_TORA = -1001526626022 # Тестовый чат 
+# CHAT_ID_TORA = -1001526626022 # Тестовый чат 
 EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 
 '''
@@ -12,10 +12,10 @@ EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 Данные ОЛЕГА
 '''
 # MAIN_TOKEN_BOT = '5367458503:AAF4i_Atjfb-0ObdBHetooVyPJuZ5jVOaXk'
-# MAIN_TOKEN_BOT = '6273983990:AAHscC2ETkVtptAYkDfSckhFJ-Hmk6l9YOs' # Тестирование в чате
-# MAIN_ADMIN = 1387633357 # Тут мой ID на данный момент. В основной версии будет твой.
-# ADMIN_LINK = 'https://t.me/legannyst'
-# CHAT_ID_TORA = -1001966380038
+MAIN_TOKEN_BOT = '6273983990:AAHscC2ETkVtptAYkDfSckhFJ-Hmk6l9YOs' # Тестирование в чате
+MAIN_ADMIN = 1387633357 # Тут мой ID на данный момент. В основной версии будет твой.
+ADMIN_LINK = 'https://t.me/legannyst'
+CHAT_ID_TORA = -1001966380038
 # EXCHANGE_TOKEN = '028bff5f7414df842c38e390'
 
 city = 'Torrevieja'

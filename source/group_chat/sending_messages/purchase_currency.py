@@ -3,7 +3,7 @@ import datetime
 import pytz
 import random
 
-from .money_sell import MoneySellConverter
+from ...data.classes.money_sell import MoneySellConverter
 from source.bot_init import dp, bot
 from source.group_chat.sending_messages.config_chat import config_chat
 from source.logger_bot import logger

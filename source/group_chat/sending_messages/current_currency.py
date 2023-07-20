@@ -4,7 +4,7 @@ import pytz
 import random
 
 from source.group_chat.sending_messages.config_chat import config_chat, times_to_send
-from .money_sell import CurrencyConverter
+from ...data.classes.money_sell import CurrencyConverter
 from source.bot_init import dp, bot
 from source.logger_bot import logger
 

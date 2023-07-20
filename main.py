@@ -10,7 +10,7 @@ from source.single_chat import send_message_admin
 from source.single_chat import meeting_with_translator
 from source.single_chat import send_weather_info
 
-from source.single_chat.admin_commands import start, taxi_orders, translator_orders
+from source.single_chat.admin_commands import start, taxi_orders, translator_orders, regulation_of_admins
 
 from source.group_chat import delete_replays
 from source.group_chat.sending_messages.config_chat import config_chat
