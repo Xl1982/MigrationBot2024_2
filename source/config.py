@@ -17,6 +17,8 @@ MAIN_ADMIN = 1387633357 # Тут мой ID на данный момент. В о
 # CHAT_ID_TORA = -1001966380038
 # EXCHANGE_TOKEN = '028bff5f7414df842c38e390'
 
+MARKET_ADMINS = []
+
 city = 'Torrevieja'
 city_rus = 'Торревьеха'
 BOT_TOKEN = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # https://t.me/Torrevieja_delivery_bot
