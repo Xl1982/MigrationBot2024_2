@@ -7,9 +7,13 @@ from source.single_chat.admin_commands.start import check_admins
 
 class IsUser(BoundFilter):
     async def check(self, message: Message):
-        return message.from_user.id not in check_admins() or message.from_user.id != MAIN_ADMIN
+        if message.from_user.id == MAIN_ADMIN:
+            return False
+        return message.from_user.id not in check_admins()
 
 
 class IsAdmin(BoundFilter):
     async def check(self, message: Message):
-        return message.from_user.id in check_admins() or message.from_user.id == MAIN_ADMIN
+        if message.from_user.id == MAIN_ADMIN:
+            return True
+        return message.from_user.id in check_admins()
