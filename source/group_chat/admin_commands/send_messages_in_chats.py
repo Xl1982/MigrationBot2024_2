@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler, check_admins
 from source.config import MAIN_ADMIN
 from source.bot_init import dp, bot
 from source.logger_bot import logger
@@ -16,7 +16,7 @@ class SomeState(StatesGroup):
 
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
 # Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
-@dp.callback_query_handler(lambda c: c.data == 'send_messages' and c.from_user.id == MAIN_ADMIN)
+@dp.callback_query_handler(lambda c: c.data == 'send_messages' and c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins())
 async def send_messages_handler(callback_query: types.CallbackQuery):
     markup = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton("Назад"))
     

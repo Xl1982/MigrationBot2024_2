@@ -31,8 +31,7 @@ from source.market import app
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
 
-
-    loop = asyncio.new_event_loop()
+    loop = asyncio.new_event_loop() 
     asyncio.set_event_loop(loop)
     loop.create_task(check_weather_time(chat_id=config_chat['chat_id']))
     loop.create_task(send_currency_notification())
