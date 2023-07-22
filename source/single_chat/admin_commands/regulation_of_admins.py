@@ -160,4 +160,4 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
 
     # Завершаем состояние FSM (если используется)
     await state.finish()
-    await info_handler()
+    await info_handler(message)

@@ -15,6 +15,7 @@ def make_keyboard(user_id):
     keyboard.add(types.InlineKeyboardButton('Отправить сообщение в группы', callback_data='send_messages'))
     # if user_id == MAIN_ADMIN:
     keyboard.add(types.InlineKeyboardButton('Действия с администраторами бота', callback_data='admins'))
+    keyboard.add(types.InlineKeyboardButton('Магазин', callback_data='market'))
 
     # Возвращаем клавиатуру
     return keyboard
@@ -27,7 +28,8 @@ def check_admins():
 
 
 # Регистрируем обработчик для команды info
-@dp.message_handler(lambda message: message.from_user.id == MAIN_ADMIN or message.from_user.id in check_admins(), commands=["info"])
+@dp.message_handler(lambda message: (message.from_user.id == MAIN_ADMIN or message.from_user.id in check_admins())
+                    and message.chat.type == types.ChatType.PRIVATE, commands=["info"])
 async def info_handler(message: types.Message):
     
     # Отправляем сообщение с текстом и инлайн клавиатурой

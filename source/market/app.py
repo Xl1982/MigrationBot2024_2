@@ -1,78 +1,47 @@
 
 from aiogram import executor, types
 from aiogram.types import ReplyKeyboardMarkup, ReplyKeyboardRemove
-from aiogram.dispatcher.filters.state import StatesGroup, State
-import handlers
-import logging
-import config
-from loader import dp
 
-logging.basicConfig(level=logging.INFO)
-
-user_message = 'Пользователь'
-admin_message = 'Админ'
+from source.single_chat.admin_commands.start import check_admins
+from source.market import handlers
+from source import config
+from source.data.classes.admin_manager import AdminsManager
+from source.bot_init import dp
 
 
-class CheckoutState(StatesGroup):
-    check_cart = State()
-    name = State()
-    address = State()
-    confirm = State()
+# user_message = 'Пользователь'
+# admin_message = 'Админ'
 
-
-class ProductState(StatesGroup):
-    title = State()
-    body = State()
-    image = State()
-    price = State()
-    confirm = State()
-
-
-class CategoryState(StatesGroup):
-    title = State()
-
-
-class SosState(StatesGroup):
-    question = State()
-    submit = State()
-
-
-class AnswerState(StatesGroup):
-    answer = State()
-    submit = State()
-
-
-@dp.message_handler(commands='start')
+@dp.message_handler(commands='market')
 async def cmd_start(message: types.Message):
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    # markup = ReplyKeyboardMarkup(resize_keyboard=True)
 
-    markup.row(user_message, admin_message)
+    # markup.row(user_message, admin_message)
 
-    await message.answer('''Привет! 👋
-🤖 Я бот-магазин по продаже товаров любой категории.
-🛍️ Чтобы перейти в каталог и выбрать приглянувшиеся товары возпользуйтесь командой /menu.
-💰 Пополнить счет можно через Яндекс.кассу, Сбербанк или Qiwi.
-❓ Возникли вопросы? Не проблема! Команда /sos поможет связаться с админами, которые постараются как можно быстрее откликнуться.
-    ''', reply_markup=markup)
+    text = '''Привет! 👋
+    🤖 Я бот-магазин по продаже товаров любой категории.
+    🛍️ Чтобы перейти в каталог и выбрать приглянувшиеся товары возпользуйтесь командой /menu.
+    💰 Пополнить счет можно через Яндекс.кассу, Сбербанк или Qiwi.
+    ❓ Возникли вопросы? Не проблема! Команда /sos поможет связаться с админами, которые постараются как можно быстрее откликнуться.
+        '''
 
-
-@dp.message_handler(text=user_message)
-async def user_mode(message: types.Message):
-    cid = message.chat.id
-    if cid in config.ADMINS:
-        config.ADMINS.remove(cid)
-
-    await message.answer('Включен пользовательский режим.', reply_markup=ReplyKeyboardRemove())
+    # if message.from_user.id in check_admins():
+        # await message.answer(text, reply_markup=markup)
+    # else:
+    await message.answer(text)
 
 
-@dp.message_handler(text=admin_message)
-async def admin_mode(message: types.Message):
-    cid = message.chat.id
-    if cid not in config.ADMINS:
-        config.ADMINS.append(cid)
-
-    await message.answer('Включен админский режим.', reply_markup=ReplyKeyboardRemove())
+# @dp.message_handler(lambda message: message.from_user.id in check_admins(), text=user_message)
+# async def user_mode(message: types.Message):
+#     user_id = 
 
 
-if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates=False)
+# @dp.message_handler(lambda message: message.from_user.id in check_admins(), text=admin_message)
+# async def admin_mode(message: types.Message):
+#     cid = message.chat.id
+#     if cid not in config.ADMINS:
+#         config.ADMINS.append(cid)
+
+#     await message.answer('Включен админский режим.', reply_markup=ReplyKeyboardRemove())
+
+

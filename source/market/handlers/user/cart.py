@@ -1,13 +1,13 @@
 import logging
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton
-from keyboards.inline.products_from_cart import product_markup, product_cb
+from source.market.keyboards.inline.products_from_cart import product_markup, product_cb
 from aiogram.utils.callback_data import CallbackData
-from keyboards.default.markups import *
+from source.market.keyboards.default.markups import *
 from aiogram.types.chat import ChatActions
-from app import CheckoutState
-from loader import dp, db, bot
-from filters import IsUser
+from source.market.handlers.states import CheckoutState
+from source.bot_init import dp, db, bot
+from source.market.filters import IsUser
 from .menu import cart
 
 
@@ -15,7 +15,7 @@ from .menu import cart
 async def process_cart(message: Message, state: FSMContext):
 
     cart_data = db.fetchall(
-        'SELECT * FROM cart WHERE cid=?', (message.chat.id,))
+        'SELECT * FROM cart WHERE cid=%s', (message.chat.id,))
 
     if len(cart_data) == 0:
 
@@ -31,11 +31,11 @@ async def process_cart(message: Message, state: FSMContext):
 
         for _, idx, count_in_cart in cart_data:
 
-            product = db.fetchone('SELECT * FROM products WHERE idx=?', (idx,))
+            product = db.fetchone('SELECT * FROM products WHERE idx=%s', (idx,))
 
             if product == None:
 
-                db.query('DELETE FROM cart WHERE idx=?', (idx,))
+                db.query('DELETE FROM cart WHERE idx=%s', (idx,))
 
             else:
                 _, title, body, image, price, _ = product
@@ -95,14 +95,14 @@ async def product_callback_handler(query: CallbackQuery, callback_data: dict, st
                 if count_in_cart == 0:
 
                     db.query('''DELETE FROM cart
-                    WHERE cid = ? AND idx = ?''', (query.message.chat.id, idx))
+                    WHERE cid = %s AND idx = %s''', (query.message.chat.id, idx))
 
                     await query.message.delete()
                 else:
 
                     db.query('''UPDATE cart 
-                    SET quantity = ? 
-                    WHERE cid = ? AND idx = ?''', (count_in_cart, query.message.chat.id, idx))
+                    SET quantity = %s 
+                    WHERE cid = %s AND idx = %s''', (count_in_cart, query.message.chat.id, idx))
 
                     await query.message.edit_reply_markup(product_markup(idx, count_in_cart))
 
@@ -230,12 +230,12 @@ async def process_confirm(message: Message, state: FSMContext):
             cid = message.chat.id
             products = [idx + '=' + str(quantity)
                         for idx, quantity in db.fetchall('''SELECT idx, quantity FROM cart
-            WHERE cid=?''', (cid,))]  # idx=quantity
+            WHERE cid=%s''', (cid,))]  # idx=quantity
 
-            db.query('INSERT INTO orders VALUES (?, ?, ?, ?)',
+            db.query('INSERT INTO orders VALUES (%s, %s, %s, %s)',
                      (cid, data['name'], data['address'], ' '.join(products)))
 
-            db.query('DELETE FROM cart WHERE cid=?', (cid,))
+            db.query('DELETE FROM cart WHERE cid=%s', (cid,))
 
             await message.answer('Ок! Ваш заказ уже в пути 🚀\nИмя: <b>' + data['name'] + '</b>\nАдрес: <b>' + data['address'] + '</b>',
                                  reply_markup=markup)

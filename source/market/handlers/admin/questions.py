@@ -1,12 +1,12 @@
-from handlers.user.menu import questions
+from source.market.handlers.user.menu import questions
 from aiogram.dispatcher import FSMContext
 from aiogram.utils.callback_data import CallbackData
-from keyboards.default.markups import all_right_message, cancel_message, submit_markup
+from source.market.keyboards.default.markups import all_right_message, cancel_message, submit_markup
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove
 from aiogram.types.chat import ChatActions
-from app import AnswerState
-from loader import dp, db, bot
-from filters import IsAdmin
+from source.market.handlers.states import AnswerState
+from source.bot_init import dp, db, bot
+from source.market.filters import IsAdmin
 
 question_cb = CallbackData('question', 'cid', 'action')
 
@@ -67,8 +67,8 @@ async def process_send_answer(message: Message, state: FSMContext):
         cid = data['cid']
 
         question = db.fetchone(
-            'SELECT question FROM questions WHERE cid=?', (cid,))[0]
-        db.query('DELETE FROM questions WHERE cid=?', (cid,))
+            'SELECT question FROM questions WHERE cid=%s', (cid,))[0]
+        db.query('DELETE FROM questions WHERE cid=%s', (cid,))
         text = f'Вопрос: <b>{question}</b>\n\nОтвет: <b>{answer}</b>'
 
         await message.answer('Отправлено!', reply_markup=ReplyKeyboardRemove())

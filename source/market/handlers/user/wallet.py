@@ -1,7 +1,7 @@
-from loader import dp
+from source.bot_init import dp
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message
-from filters import IsUser
+from source.market.filters import IsUser
 from .menu import balance
 
 

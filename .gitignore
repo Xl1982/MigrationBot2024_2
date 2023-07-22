@@ -12,3 +12,5 @@ venv/
 desktop.ini
 
 testing.py
+source/data/admins.json
+source/data/chats.json

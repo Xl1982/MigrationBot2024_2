@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from aiogram.utils import executor
 
@@ -24,8 +25,13 @@ from source.group_chat.admin_commands import add_chat_id, ban_users
 from source.group_chat import welcome_message_timeout
 from source.group_chat.admin_commands import send_messages_in_chats, add_chat_id
 
+from source.market import app
+
 # Запуск бота
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+
+
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.create_task(check_weather_time(chat_id=config_chat['chat_id']))

@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.callback_data import CallbackData
-from loader import db
+from source.market import db
 
 product_cb = CallbackData('product', 'id', 'action')
 

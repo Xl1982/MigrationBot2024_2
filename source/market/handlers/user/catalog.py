@@ -1,12 +1,12 @@
 import logging
 from aiogram.types import Message, CallbackQuery
-from keyboards.inline.categories import categories_markup, category_cb
-from keyboards.inline.products_from_catalog import product_markup, product_cb
+from source.market.keyboards.inline.categories import categories_markup, category_cb
+from source.market.keyboards.inline.products_from_catalog import product_markup, product_cb
 from aiogram.utils.callback_data import CallbackData
 from aiogram.types.chat import ChatActions
-from loader import dp, db, bot
+from source.bot_init import dp, db, bot
 from .menu import catalog
-from filters import IsUser
+from source.market.filters import IsUser
 
 
 @dp.message_handler(IsUser(), text=catalog)
@@ -19,8 +19,8 @@ async def process_catalog(message: Message):
 async def category_callback_handler(query: CallbackQuery, callback_data: dict):
 
     products = db.fetchall('''SELECT * FROM products product
-    WHERE product.tag = (SELECT title FROM categories WHERE idx=?) 
-    AND product.idx NOT IN (SELECT idx FROM cart WHERE cid = ?)''',
+    WHERE product.tag = (SELECT title FROM categories WHERE idx=%s) 
+    AND product.idx NOT IN (SELECT idx FROM cart WHERE cid = %s)''',
                            (callback_data['id'], query.message.chat.id))
 
     await query.answer('Все доступные товары.')
@@ -30,7 +30,7 @@ async def category_callback_handler(query: CallbackQuery, callback_data: dict):
 @dp.callback_query_handler(IsUser(), product_cb.filter(action='add'))
 async def add_product_callback_handler(query: CallbackQuery, callback_data: dict):
 
-    db.query('INSERT INTO cart VALUES (?, ?, 1)',
+    db.query('INSERT INTO cart VALUES (%s, %s, 1)',
              (query.message.chat.id, callback_data['id']))
 
     await query.answer('Товар добавлен в корзину!')
