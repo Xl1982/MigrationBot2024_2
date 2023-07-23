@@ -16,7 +16,7 @@ class SomeState(StatesGroup):
 
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
 # Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
-@dp.callback_query_handler(lambda c: c.data == 'send_messages' and c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins())
+@dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
 async def send_messages_handler(callback_query: types.CallbackQuery):
     markup = ReplyKeyboardMarkup(resize_keyboard=True).add(KeyboardButton("Назад"))
     
