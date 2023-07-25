@@ -74,4 +74,32 @@ class User(BaseDB):
         else:
             return False
 
+    def get_user_by_id(self, user_id):
+        # создаем курсор для выполнения запросов
+        cur = self.conn.cursor()
+        # формируем запрос на выборку данных о пользователе по заданному user_id
+        query = f"""
+            SELECT user_id, user_firstname, user_lastname, user_last_message, is_admin_banned 
+            FROM users 
+            WHERE user_id = %s;
+        """
+        # выполняем запрос с передачей данных в качестве параметра
+        cur.execute(query, (user_id,))
+        # получаем результат запроса в виде кортежа
+        result = cur.fetchone()
+        # закрываем курсор
+        cur.close()
+        # если результат не пустой, то возвращаем информацию о пользователе в виде словаря
+        if result:
+            user_info = {
+                "user_id": result[0],
+                "user_firstname": result[1],
+                "user_lastname": result[2],
+                "user_last_message": result[3],
+                "is_admin_banned": bool(result[4])
+            }
+            return user_info
+        # иначе возвращаем None
+        else:
+            return None
 
