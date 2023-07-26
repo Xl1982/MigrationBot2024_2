@@ -16,6 +16,7 @@ def make_keyboard(user_id):
     # if user_id == MAIN_ADMIN:
     keyboard.add(types.InlineKeyboardButton('Действия с администраторами бота', callback_data='admins'))
     keyboard.add(types.InlineKeyboardButton('Магазин', callback_data='market'))
+    keyboard.add(types.InlineKeyboardButton('Настройка сообщений для рассылки', callback_data='messages'))
 
     # Возвращаем клавиатуру
     return keyboard

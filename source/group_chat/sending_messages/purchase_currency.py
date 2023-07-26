@@ -33,7 +33,7 @@ async def send_purchase_currency_notification():
                 converter = MoneySellConverter()
 
                 # Вызов метода convert_currency для получения текста с обменным курсом
-                currency_text, _, _, _ = converter.convert_currency(margin_coefficient=1.2)
+                currency_text, _, _, _ = converter.convert_currency(margin_coefficient=1.1)
 
                 currency_text += f'\nКонтактные данные: {ADMIN_LINK}'
 
