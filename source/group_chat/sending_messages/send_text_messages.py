@@ -27,7 +27,7 @@ async def send_text_messages():
         for message_time_str, message_text in messages_for_current_day.items():
             message_time = datetime.datetime.strptime(message_time_str, '%H:%M').time()
 
-            # Проверяем, соответствует ли текущее время времени отправки
+            # Проверяем, входит ли текущее время времени отправки в диапазон +- 2 минуты
             start_time = (datetime.datetime.combine(datetime.date.today(), message_time) - datetime.timedelta(minutes=2)).time()
             end_time = (datetime.datetime.combine(datetime.date.today(), message_time) + datetime.timedelta(minutes=2)).time()
 
@@ -36,8 +36,7 @@ async def send_text_messages():
                 logger.info(f"Отправлено текстовое сообщение: {message_text}")
 
                 await asyncio.sleep(5 * 60)  # Уход в сон на 5 минут
-                break
-
+                
         else:
             await asyncio.sleep(1 * 60)  # Уход в сон на 1 минуту, если сообщение не отправлено
 
