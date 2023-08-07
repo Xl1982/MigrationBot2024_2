@@ -17,6 +17,14 @@ add_product = '➕ Добавить товар'
 delete_category = '🗑️ Удалить категорию'
 
 
+def is_number(number):
+    try:
+        float(number)
+        return True
+    except ValueError:
+        return False
+    
+
 @dp.message_handler(IsAdmin(), text=settings)
 async def process_settings(message: Message):
 
@@ -174,7 +182,7 @@ async def process_image_url(message: Message, state: FSMContext):
         await message.answer('Вам нужно прислать фото товара.')
 
 
-@dp.message_handler(IsAdmin(), lambda message: not message.text.isdigit(), state=ProductState.price)
+@dp.message_handler(IsAdmin(), lambda message: is_number(message.text) == False, state=ProductState.price)
 async def process_price_invalid(message: Message, state: FSMContext):
 
     if message.text == back_message:
@@ -190,7 +198,7 @@ async def process_price_invalid(message: Message, state: FSMContext):
         await message.answer('Укажите цену в виде числа!')
 
 
-@dp.message_handler(IsAdmin(), lambda message: message.text.isdigit(), state=ProductState.price)
+@dp.message_handler(IsAdmin(), lambda message: is_number(message.text) == True, state=ProductState.price)
 async def process_price(message: Message, state: FSMContext):
 
     async with state.proxy() as data:
@@ -202,7 +210,7 @@ async def process_price(message: Message, state: FSMContext):
         price = data['price']
 
         await ProductState.next()
-        text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price} рублей.'
+        text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price} евро.'
 
         markup = check_markup()
 
@@ -242,7 +250,7 @@ async def process_confirm(message: Message, state: FSMContext):
                            ).encode('utf-8')).hexdigest()
 
         db.query('INSERT INTO products VALUES (%s, %s, %s, %s, %s, %s)',
-                 (idx, title, body, image, int(price), tag))
+                 (idx, title, body, image, float(price), tag))
 
     await state.finish()
     await message.answer('Готово!', reply_markup=ReplyKeyboardRemove())
@@ -267,7 +275,7 @@ async def show_products(m, products, category_idx):
 
     for idx, title, body, image, price, tag in products:
 
-        text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price} рублей.'
+        text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price} евро.'
 
         markup = InlineKeyboardMarkup()
         markup.add(InlineKeyboardButton(

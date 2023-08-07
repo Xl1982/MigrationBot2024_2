@@ -1,4 +1,6 @@
 import logging
+
+from source.config import MAIN_ADMIN
 from aiogram.dispatcher import FSMContext
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardMarkup, InlineKeyboardButton
 from source.market.keyboards.inline.products_from_cart import product_markup, product_cb
@@ -9,6 +11,7 @@ from source.market.handlers.states import CheckoutState
 from source.bot_init import dp, db, bot
 from source.market.filters import IsUser
 from .menu import cart
+from source.single_chat.start_handler import start_work
 
 
 @dp.message_handler(IsUser(), text=cart)
@@ -45,11 +48,11 @@ async def process_cart(message: Message, state: FSMContext):
                     data['products'][idx] = [title, price, count_in_cart]
 
                 markup = product_markup(idx, count_in_cart)
-                text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price}₽.'
+                text = f'<b>{title}</b>\n\n{body}\n\nЦена: {price}€.'
 
                 await message.answer_photo(photo=image,
                                            caption=text,
-                                           reply_markup=markup)
+                                           reply_markup=markup, parse_mode='HTML')
 
         if order_cost != 0:
             markup = ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
@@ -123,11 +126,11 @@ async def checkout(message, state):
         for title, price, count_in_cart in data['products'].values():
 
             tp = count_in_cart * price
-            answer += f'<b>{title}</b> * {count_in_cart}шт. = {tp}₽\n'
+            answer += f'<b>{title}</b> * {count_in_cart}шт. = {tp}€\n'
             total_price += tp
 
-    await message.answer(f'{answer}\nОбщая сумма заказа: {total_price}₽.',
-                         reply_markup=check_markup())
+    await message.answer(f'{answer}\nОбщая сумма заказа: {total_price}€.',
+                        parse_mode='HTML', reply_markup=check_markup())
 
 
 @dp.message_handler(IsUser(), lambda message: message.text not in [all_right_message, back_message], state=CheckoutState.check_cart)
@@ -179,7 +182,7 @@ async def process_address_back(message: Message, state: FSMContext):
     async with state.proxy() as data:
 
         await message.answer('Изменить имя с <b>' + data['name'] + '</b>?',
-                             reply_markup=back_markup())
+                            parse_mode='HTML', reply_markup=back_markup())
 
     await CheckoutState.name.set()
 
@@ -212,7 +215,7 @@ async def process_confirm(message: Message, state: FSMContext):
 
     async with state.proxy() as data:
         await message.answer('Изменить адрес с <b>' + data['address'] + '</b>?',
-                             reply_markup=back_markup())
+                            parse_mode='HTML', reply_markup=back_markup())
 
 
 @dp.message_handler(IsUser(), text=confirm_message, state=CheckoutState.confirm)
@@ -231,14 +234,24 @@ async def process_confirm(message: Message, state: FSMContext):
             products = [idx + '=' + str(quantity)
                         for idx, quantity in db.fetchall('''SELECT idx, quantity FROM cart
             WHERE cid=%s''', (cid,))]  # idx=quantity
+            await bot.send_message(chat_id=MAIN_ADMIN, text=f'Создан заказ:\nИмя: <b>{data["name"]}</b>\nАдрес: <b>{data["address"]}</b>')
+            for product in products:
+                product = product.split('=')
+                count = product[1]
+                tag = product[0]
+                name = db.fetchall('''SELECT title FROM products WHERE idx=%s''', (tag,))
+                await bot.send_message(chat_id=MAIN_ADMIN, text=f'Товар: <b>{name[0][0]}</b>\nКоличество: <b>{count}</b>\nКуда: <b>{data["address"]}</b>\nИмя:  <b>{data["name"]}</b>')
 
             db.query('INSERT INTO orders VALUES (%s, %s, %s, %s)',
                      (cid, data['name'], data['address'], ' '.join(products)))
 
             db.query('DELETE FROM cart WHERE cid=%s', (cid,))
 
-            await message.answer('Ок! Ваш заказ уже в пути 🚀\nИмя: <b>' + data['name'] + '</b>\nАдрес: <b>' + data['address'] + '</b>',
-                                 reply_markup=markup)
+            await message.answer('Ок! Ваш заказ уже в пути 🚀\nИмя: <b>{}</b>\nАдрес: <b>{}</b>'.format(data['name'], data['address']),
+                    parse_mode='HTML', reply_markup=markup)
+            await start_work(message)
+            await state.finish()
+            return
     else:
 
         await message.answer('У вас недостаточно денег на счете. Пополните баланс!',

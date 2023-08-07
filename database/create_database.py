@@ -76,12 +76,12 @@ try:
     """)
 
 
-    cur.execute('CREATE TABLE IF NOT EXISTS products (idx text PRIMARY KEY, title text, body text, photo bytea, price int, tag text)')
-    cur.execute('CREATE TABLE IF NOT EXISTS orders (cid int, usr_name text, usr_address text, products json)')
-    cur.execute('CREATE TABLE IF NOT EXISTS cart (cid int, idx text REFERENCES products (idx), quantity int)')
+    cur.execute('CREATE TABLE IF NOT EXISTS products (idx text PRIMARY KEY, title text, body text, photo bytea, price real, tag text)')
+    cur.execute('CREATE TABLE IF NOT EXISTS orders (cid BIGINT, usr_name text, usr_address text, products text)')
+    cur.execute('CREATE TABLE IF NOT EXISTS cart (cid BIGINT, idx text REFERENCES products (idx), quantity int)')
     cur.execute('CREATE TABLE IF NOT EXISTS categories (idx text PRIMARY KEY, title text)')
-    cur.execute('CREATE TABLE IF NOT EXISTS wallet (cid int, balance real)')
-    cur.execute('CREATE TABLE IF NOT EXISTS questions (cid int, question text)')
+    cur.execute('CREATE TABLE IF NOT EXISTS wallet (cid BIGINT, balance real)')
+    cur.execute('CREATE TABLE IF NOT EXISTS questions (cid BIGINT, question text)')
 
 
     # Сохраняем изменения в базе данных
@@ -93,4 +93,4 @@ try:
 
     print('База данных успешно создана')
 except Exception as e:
-    print(f'В процессе создания базы данных произошла ошибка: {e}')
+    print(f'В процессе создания базы данных произошла ошибка: {e}') 
