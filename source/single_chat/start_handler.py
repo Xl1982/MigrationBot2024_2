@@ -3,21 +3,24 @@ from aiogram.dispatcher import FSMContext
 
 from database.operations.users import User
 
+from source.market.filters import IsAdmin, IsUser
 from source.data.classes.money_sell import CurrencyConverter
 from source.single_chat.keyboard import *
 from source.bot_init import dp, bot
 
 
+@dp.message_handler(IsUser(), lambda message: message.text == 'Выход' and message.chat.type == types.ChatType.PRIVATE, state='*')
 @dp.message_handler(lambda message: message.text == 'Назад' and message.chat.type == types.ChatType.PRIVATE)
 @dp.message_handler(lambda message: message.chat.type == types.ChatType.PRIVATE, commands=['start'])
-async def start_work(message: types.Message):
+async def start_work(message: types.Message, state: FSMContext = None):
+    if state:
+        await state.finish()
     user = User()
     user.add_user(user_id=message.from_user.id, user_firstname=message.from_user.first_name,
                 user_lastname=message.from_user.last_name)
     
     markup = get_main_keyboard()
-    await message.answer('Привет! Я бот, который поможет тебе сориетироваться после переезда! '
-                        'Нажми на кнопку для выбора интересующей тебя услуги:', reply_markup=markup)
+    await message.answer('Нажми на кнопку для выбора интересующей тебя услуги:', reply_markup=markup)
     
 
 @dp.callback_query_handler(lambda c: c.data == 'exit', state='*')
@@ -25,7 +28,7 @@ async def old_user_hello(callback_query: types.CallbackQuery, state: FSMContext)
     await state.finish()
     markup = get_main_keyboard()
     await callback_query.answer()
-    await callback_query.message.answer('Выбери действие нажав на кнопку на клавиатуре:', reply_markup=markup)
+    await callback_query.message.answer('Нажми на кнопку для выбора интересующей тебя услуги:', reply_markup=markup)
 
 
 @dp.message_handler(lambda message: message.text == 'Расписание автобусов', chat_type=types.ChatType.PRIVATE)

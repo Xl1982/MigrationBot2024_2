@@ -8,7 +8,8 @@ from source.bot_init import dp, bot, db
 from source.market.filters import IsAdmin, IsUser
 from hashlib import md5
 from source.market.handlers.user.menu import settings
-
+from source.market.keyboards.default.markups import make_reply_keyboard
+from source.market.keyboards.inline.categories import make_inline_keyboard
 
 category_cb = CallbackData('category', 'id', 'action')
 product_cb = CallbackData('product', 'id', 'action')
@@ -38,7 +39,7 @@ async def process_settings(message: Message):
     markup.add(InlineKeyboardButton(
         '+ Добавить категорию', callback_data='add_category'))
 
-    await message.answer('Настройка категорий:', reply_markup=markup)
+    await message.answer('Настройка категорий:', reply_markup=make_inline_keyboard(markup))
 
 
 @dp.callback_query_handler(IsAdmin(), category_cb.filter(action='view'))
@@ -62,7 +63,8 @@ async def category_callback_handler(query: CallbackQuery, callback_data: dict, s
 @dp.callback_query_handler(IsAdmin(), text='add_category')
 async def add_category_callback_handler(query: CallbackQuery):
     await query.message.delete()
-    await query.message.answer('Название категории?')
+    markup = InlineKeyboardMarkup()
+    await query.message.answer('Название категории?', reply_markup=make_inline_keyboard(markup))
     await CategoryState.title.set()
 
 
@@ -289,4 +291,4 @@ async def show_products(m, products, category_idx):
     markup.add(add_product)
     markup.add(delete_category)
 
-    await m.answer('Хотите что-нибудь добавить или удалить?', reply_markup=markup)
+    await m.answer('Хотите что-нибудь добавить или удалить?', reply_markup=make_reply_keyboard(markup))

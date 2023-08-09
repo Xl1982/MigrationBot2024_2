@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 back_message = '👈 Назад'
 confirm_message = '✅ Подтвердить заказ'
@@ -30,3 +30,6 @@ def submit_markup():
    markup.row(cancel_message, all_right_message)
 
    return markup
+
+def make_reply_keyboard(markup: ReplyKeyboardMarkup):
+    return markup.add(KeyboardButton('Выход'))
