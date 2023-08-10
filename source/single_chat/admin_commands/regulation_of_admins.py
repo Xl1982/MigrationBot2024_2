@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -53,7 +55,11 @@ async def add_admin(query: types.CallbackQuery):
 async def process_admin_info(message: types.Message, state: FSMContext):
     user_id = None
     username = None
-    admins_manager = AdminsManager(r'source\data\admins.json')
+    # Определите путь к файлу для администраторов, используя модуль os
+    admins_path = os.path.join('source', 'data', 'admins.json')
+
+    # Создайте или работайте с файлом администраторов по указанному пути
+    admins_manager = AdminsManager(admins_path)
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     if message.text == 'Назад':

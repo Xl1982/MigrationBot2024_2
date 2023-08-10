@@ -1,4 +1,5 @@
 import re
+import os
 
 from aiogram import types
 from aiogram.dispatcher.filters.state import StatesGroup, State
@@ -8,7 +9,10 @@ from source.data.classes.messages import TextMessagesStorage
 from source.bot_init import dp, bot
 from source.single_chat.admin_commands.start import info_handler
 
-path = r'source\data\messages.json'
+# Определите путь к файлу, используя модуль os
+path = os.path.join('source', 'data', 'messages.json')
+
+# Создайте или работайте с файлом по указанному пути
 storage = TextMessagesStorage(path)
 
 # Состояния

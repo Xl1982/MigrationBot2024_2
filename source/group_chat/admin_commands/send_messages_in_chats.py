@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -26,7 +28,7 @@ async def send_messages_handler(callback_query: types.CallbackQuery):
 # Обработчик ввода текста администратором
 @dp.message_handler(state=SomeState.waiting_for_message)
 async def send_message_to_chats(message: types.Message, state: FSMContext):
-    file_name = "source\data\chats.json"
+    file_name = os.path.join("source", "data", "chats.json")
     chat_manager = ChatManager(file_name)
     # Получаем текст сообщения от администратора
     text = message.text
