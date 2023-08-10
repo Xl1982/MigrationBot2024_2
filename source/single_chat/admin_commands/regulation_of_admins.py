@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from database.operations.users import User
 from source.data.classes.admin_manager import AdminsManager
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler, info_handler_two
 
 
 class RegulationOfAdmins(StatesGroup):
@@ -35,8 +35,7 @@ async def back_admin(query: types.CallbackQuery):
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await query.answer()
-    await info_handler(query.message)
-
+    await info_handler_two(query.message)
 
 @dp.callback_query_handler(lambda c: c.data == 'add_admin' or c.data == 'delete_admin')
 async def add_admin(query: types.CallbackQuery):
@@ -63,7 +62,7 @@ async def process_admin_info(message: types.Message, state: FSMContext):
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     if message.text == 'Назад':
-        await info_handler(message)
+        await info_handler_two(message)
         await state.finish()
         return
 
@@ -101,7 +100,7 @@ async def process_admin_info(message: types.Message, state: FSMContext):
 
     # Завершаем состояние FSM (если используется)
     await state.finish()
-    await info_handler(message)
+    await info_handler_two(message)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'check_admins')
@@ -124,7 +123,7 @@ async def check_admins(query: types.CallbackQuery):
 
         await query.answer()
         await query.message.answer(message_text)
-    await info_handler(query.message)
+    await info_handler_two(query.message)
     
 
 
@@ -134,7 +133,7 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     if message.text == 'Назад':
-        await info_handler(message)
+        await info_handler_two(message)
         await state.finish()
         return
 
@@ -172,4 +171,4 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
 
     # Завершаем состояние FSM (если используется)
     await state.finish()
-    await info_handler(message)
+    await info_handler_two(message)
