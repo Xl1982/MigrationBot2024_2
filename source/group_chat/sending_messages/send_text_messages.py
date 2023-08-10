@@ -47,7 +47,7 @@ async def send_text_messages():
                 await asyncio.sleep(2 * 60)
                 
         else:
-            await asyncio.sleep(1 * 10)
+            await asyncio.sleep(1 * 60)
 
 async def log_to_file(filename, log_message):
     async with aiofiles.open(filename, mode='a', encoding='utf-8') as file:
