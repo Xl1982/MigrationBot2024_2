@@ -106,8 +106,11 @@ async def process_admin_info(message: types.Message, state: FSMContext):
 
 @dp.callback_query_handler(lambda c: c.data == 'check_admins')
 async def check_admins(query: types.CallbackQuery):
-    # Создаем экземпляр AdminsManager, указывая путь к файлу admins.json
-    admins_manager = AdminsManager(r'source\data\admins.json')
+    # Определите путь к файлу для администраторов, используя модуль os
+    admins_path = os.path.join('source', 'data', 'admins.json')
+
+    # Создайте или работайте с файлом администраторов по указанному пути
+    admins_manager = AdminsManager(admins_path)
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     all_admins = admins_manager.get_all_admins()
@@ -149,8 +152,11 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
 
 
     if user_id is not None:
-        # Создаем экземпляр AdminsManager, указывая путь к файлу admins.json
-        admins_manager = AdminsManager(r'source\data\admins.json')
+        # Определите путь к файлу для администраторов, используя модуль os
+        admins_path = os.path.join('source', 'data', 'admins.json')
+
+        # Создайте или работайте с файлом администраторов по указанному пути
+        admins_manager = AdminsManager(admins_path)
 
         # Проверяем, существует ли админ с заданным user_id
         if admins_manager.get_admin_by_id(user_id) is not None:

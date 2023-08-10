@@ -1,7 +1,7 @@
 '''Данные основные для работы бота'''
 # MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I' # Тестовый бот
 MAIN_TOKEN_BOT = '6212366189:AAEdHV4o8SeokbaY_5Di8GzW9_7kd8kCLwA' # Основной бот Торревьеха
-MAIN_ADMIN = 1387633357
+MAIN_ADMIN = '1120233842'
 ADMIN_LINK = 'https://t.me/Torrevija'
 CHAT_ID_TORA = -1001874062984 #https://t.me/torrevieja_migration
 # CHAT_ID_TORA = -1001526626022 # Тестовый чат 
