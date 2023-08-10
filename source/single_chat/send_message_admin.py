@@ -56,8 +56,8 @@ async def send_message(message: types.Message, state: FSMContext):
     user_username = message.from_user.username
     user_id = message.from_user.id
     # пересылаем сообщение админу с username и id пользователя
-    await bot.send_message(ADMIN_ID, f"Сообщение от {message.from_user.full_name} (@{user_username}, {user_id}):\n<<{user_message}>>. "
-                           f'\n\nДля отправки ответного сообщения введи @{user_id} <ответ>', parse_mode=None)
+    await bot.send_message(ADMIN_ID, f"Сообщение от {message.from_user.full_name} (@{user_username}, {user_id}):\n{user_message}. "
+                           f'\n\nДля отправки ответного сообщения введи @{user_id} "ответ"', parse_mode=None)
     # уведомляем пользователя о передаче сообщения
     await message.answer("Сообщение успешно отправлено админу. Пожалуйста, подожди, пока он свяжется с тобой.")
     # сбрасываем состояние для пользователя
@@ -93,6 +93,6 @@ async def reply_user(message: types.Message):
             await message.answer("Неверный формат сообщения. Для отправки ответа пользователю введите его id с символом @ в начале, затем пробел и текст ответа. Для блокировки пользователя введите его id с символом @ в начале, затем пробел и команду 'бан'.", parse_mode=None)
     except Exception as e:
         await bot.send_message(ADMIN_ID, "Проблема с отправкой сообщения. Проверь корректность своего ответа для его отправки. "
-                               "Должно быть @<user_id> <text>", parse_mode=None)
+                               "Должно быть @'user_id' 'text'", parse_mode=None)
         print(f'Ошибка при отправке ответа админа пользователю - {e}')
 
