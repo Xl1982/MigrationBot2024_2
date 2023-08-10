@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -39,7 +41,8 @@ def make_keyboard(user_id):
     return keyboard
 
 def check_admins():
-    admins_manager = AdminsManager(r'source\data\admins.json')
+    path = os.path.join('source', 'data', 'admins.json')
+    admins_manager = AdminsManager(path)
     # Получаем список всех user_id администраторов из JSON файла
     all_admin_user_ids = admins_manager.get_all_admin_user_ids()
     return all_admin_user_ids
