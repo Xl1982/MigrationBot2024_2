@@ -32,10 +32,12 @@ def make_keyboard(user_id):
     keyboard.add(types.InlineKeyboardButton("Список заказов такси", callback_data="taxi"))
     keyboard.add(types.InlineKeyboardButton("Список заказов для переводчика", callback_data="translator"))
     keyboard.add(types.InlineKeyboardButton('Отправить сообщение в группы', callback_data='send_messages'))
+    keyboard.add(types.InlineKeyboardButton('Настройка сообщений для рассылки', callback_data='messages'))
     # if user_id == MAIN_ADMIN:
     keyboard.add(types.InlineKeyboardButton('Действия с администраторами бота', callback_data='admins'))
+    keyboard.add(types.InlineKeyboardButton('Настройка чатов', callback_data='chats'))
     keyboard.add(types.InlineKeyboardButton('Магазин', callback_data='market'))
-    keyboard.add(types.InlineKeyboardButton('Настройка сообщений для рассылки', callback_data='messages'))
+
 
     # Возвращаем клавиатуру
     return keyboard
