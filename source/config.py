@@ -16,7 +16,6 @@ EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 # MAIN_ADMIN = 1387633357 # Тут мой/ ID на данный момент. В основной версии будет твой.
 # ADMIN_LINK = 'https://t.me/legannyst'
 # CHAT_ID_TORA = -1001966380038
-# EXCHANGE_TOKEN = '028bff5f7414df842c38e390'
 
 
 '''Остальные данные'''

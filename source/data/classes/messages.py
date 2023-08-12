@@ -77,9 +77,10 @@ class TextMessagesStorage:
             day_of_week (str): Название дня недели.
             time_sent (str): Время отправки сообщения в формате 'ЧЧ:ММ'.
         """
-        if day_of_week in self.data and time_sent in self.data[day_of_week]:
-            del self.data[day_of_week][time_sent]
+        if day_of_week in self.data:
+            self.data[day_of_week] = [message for message in self.data[day_of_week] if message['time_sent'] != time_sent]
             self._save_data()
+
 
     def get_messages_for_day(self, day_of_week):
         """

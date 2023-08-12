@@ -39,3 +39,4 @@ if __name__ == '__main__':
     loop.create_task(send_text_messages())
 
     executor.start_polling(dp, skip_updates=True)
+    

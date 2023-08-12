@@ -122,9 +122,11 @@ async def choose_day_to_delete_message(query: types.CallbackQuery, state: FSMCon
 
     # Отправляем список сообщений и предлагаем выбрать сообщение для удаления
     keyboard = types.InlineKeyboardMarkup(row_width=1)
-    for time_sent in messages:
+    for message_info in messages:
+        time_sent = message_info['time_sent']
         keyboard.add(types.InlineKeyboardButton(time_sent, callback_data=f"delete_message_{time_sent}"))
     keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
+    await state.update_data(chosen_day=chosen_day)
 
     await query.message.answer(f"Выберите время отправки сообщения на {retranslate_day(chosen_day)}, которое нужно удалить:", reply_markup=keyboard)
 
