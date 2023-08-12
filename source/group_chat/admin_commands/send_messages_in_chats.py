@@ -86,7 +86,7 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
 
 @dp.callback_query_handler(lambda c: c.data == 'no_photo', state=SomeState.waiting_choose)
 async def get_text_without_photo(query: types.CallbackQuery, state: FSMContext):
-    await query.message.answer('Отправьте текс для рассылки в чаты: ')
+    await query.message.answer('Отправьте текст для рассылки в чаты: ')
     await SomeState.waiting_for_send_message_without_photo.set()
 
 

@@ -12,7 +12,6 @@ EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 
 Данные ОЛЕГА
 '''
-# MAIN_TOKEN_BOT = '5367458503:AAF4i_Atjfb-0ObdBHetooVyPJuZ5jVOaXk'
 # MAIN_TOKEN_BOT = '6273983990:AAHscC2ETkVtptAYkDfSckhFJ-Hmk6l9YOs' # Тестирование в чате
 # MAIN_ADMIN = 1387633357 # Тут мой/ ID на данный момент. В основной версии будет твой.
 # ADMIN_LINK = 'https://t.me/legannyst'

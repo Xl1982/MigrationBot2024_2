@@ -53,18 +53,20 @@ class TextMessagesStorage:
         with open(self.file_path, 'w') as file:
             json.dump(self.data, file, indent=4)
 
-    def add_message(self, day_of_week, time_sent, message):
+    def add_message(self, day_of_week, time_sent, text, chat_id, photos=None):
         """
         Добавляет текстовое сообщение с указанным временем отправки к определенному дню недели.
 
         Параметры:
             day_of_week (str): Название дня недели.
             time_sent (str): Время отправки сообщения в формате 'ЧЧ:ММ'.
-            message (str): Текстовое сообщение.
+            text (str): Текстовое сообщение.
+            photos (list): Список файловых идентификаторов фотографий (по умолчанию None).
         """
         if day_of_week not in self.data:
-            self.data[day_of_week] = {}
-        self.data[day_of_week][time_sent] = message
+            self.data[day_of_week] = []
+        message = {'time_sent': time_sent, 'text': text, 'chat_id': chat_id, 'photos': photos or []}
+        self.data[day_of_week].append(message)
         self._save_data()
 
     def delete_message(self, day_of_week, time_sent):
@@ -81,12 +83,12 @@ class TextMessagesStorage:
 
     def get_messages_for_day(self, day_of_week):
         """
-        Возвращает словарь с текстовыми сообщениями для указанного дня недели.
+        Возвращает список словарей с текстовыми сообщениями для указанного дня недели.
 
         Параметры:
             day_of_week (str): Название дня недели.
 
         Возвращает:
-            dict: Словарь, где ключ - время отправки сообщения, значение - текстовое сообщение.
+            list: Список словарей, где каждый словарь представляет собой сообщение с ключами 'time_sent', 'text' и 'photos'.
         """
-        return self.data.get(day_of_week, {})
+        return self.data.get(day_of_week, [])
