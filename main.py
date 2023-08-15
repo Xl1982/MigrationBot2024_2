@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import aiogram
 
 from aiogram.utils import executor
 
@@ -27,6 +28,11 @@ from source.group_chat.admin_commands import send_messages_in_chats, add_chat_id
 
 from source.market import app
 
+# @dp.message_handler(content_types=aiogram.types.ContentTypes.VIDEO)
+# async def handle_video(message: aiogram.types.Message):
+#     video_file_id = message.video.file_id
+#     await message.reply(f'Video file_id: {video_file_id}')
+
 # Запуск бота
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
@@ -39,4 +45,4 @@ if __name__ == '__main__':
     loop.create_task(send_text_messages())
 
     executor.start_polling(dp, skip_updates=True)
-    
+        

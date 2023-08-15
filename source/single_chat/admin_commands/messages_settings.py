@@ -34,7 +34,7 @@ class MessagesState(StatesGroup):
     add_text = State()
     delete_messages = State()
     wait_choose = State()
-    wait_photos = State()
+    wait_files = State()
 
 
 def retranslate_day(day_en):
@@ -139,6 +139,12 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     # Получаем выбранный день недели
     chosen_day = query.data.split('_')[2].capitalize()
     
+    # Определите путь к файлу для хранения текстовых сообщений
+    messages_path = os.path.join('source', 'data', 'messages.json')
+
+    # Создайте или работайте с файлом сообщений по указанному пути
+    storage = TextMessagesStorage(messages_path)
+    
     # Получаем список сообщений на указанный день
     messages = storage.get_messages_for_day(chosen_day)
     
@@ -151,19 +157,23 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     for message in messages:
         time_sent = message['time_sent']
         text = message['text']
-        photos = message['photos']
-        # chat_id = message['chat_id']
-        text = f'<b>Время отправки: {time_sent}</b>\nТекст:\n' + text
-        if photos:
+        files = message['files']
+        
+        # Оформляем текст сообщения
+        message_text = f'<b>Время отправки: {time_sent}</b>\nТекст:\n{text}'
+
+        if files:
             media_group = []
-            for i, photo in enumerate(photos):
-                # Первая фотография будет иметь подпись, остальные - нет
-                caption = text if i == 0 else None
-                media_group.append(types.InputMediaPhoto(media=photo, caption=caption))                    
-                await query.message.answer_media_group(media_group) 
+            for i, file_id in enumerate(files):
+                # Первое вложение будет иметь подпись, остальные - нет
+                caption = message_text if i == 0 else None
+                media_group.append(types.InputMediaDocument(media=file_id, caption=caption))                    
+            
+            # Отправляем группу медиафайлов
+            await query.message.answer_media_group(media_group) 
         else:
             # Отправляем время отправки и текст
-            await query.message.answer(f"<b>Время отправки: {time_sent}</b>\nТекст:\n {text}")
+            await query.message.answer(message_text, parse_mode='HTML')
 
     # Завершаем состояние
     await state.finish()
@@ -172,8 +182,8 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
 @dp.message_handler(state=MessagesState.add_time)
 async def add_message_time(message: types.Message, state: FSMContext):
     # Проверяем, соответствует ли формат времени ЧЧ:ММ
-    keyboard = types.InlineKeyboardMarkup().row(types.InlineKeyboardButton('Да', callback_data='photo_mess_yes'), 
-                                                types.InlineKeyboardButton('Нет', callback_data='photo_mess_no'))
+    keyboard = types.InlineKeyboardMarkup().row(types.InlineKeyboardButton('Да', callback_data='file_mess_yes'), 
+                                                types.InlineKeyboardButton('Нет', callback_data='file_mess_no'))
     keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
 
     time_sent = message.text.strip()
@@ -186,42 +196,49 @@ async def add_message_time(message: types.Message, state: FSMContext):
 
     # Просим ввести текст сообщения
     await MessagesState.wait_choose.set()
-    await message.answer("Сообщение будет с фото?", reply_markup=keyboard)
+    await message.answer("Сообщение будет с фото или видео?", reply_markup=keyboard)
+
 
 # Ответление для сохранения фото
 
 # Если фотографии будут, тогда просим их отправить
-@dp.callback_query_handler(lambda c: c.data == 'photo_mess_yes', state=MessagesState.wait_choose)
+@dp.callback_query_handler(lambda c: c.data == 'file_mess_yes', state=MessagesState.wait_choose)
 async def message_with_photo(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
-    await query.message.answer('Отправьте фото к сообщению (до 10)', reply_markup=markup)
-    await MessagesState.wait_photos.set()
+    await query.message.answer('Отправьте фото или видео к сообщению (до 10 в сумме)', reply_markup=markup)
+    await MessagesState.wait_files.set()
 
 
-# Обработчик для приема фотографий и добавления их в состояние
-@dp.message_handler(content_types=types.ContentType.PHOTO, state=MessagesState.wait_photos)
-async def save_photo(message: types.Message, state: FSMContext):
+@dp.message_handler(content_types=[types.ContentType.PHOTO, types.ContentType.VIDEO], state=MessagesState.wait_files)
+@dp.message_handler(content_types=[types.ContentType.PHOTO, types.ContentType.VIDEO], state=MessagesState.add_text)
+async def save_files(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        # Получаем список фотографий из состояния или создаем новый
-        photos = data.get('photos', [])
+        # Получаем словарь с файлами из состояния или создаем новый
+        files = data.get('files', {'photos': [], 'videos': []})
 
-        # Добавляем фотографию в список
-        photos.append(message.photo[-1].file_id)
-        # Обновляем данные в состоянии
-        await state.update_data(photos=photos)
-        num_photos_added = len(photos)
-        if num_photos_added < 10:
-            remaining_photos = 10 - num_photos_added
-            await message.answer(f"Вы добавили {num_photos_added} фото. Вы можете добавить еще {remaining_photos} фото или отправить текст.")
+        # Добавляем файловый идентификатор в соответствующий список
+        if message.photo:
+            files['photos'].append(message.photo[-1].file_id)
         else:
-            await message.answer("Вы добавили максимальное количество фото (10). Теперь отправьте текст.")
+            files['videos'].append(message.video.file_id)
+
+        # Обновляем данные в состоянии
+        await state.update_data(files=files)
+        num_files_added = len(files['photos']) + len(files['videos'])
+        if num_files_added < 10:
+            remaining_files = 10 - num_files_added
+            await message.answer(f"Вы добавили {num_files_added} медиа-файлов. Вы можете добавить еще {remaining_files} медиа-файлов или отправить текст.")
+        else:
+            await message.answer("Вы добавили максимальное количество медиафайлов (10). Теперь отправьте текст.")
+            
     await MessagesState.add_text.set()
 
-# Если без фото
-@dp.callback_query_handler(lambda c: c.data == 'photo_mess_no', state=MessagesState.wait_choose)
+
+# Если без файлов
+@dp.callback_query_handler(lambda c: c.data == 'file_mess_no', state=MessagesState.wait_choose)
 async def message_without_photo(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
@@ -233,18 +250,26 @@ async def message_without_photo(query: types.CallbackQuery, state: FSMContext):
 # Обработчик для получения текста сообщения при добавлении
 @dp.message_handler(state=MessagesState.add_text)
 async def add_message_text(message: types.Message, state: FSMContext):
-    data = await state.get_data()
-    photos = data.get('photos', [])
-    chosen_day = data.get('chosen_day')
-    time_sent = data.get('time_sent')
-    text_message = message.text
+    async with state.proxy() as data:
+        files = data.get('files', [])
+        chosen_day = data.get('chosen_day')
+        time_sent = data.get('time_sent')
+        text_message = message.text
 
-    if photos:
-        storage.add_message(chosen_day, time_sent, text_message, message.chat.id, photos)
-    else:
-        storage.add_message(chosen_day, time_sent, text_message, message.chat.id)
-    await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
-    await info_handler_two(message)
+        if files:
+            # Определите путь к файлу для хранения текстовых сообщений
+            messages_path = os.path.join('source', 'data', 'messages.json')
+
+            # Создайте или работайте с файлом сообщений по указанному пути
+            storage = TextMessagesStorage(messages_path)
+            
+            storage.add_message(chosen_day, time_sent, text_message, photos=files.get('photos', []), videos=files.get('videos', []))
+        else:
+            storage.add_message(chosen_day, time_sent, text_message)
+        
+        await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
+        await info_handler_two(message)
+    
     # Завершаем состояние
     await state.finish()
 
