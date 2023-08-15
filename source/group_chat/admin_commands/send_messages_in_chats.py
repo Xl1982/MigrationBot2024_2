@@ -74,8 +74,8 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
             caption = text_message if i == 0 else None
             media_group.append(types.InputMediaPhoto(media=photo, caption=caption))
 
-        # Получаем список чатов (chat_id) с помощью метода get_all_chats()
-        chat_ids = chat_manager.get_all_chats()
+        # Получаем список чатов (chat_id) с помощью метода get_all_chat_ids()
+        chat_ids = chat_manager.get_all_chat_ids()
 
         for chat_id in chat_ids:
             # Отправляем группу фотографий как альбом в каждый чат
@@ -97,8 +97,8 @@ async def send_message_to_chats(message: types.Message, state: FSMContext):
     # Получаем текст сообщения от администратора
     text = message.text
 
-    # Получаем список чатов (chat_id) с помощью метода get_all_chats()
-    chat_ids = chat_manager.get_all_chats()
+    # Получаем список чатов (chat_id) с помощью метода get_all_chat_ids()
+    chat_ids = chat_manager.get_all_chat_ids()
 
     # Отправляем сообщение в каждый чат из списка chat_ids
     for chat_id in chat_ids:
