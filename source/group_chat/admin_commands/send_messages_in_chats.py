@@ -18,10 +18,19 @@ class SomeState(StatesGroup):
     waiting_for_send_message_without_photo = State()
     waiting_choose = State()
 
+@dp.callback_query_handler(lambda c: c.data == 'back_send_message', state='*')
+async def back_button_handler(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+    await state.finish()
+    await info_handler_two(query.message)
+
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
 # Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
 @dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
 async def send_messages_handler(callback_query: types.CallbackQuery):
+
+    
     markup = types.InlineKeyboardMarkup().add(types.InlineKeyboardButton('Да', callback_data='yes_photo'))
     markup.add(types.InlineKeyboardButton('Нет', callback_data='no_photo'))
     markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
@@ -31,6 +40,9 @@ async def send_messages_handler(callback_query: types.CallbackQuery):
 
 @dp.callback_query_handler(lambda c: c.data == 'yes_photo', state=SomeState.waiting_choose)
 async def get_photo(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
     await query.message.answer('Отправьте фото к сообщению (до 10)', reply_markup=markup)
@@ -86,6 +98,9 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
 
 @dp.callback_query_handler(lambda c: c.data == 'no_photo', state=SomeState.waiting_choose)
 async def get_text_without_photo(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+
     await query.message.answer('Отправьте текст для рассылки в чаты: ')
     await SomeState.waiting_for_send_message_without_photo.set()
 
