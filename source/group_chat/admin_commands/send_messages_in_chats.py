@@ -18,6 +18,14 @@ class SomeState(StatesGroup):
     waiting_for_send_message_without_photo = State()
     waiting_choose = State()
 
+@dp.callback_query_handler(lambda c: c.data =="back_send_message", state='*')
+async def back_button_handler(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+    await state.finish()
+    await info_handler_two(query.message)
+
+
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
 # Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
 @dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
