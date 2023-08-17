@@ -118,6 +118,7 @@ async def choose_day_to_delete_message(query: types.CallbackQuery, state: FSMCon
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
         await state.finish()
+        await info_handler_two(query.message)
         return
 
     # Отправляем список сообщений и предлагаем выбрать сообщение для удаления
@@ -151,49 +152,62 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
         await state.finish()
+        await info_handler_two(query.message)
         return
 
     # Отправляем каждое сообщение отдельно
     for message in messages:
         time_sent = message['time_sent']
         text = message['text']
-        files = message['files']
+        photos = message['photos']
+        videos = message['videos']
         
         # Оформляем текст сообщения
         message_text = f'<b>Время отправки: {time_sent}</b>\nТекст:\n{text}'
 
-        if files:
-            media_group = []
-            for i, file_id in enumerate(files):
+        media_group = []
+        if photos:
+            for i, file_id in enumerate(photos):
                 # Первое вложение будет иметь подпись, остальные - нет
                 caption = message_text if i == 0 else None
-                media_group.append(types.InputMediaDocument(media=file_id, caption=caption))                    
-            
-            # Отправляем группу медиафайлов
-            await query.message.answer_media_group(media_group) 
-        else:
+                media_group.append(types.InputMediaPhoto(media=file_id, caption=caption))                    
+        if videos:
+            for i, video_id in enumerate(videos):
+                if not photos and i == 0:
+                    caption = message_text
+                else:
+                    caption = None
+                media_group.append(types.InputMediaVideo(media=video_id, caption=caption))
+
+        if not media_group:
             # Отправляем время отправки и текст
             await query.message.answer(message_text, parse_mode='HTML')
+        else:
+            # Отправляем группу медиафайлов
+            await query.message.answer_media_group(media_group) 
 
     # Завершаем состояние
     await state.finish()
+    await info_handler_two(query.message)
+
 
 # Обработчик для получения времени при добавлении сообщения
 @dp.message_handler(state=MessagesState.add_time)
 async def add_message_time(message: types.Message, state: FSMContext):
     # Проверяем, соответствует ли формат времени ЧЧ:ММ
-    keyboard = types.InlineKeyboardMarkup().row(types.InlineKeyboardButton('Да', callback_data='file_mess_yes'), 
-                                                types.InlineKeyboardButton('Нет', callback_data='file_mess_no'))
-    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
 
     time_sent = message.text.strip()
     if not re.match(r'^\d{1,2}:\d{2}$', time_sent):
+        keyboard = types.InlineKeyboardMarkup()
+        keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))        
         await message.reply("Неправильный формат времени. Введите время в формате ЧЧ:ММ (например, 12:30):", reply_markup=keyboard)
         return
 
     # Сохраняем время отправки в состояние
     await state.update_data(time_sent=time_sent)
-
+    keyboard = types.InlineKeyboardMarkup().row(types.InlineKeyboardButton('Да', callback_data='file_mess_yes'), 
+                                                types.InlineKeyboardButton('Нет', callback_data='file_mess_no'))
+    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
     # Просим ввести текст сообщения
     await MessagesState.wait_choose.set()
     await message.answer("Сообщение будет с фото или видео?", reply_markup=keyboard)
@@ -211,30 +225,27 @@ async def message_with_photo(query: types.CallbackQuery, state: FSMContext):
     await query.message.answer('Отправьте фото или видео к сообщению (до 10 в сумме)', reply_markup=markup)
     await MessagesState.wait_files.set()
 
-
 @dp.message_handler(content_types=[types.ContentType.PHOTO, types.ContentType.VIDEO], state=MessagesState.wait_files)
 @dp.message_handler(content_types=[types.ContentType.PHOTO, types.ContentType.VIDEO], state=MessagesState.add_text)
 async def save_files(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         # Получаем словарь с файлами из состояния или создаем новый
         files = data.get('files', {'photos': [], 'videos': []})
-
-        # Добавляем файловый идентификатор в соответствующий список
-        if message.photo:
-            files['photos'].append(message.photo[-1].file_id)
-        else:
-            files['videos'].append(message.video.file_id)
-
         # Обновляем данные в состоянии
         await state.update_data(files=files)
-        num_files_added = len(files['photos']) + len(files['videos'])
+        num_files_added = len(files['photos']) + len(files['videos']) + 1
         if num_files_added < 10:
+            # Добавляем файловый идентификатор в соответствующий список
+            if message.photo:
+                files['photos'].append(message.photo[-1].file_id)
+            else:
+                files['videos'].append(message.video.file_id)
             remaining_files = 10 - num_files_added
             await message.answer(f"Вы добавили {num_files_added} медиа-файлов. Вы можете добавить еще {remaining_files} медиа-файлов или отправить текст.")
         else:
             await message.answer("Вы добавили максимальное количество медиафайлов (10). Теперь отправьте текст.")
             
-    await MessagesState.add_text.set()
+        await MessagesState.add_text.set()
 
 
 # Если без файлов
@@ -255,14 +266,19 @@ async def add_message_text(message: types.Message, state: FSMContext):
         chosen_day = data.get('chosen_day')
         time_sent = data.get('time_sent')
         text_message = message.text
+        # Определите путь к файлу для хранения текстовых сообщений
+        messages_path = os.path.join('source', 'data', 'messages.json')
 
+        # Создайте или работайте с файлом сообщений по указанному пути
+        storage = TextMessagesStorage(messages_path)
         if files:
-            # Определите путь к файлу для хранения текстовых сообщений
-            messages_path = os.path.join('source', 'data', 'messages.json')
-
-            # Создайте или работайте с файлом сообщений по указанному пути
-            storage = TextMessagesStorage(messages_path)
-            
+            photos = files.get('photos', [])
+            videos = files.get('videos', [])
+            if len(videos) + len(photos) > 10:
+                await message.answer('Вложенных файлов вышло больше 10. Пройдите процедуру создания сообщения заново.')
+                await state.finish()
+                await info_handler_two(message)
+                return
             storage.add_message(chosen_day, time_sent, text_message, photos=files.get('photos', []), videos=files.get('videos', []))
         else:
             storage.add_message(chosen_day, time_sent, text_message)
@@ -295,3 +311,4 @@ async def delete_message(query: types.CallbackQuery, state: FSMContext):
 
     # Завершаем состояние
     await state.finish()
+    await info_handler_two(query.message)
