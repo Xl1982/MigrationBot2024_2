@@ -29,7 +29,7 @@ class ChatManager:
         try:
             with open(self.file_name, "r", encoding="utf-8") as file:
                 chats = json.load(file)
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             chats = {}
         return chats
 
@@ -48,7 +48,7 @@ class ChatManager:
         Добавляет чат с заданным chat_id и названием.
 
         Аргументы:
-            chat_id (int): chat_id чата.
+            chat_id (str): chat_id чата.
             chat_name (str): Название чата.
         """
         chats = self.load_chats()
@@ -62,6 +62,7 @@ class ChatManager:
                 "sending_messages": True,
                 }
             self.save_chats(chats)
+
 
     def remove_chat(self, chat_id):
         """
