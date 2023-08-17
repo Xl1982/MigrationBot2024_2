@@ -1,6 +1,7 @@
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, ChatType
 from source.bot_init import dp
 from source.market.filters import IsAdmin, IsUser
+from source.market.keyboards.default.markups import make_reply_keyboard
 
 catalog = '🛍️ Каталог'
 balance = '💰 Баланс'
@@ -17,7 +18,7 @@ async def admin_menu(message: Message):
     markup.add(settings)
     markup.add(questions, orders)
 
-    await message.answer('Меню', reply_markup=markup)
+    await message.answer('Меню', reply_markup=make_reply_keyboard(markup))
 
 @dp.message_handler(IsUser(), commands='menu')
 async def user_menu(message: Message):
@@ -26,4 +27,4 @@ async def user_menu(message: Message):
     markup.add(balance, cart)
     markup.add(delivery_status)
 
-    await message.answer('Меню', reply_markup=markup)
+    await message.answer('Меню', reply_markup=make_reply_keyboard(markup))

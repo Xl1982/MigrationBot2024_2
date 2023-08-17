@@ -5,12 +5,14 @@ from aiogram.types import Message
 from source.market.handlers.states import SosState
 from source.market.filters import IsUser
 from source.bot_init import dp, db
-
+from source.market.keyboards.default.markups import make_reply_keyboard
+from source.single_chat.start_handler import start_work
 
 @dp.message_handler(commands='sos')
 async def cmd_sos(message: Message):
     await SosState.question.set()
-    await message.answer('В чем суть проблемы? Опишите как можно детальнее и администратор обязательно вам ответит.', reply_markup=ReplyKeyboardRemove())
+    markup = ReplyKeyboardMarkup()
+    await message.answer('В чем суть проблемы? Опишите как можно детальнее и администратор обязательно вам ответит.', reply_markup=make_reply_keyboard(markup))
 
 
 @dp.message_handler(state=SosState.question)
@@ -45,9 +47,11 @@ async def process_submit(message: Message, state: FSMContext):
                      (cid, data['question']))
 
         await message.answer('Отправлено!', reply_markup=ReplyKeyboardRemove())
+        await start_work(message)
 
     else:
 
         await message.answer('Превышен лимит на количество задаваемых вопросов.', reply_markup=ReplyKeyboardRemove())
+        await start_work(message)
 
     await state.finish()

@@ -7,12 +7,14 @@ from aiogram.types.chat import ChatActions
 from source.bot_init import dp, db, bot
 from .menu import catalog
 from source.market.filters import IsUser
+from source.market.keyboards.inline.categories import make_inline_keyboard
+from source.market.keyboards.default.markups import make_reply_keyboard
 
 
 @dp.message_handler(IsUser(), text=catalog)
 async def process_catalog(message: Message):
     await message.answer('Выберите раздел, чтобы вывести список товаров:',
-                         reply_markup=categories_markup())
+                         reply_markup=make_inline_keyboard(categories_markup()))
 
 
 @dp.callback_query_handler(IsUser(), category_cb.filter(action='view'))
@@ -54,4 +56,4 @@ async def show_products(m, products):
 
             await m.answer_photo(photo=image,
                                  caption=text,
-                                 reply_markup=markup)
+                                 reply_markup=make_inline_keyboard(markup))

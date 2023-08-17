@@ -1,3 +1,5 @@
+import os
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -5,7 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from database.operations.users import User
 from source.data.classes.admin_manager import AdminsManager
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler, info_handler_two
 
 
 class RegulationOfAdmins(StatesGroup):
@@ -33,8 +35,7 @@ async def back_admin(query: types.CallbackQuery):
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await query.answer()
-    await info_handler(query.message)
-
+    await info_handler_two(query.message)
 
 @dp.callback_query_handler(lambda c: c.data == 'add_admin' or c.data == 'delete_admin')
 async def add_admin(query: types.CallbackQuery):
@@ -53,11 +54,15 @@ async def add_admin(query: types.CallbackQuery):
 async def process_admin_info(message: types.Message, state: FSMContext):
     user_id = None
     username = None
-    admins_manager = AdminsManager(r'source\data\admins.json')
+    # Определите путь к файлу для администраторов, используя модуль os
+    admins_path = os.path.join('source', 'data', 'admins.json')
+
+    # Создайте или работайте с файлом администраторов по указанному пути
+    admins_manager = AdminsManager(admins_path)
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     if message.text == 'Назад':
-        await info_handler(message)
+        await info_handler_two(message)
         await state.finish()
         return
 
@@ -95,13 +100,16 @@ async def process_admin_info(message: types.Message, state: FSMContext):
 
     # Завершаем состояние FSM (если используется)
     await state.finish()
-    await info_handler(message)
+    await info_handler_two(message)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'check_admins')
 async def check_admins(query: types.CallbackQuery):
-    # Создаем экземпляр AdminsManager, указывая путь к файлу admins.json
-    admins_manager = AdminsManager(r'source\data\admins.json')
+    # Определите путь к файлу для администраторов, используя модуль os
+    admins_path = os.path.join('source', 'data', 'admins.json')
+
+    # Создайте или работайте с файлом администраторов по указанному пути
+    admins_manager = AdminsManager(admins_path)
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     all_admins = admins_manager.get_all_admins()
@@ -115,7 +123,7 @@ async def check_admins(query: types.CallbackQuery):
 
         await query.answer()
         await query.message.answer(message_text)
-    await info_handler(query.message)
+    await info_handler_two(query.message)
     
 
 
@@ -125,7 +133,7 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
     # Удаляем предыдущее сообщение с помощью метода delete_message
     await bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
     if message.text == 'Назад':
-        await info_handler(message)
+        await info_handler_two(message)
         await state.finish()
         return
 
@@ -143,8 +151,11 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
 
 
     if user_id is not None:
-        # Создаем экземпляр AdminsManager, указывая путь к файлу admins.json
-        admins_manager = AdminsManager(r'source\data\admins.json')
+        # Определите путь к файлу для администраторов, используя модуль os
+        admins_path = os.path.join('source', 'data', 'admins.json')
+
+        # Создайте или работайте с файлом администраторов по указанному пути
+        admins_manager = AdminsManager(admins_path)
 
         # Проверяем, существует ли админ с заданным user_id
         if admins_manager.get_admin_by_id(user_id) is not None:
@@ -160,4 +171,4 @@ async def process_admin_id_to_delete(message: types.Message, state: FSMContext):
 
     # Завершаем состояние FSM (если используется)
     await state.finish()
-    await info_handler(message)
+    await info_handler_two(message)

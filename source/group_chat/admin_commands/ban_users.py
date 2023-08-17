@@ -41,7 +41,7 @@ def unmute_permissions():
 async def ban_user(message: types.Message):
     # Проверяем, что команда была отправлена администратором чата
     chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.is_chat_admin():
+    if chat_member.is_chat_admin() or chat_member.status == 'left':
         # Получаем ID пользователя, на которого ответили
         user_id = message.reply_to_message.from_user.id
         # Проверяем, что он не является администратором или владельцем чата
@@ -66,7 +66,7 @@ async def ban_user(message: types.Message):
 async def unban_user(message: types.Message):
     # Проверяем, что команда была отправлена администратором чата
     chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.is_chat_admin():
+    if chat_member.is_chat_admin() or chat_member.status == 'left':
         # Получаем ID пользователя из аргумента
         user_id = message.get_args()
         # Проверяем, что аргумент не пустой
@@ -100,7 +100,7 @@ async def unban_user(message: types.Message):
 async def mute_user(message: types.Message):
     # Проверяем, что команда была отправлена администратором чата
     chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.is_chat_admin():
+    if chat_member.is_chat_admin() or chat_member.status == 'left':
         # Получаем ID пользователя, на которого ответили
         user_id = message.reply_to_message.from_user.id
         # Проверяем, что он не является администратором или владельцем чата
@@ -127,7 +127,7 @@ async def mute_user(message: types.Message):
 async def unmute_user(message: types.Message):
     # Проверяем, что команда была отправлена администратором чата
     chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.is_chat_admin():
+    if chat_member.is_chat_admin() or chat_member.status == 'left':
         # Если команда была ответом на сообщение пользователя
         if message.reply_to_message:
             # Получаем ID пользователя, на которого ответили

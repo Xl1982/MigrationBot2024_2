@@ -47,7 +47,7 @@ async def send_weather_forecast(chat_id: int, hour=12):
             if first_time_forecast['description'] == 'Ясно':
                 weather_emoji = "☀️"
             elif first_time_forecast['description'] == 'Дождь':
-                weather_emoji = "🌧️"
+                weather_emoji = "🌧️"                
             elif first_time_forecast['description'] == 'Снег':
                 weather_emoji = "❄️"
             else:
@@ -56,7 +56,8 @@ async def send_weather_forecast(chat_id: int, hour=12):
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
                 forecast = api.get_weather(city)
-                forecast_message += f"{forecast}\n{'-' * 52}\n\n"
+                # forecast_message += f"{forecast}\n{'-' * 52}\n\n"
+                forecast_message += f"{forecast}\n"
             else:
                 # Выводим краткую информацию для остальных дней
                 simplified_message = f'{"-" * 52}\n'
@@ -64,7 +65,7 @@ async def send_weather_forecast(chat_id: int, hour=12):
                 simplified_message += f"🌡️ Температура: {first_time_forecast['temperature']}°C\n"
                 simplified_message += f"{weather_emoji} Состояние погоды: {first_time_forecast['description']}\n"
                 simplified_message += f"💨 Облачность: {first_time_forecast['cloudiness']}%\n"
-                simplified_message += f'{"-" * 52}\n\n'
+                # simplified_message += f'{"-" * 52}\n'
                 forecast_message += simplified_message 
         else:
             # Если нет доступного прогноза погоды, добавляем сообщение об этом
@@ -83,6 +84,7 @@ async def check_weather_time(chat_id):
 
         for target_time in target_times:
             now = datetime.datetime.now(pytz.timezone('Europe/Madrid'))
+            # now = datetime.datetime.now()
             current_time = now.time()
             target_time_combine = datetime.datetime.combine(now.date(), target_time)
 

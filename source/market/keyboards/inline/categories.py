@@ -13,3 +13,7 @@ def categories_markup():
         markup.add(InlineKeyboardButton(title, callback_data=category_cb.new(id=idx, action='view')))
 
     return markup
+
+def make_inline_keyboard(markup: InlineKeyboardMarkup):
+    return markup.add(InlineKeyboardButton('Выход', callback_data='market_exit'))
+
