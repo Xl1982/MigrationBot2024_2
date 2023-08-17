@@ -12,7 +12,7 @@ from source.config import ADMIN_LINK
 from source.group_chat.sending_messages.config_chat import times_to_send
 
 
-async def send_purchase_currency_notification():
+async def send_purchase_currency_notification(chat_id):
     target_times = times_to_send['purchase_currency']
 
     deviation_minutes = [1, 2]  # Время отклонения от графика в минутах
@@ -38,7 +38,7 @@ async def send_purchase_currency_notification():
                 currency_text += f'\nКонтактные данные: {ADMIN_LINK}'
 
                 # Отправка уведомления в чат
-                await bot.send_message(config_chat['chat_id'], currency_text)
+                await bot.send_message(chat_id, currency_text)
 
                 # Логирование отправки уведомления
                 logger.info(f"Отправлено уведомление о покупке валюты: {currency_text}")

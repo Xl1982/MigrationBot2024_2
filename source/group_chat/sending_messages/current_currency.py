@@ -8,7 +8,7 @@ from ...data.classes.money_sell import CurrencyConverter
 from source.bot_init import dp, bot
 from source.logger_bot import logger
 
-async def send_currency_notification():
+async def send_currency_notification(chat_id):
     target_times = times_to_send['current_currency']  # Время для отправки уведомления о курсе валют из файла конфигурации
 
     logger.info('Проверка времени для вывода курса валюты')
@@ -33,7 +33,7 @@ async def send_currency_notification():
                 exchange_text, _, _, _ = converter.convert_currency()
 
                 # Отправка уведомления в чат
-                await bot.send_message(config_chat['chat_id'], exchange_text)
+                await bot.send_message(chat_id, exchange_text)
 
                 # Логирование отправки уведомления
                 logger.info(f"Отправлено уведомление о курсе валют: {exchange_text}")

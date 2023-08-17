@@ -5,9 +5,11 @@ from aiogram import types
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
 
+from source.single_chat.admin_commands.start import ChatEditStates
 from source.data.classes.messages import TextMessagesStorage
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler_two
+from source.single_chat.admin_commands.start import info_handler_two, check_admins
+from source.config import MAIN_ADMIN
 
 weekdays = {
     "Monday": "Понедельник",
@@ -58,14 +60,33 @@ async def exit_from_states(query: types.CallbackQuery, state: FSMContext):
     await info_handler_two(query.message)
     await state.finish()
 
+# Для переноса старых сообщений (рекомендуется в следующих апдейтах удалить, смысла не будет в этом коде)
+class MigrateStates(StatesGroup):
+    wait_id_chat = State()
+
+@dp.message_handler(lambda message: (message.from_user.id == MAIN_ADMIN or message.from_user.id in check_admins())
+                    and message.chat.type == types.ChatType.PRIVATE, commands=["migrate"])
+async def migrate_json_file(message: types.Message):
+    await MigrateStates.wait_id_chat.set()
+    await message.answer("Отправьте ID чата для которого надо сохранить старые сообщения")
+
+@dp.message_handler(state=MigrateStates.wait_id_chat)
+async def migrate_to_chat_id(message: types.Message, state: FSMContext):
+    storage.migrate_old_format_for_chat(message.text)
+    await message.answer('Старые сообщения успешно перенесены')
+    await state.finish()
 
 # 
 # Точка входа текущей ветки
 # 
-@dp.callback_query_handler(lambda c: c.data == 'messages')
-async def start_settings(query: types.CallbackQuery):
+@dp.callback_query_handler(lambda c: c.data.startswith('edit_text_messages_'), state=ChatEditStates.choose_chat)
+async def start_settings(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
+    
+    chat_id = query.data.split('_')[-1]
+    await state.update_data(chat_id=chat_id)
+    
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(types.InlineKeyboardButton('Текущие сообщения', callback_data='messages_current'))
     keyboard.add(types.InlineKeyboardButton('Добавить сообщение', callback_data='messages_add'))
@@ -75,7 +96,7 @@ async def start_settings(query: types.CallbackQuery):
     await query.message.answer('Выберите действие:', reply_markup=keyboard)
 
 
-@dp.callback_query_handler(lambda c: c.data.startswith('messages_'))
+@dp.callback_query_handler(lambda c: c.data.startswith('messages_'), state=ChatEditStates.choose_chat)
 async def current_messages(query: types.CallbackQuery):
     await query.answer()
     choose = query.data.split('_')[1]
@@ -112,9 +133,10 @@ async def choose_day_to_delete_message(query: types.CallbackQuery, state: FSMCon
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     # Получаем выбранный день недели
+    state_data = await state.get_data()
     chosen_day = query.data.split('_')[2].capitalize()
     # Получаем список сообщений на указанный день
-    messages = storage.get_messages_for_day(chosen_day)
+    messages = storage.get_messages_for_day(chat_id=state_data['chat_id'], day_of_week=chosen_day)
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
         await state.finish()
@@ -138,7 +160,8 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     
     # Получаем выбранный день недели
     chosen_day = query.data.split('_')[2].capitalize()
-    
+    state_data = await state.get_data()
+    chat_id = state_data['chat_id']
     # Определите путь к файлу для хранения текстовых сообщений
     messages_path = os.path.join('source', 'data', 'messages.json')
 
@@ -146,7 +169,7 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     storage = TextMessagesStorage(messages_path)
     
     # Получаем список сообщений на указанный день
-    messages = storage.get_messages_for_day(chosen_day)
+    messages = storage.get_messages_for_day(chat_id, chosen_day)
     
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
@@ -253,19 +276,20 @@ async def add_message_text(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         files = data.get('files', [])
         chosen_day = data.get('chosen_day')
+        # Определите путь к файлу для хранения текстовых сообщений
+        messages_path = os.path.join('source', 'data', 'messages.json')
+
+        # Создайте или работайте с файлом сообщений по указанному пути
+        storage = TextMessagesStorage(messages_path)
         time_sent = data.get('time_sent')
         text_message = message.text
-
+        chat_id = data.get('chat_id')
         if files:
-            # Определите путь к файлу для хранения текстовых сообщений
-            messages_path = os.path.join('source', 'data', 'messages.json')
 
-            # Создайте или работайте с файлом сообщений по указанному пути
-            storage = TextMessagesStorage(messages_path)
             
-            storage.add_message(chosen_day, time_sent, text_message, photos=files.get('photos', []), videos=files.get('videos', []))
+            storage.add_message(chat_id, chosen_day, time_sent, text_message, photos=files.get('photos', []), videos=files.get('videos', []))
         else:
-            storage.add_message(chosen_day, time_sent, text_message)
+            storage.add_message(chat_id, chosen_day, time_sent, text_message)
         
         await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
         await info_handler_two(message)
@@ -286,9 +310,10 @@ async def delete_message(query: types.CallbackQuery, state: FSMContext):
     # Получаем выбранный день недели из состояния
     data = await state.get_data()
     chosen_day = data.get('chosen_day')
+    chat_id = data.get('chat_id')
 
     # Удаляем сообщение
-    storage.delete_message(chosen_day, time_sent)
+    storage.delete_message(chat_id, chosen_day, time_sent)
 
     # Отправляем сообщение об успешном удалении
     await query.message.answer(f"Сообщение на {retranslate_day(chosen_day)} в {time_sent} успешно удалено.")

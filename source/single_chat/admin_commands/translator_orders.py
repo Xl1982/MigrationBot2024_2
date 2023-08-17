@@ -5,7 +5,7 @@ from aiogram.dispatcher import FSMContext
 from database.operations.translator_orders import TranslatorOrder
 from source.bot_init import dp, bot
 from source.config import MAIN_ADMIN
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler_two
 
 
 # Определение состояний
@@ -34,7 +34,7 @@ def make_keyboard():
 async def exit_for_translator(callback: types.CallbackQuery, state: FSMContext):
     # Удаляем сообщение с предыдущей клавиатурой
     await bot.delete_message(callback.message.chat.id, callback.message.message_id)
-    await info_handler(callback.message)
+    await info_handler_two(callback.message)
     await state.finish()
 
 
@@ -62,7 +62,7 @@ async def last_order_handler(query: types.CallbackQuery):
         # Отправляем сообщение с информацией о последнем заказе
         await bot.delete_message(query.message.chat.id, query.message.message_id)
         await bot.send_message(query.from_user.id, order_info)
-        await info_handler(query.message)
+        await info_handler_two(query.message)
     else:
         # Если нет данных о заказах, отправляем сообщение об этом
         await bot.send_message(query.from_user.id, "Нет данных о заказах")
@@ -80,11 +80,11 @@ async def order_count_handler(query: types.CallbackQuery):
         # Отправляем сообщение с количеством заказов
         await bot.delete_message(query.message.chat.id, query.message.message_id)
         await bot.send_message(query.from_user.id, f"Количество заказов: {order_count}")
-        await info_handler(query.message)
+        await info_handler_two(query.message)
     else:
         await bot.delete_message(query.message.chat.id, query.message.message_id)
         await bot.send_message(query.from_user.id, 'Таблица с заказми пуста - заказов нет.')
-        await info_handler(query.message)
+        await info_handler_two(query.message)
 
 @dp.callback_query_handler(lambda query: query.data == 't_choose_orders')
 async def choose_count_orders(query: types.CallbackQuery):
@@ -113,7 +113,7 @@ async def show_orders(message: types.Message, state: FSMContext):
         if len(orders) == 0:
             await message.answer('Нет доступных заказов.')
             await bot.delete_message(message.chat.id, message.message_id)
-            await info_handler(message)
+            await info_handler_two(message)
             return
 
         orders_info = []

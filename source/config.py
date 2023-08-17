@@ -12,10 +12,10 @@ EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
 
 Данные ОЛЕГА
 '''
-# MAIN_TOKEN_BOT = '6273983990:AAHscC2ETkVtptAYkDfSckhFJ-Hmk6l9YOs' # Тестирование в чате
-# MAIN_ADMIN = 1387633357 # Тут мой/ ID на данный момент. В основной версии будет твой.
-# ADMIN_LINK = 'https://t.me/legannyst'
-# CHAT_ID_TORA = -1001966380038
+MAIN_TOKEN_BOT = '6273983990:AAGs0FkC81rlraE7EjW2vvhRG2MtYxgA0Ac' # Тестирование в чате
+MAIN_ADMIN = 1387633357 # Тут мой/ ID на данный момент. В основной версии будет твой.
+ADMIN_LINK = 'https://t.me/legannyst'
+CHAT_ID_TORA = -1001966380038
 
 
 '''Остальные данные'''
