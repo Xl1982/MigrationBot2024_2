@@ -61,11 +61,14 @@ async def process_photos(message: types.Message, state: FSMContext):
         # Обновляем данные в состоянии
         await state.update_data(photos=photos)
         num_photos_added = len(photos)
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
         if num_photos_added < 10:
             remaining_photos = 10 - num_photos_added
-            await message.answer(f"Вы добавили {num_photos_added} фото. Вы можете добавить еще {remaining_photos} фото или отправить текст.")
+            await message.answer(f"Вы добавили {num_photos_added} фото. Вы можете добавить еще {remaining_photos} фото или отправить текст.",
+                                  reply_markup=markup)
         else:
-            await message.answer("Вы добавили максимальное количество фото (10). Теперь отправьте текст.")
+            await message.answer("Вы добавили максимальное количество фото (10). Теперь отправьте текст.", reply_markup=markup)
     await SomeState.waiting_for_send_message.set()
 
 
@@ -92,8 +95,10 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
         for chat_id in chat_ids:
             # Отправляем группу фотографий как альбом в каждый чат
             await bot.send_media_group(chat_id, media=media_group)
+            await message.answer('Сообщения отправлены!')
 
         await state.finish()
+        await info_handler_two(message)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'no_photo', state=SomeState.waiting_choose)
@@ -101,7 +106,10 @@ async def get_text_without_photo(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(query.message.chat.id, query.message.message_id)
 
-    await query.message.answer('Отправьте текст для рассылки в чаты: ')
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
+
+    await query.message.answer('Отправьте текст для рассылки в чаты: ', reply_markup=markup)
     await SomeState.waiting_for_send_message_without_photo.set()
 
 
