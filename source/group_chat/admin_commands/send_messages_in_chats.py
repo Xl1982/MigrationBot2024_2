@@ -19,7 +19,6 @@ class SomeState(StatesGroup):
     waiting_choose = State()
 
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
-# Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
 @dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
 async def send_messages_handler(callback_query: types.CallbackQuery):
     await callback_query.answer()
@@ -87,6 +86,7 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
             if chat_info['sending_messages']:
                 # Отправляем группу фотографий как альбом в каждый чат
                 await bot.send_media_group(chat_id, media=media_group)
+                await message.answer(f'В чат {chat_info["title"]} сообщение отправлено', reply_markup=ReplyKeyboardRemove())
             else:
                 await message.answer(f'В чат {chat_info["title"]} отключена отправка сообщений. Включите в настройках чата через /chats.')
 
@@ -117,6 +117,7 @@ async def send_message_to_chats(message: types.Message, state: FSMContext):
             chat_info = chat_manager.get_chat_data(chat_id)
             if chat_info['sending_messages']:
                 await bot.send_message(chat_id, text)
+                await message.answer(f'В чат {chat_info["title"]} сообщение отправлено', reply_markup=ReplyKeyboardRemove())
             else:
                 await message.answer(f'В чат {chat_info["title"]} отключена отправка сообщений. Включите в настройках чата через /chats.')
         except Exception as e:
@@ -124,5 +125,4 @@ async def send_message_to_chats(message: types.Message, state: FSMContext):
 
     # Сбрасываем состояние ожидания
     await state.finish()
-    await bot.send_message(message.from_user.id, "Сообщение успешно разослано.", reply_markup=ReplyKeyboardRemove())
     await info_handler_two(message)
