@@ -29,7 +29,8 @@ async def back_button_handler(query: types.CallbackQuery, state: FSMContext):
 # Работает только если нажатие было от главного админа (в принципе можно будет всё это запилить под список или под хранимые данные в json файле)
 @dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
 async def send_messages_handler(callback_query: types.CallbackQuery):
-
+    await callback_query.answer()
+    await bot.delete_message(callback_query.message.chat.id, callback_query.message.message_id)
     
     markup = types.InlineKeyboardMarkup().add(types.InlineKeyboardButton('Да', callback_data='yes_photo'))
     markup.add(types.InlineKeyboardButton('Нет', callback_data='no_photo'))
