@@ -18,6 +18,13 @@ class SomeState(StatesGroup):
     waiting_for_send_message_without_photo = State()
     waiting_choose = State()
 
+@dp.callback_query_handler(lambda c: c.data == 'back_send_message', state='*')
+async def back_button_handler(query: types.CallbackQuery, state: FSMContext):
+    await query.answer()
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+    await state.finish()
+    await info_handler_two(query.message)
+
 # Обработчик нажатия на кнопку "Отправить сообщение в группы"
 @dp.callback_query_handler(lambda c: c.data == 'send_messages' and (c.from_user.id == MAIN_ADMIN or c.from_user.id in check_admins()))
 async def send_messages_handler(callback_query: types.CallbackQuery):
@@ -53,11 +60,14 @@ async def process_photos(message: types.Message, state: FSMContext):
         # Обновляем данные в состоянии
         await state.update_data(photos=photos)
         num_photos_added = len(photos)
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
         if num_photos_added < 10:
             remaining_photos = 10 - num_photos_added
-            await message.answer(f"Вы добавили {num_photos_added} фото. Вы можете добавить еще {remaining_photos} фото или отправить текст.")
+            await message.answer(f"Вы добавили {num_photos_added} фото. Вы можете добавить еще {remaining_photos} фото или отправить текст.",
+                                  reply_markup=markup)
         else:
-            await message.answer("Вы добавили максимальное количество фото (10). Теперь отправьте текст.")
+            await message.answer("Вы добавили максимальное количество фото (10). Теперь отправьте текст.", reply_markup=markup)
     await SomeState.waiting_for_send_message.set()
 
 
@@ -91,13 +101,18 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
                 await message.answer(f'В чат {chat_info["title"]} отключена отправка сообщений. Включите в настройках чата через /chats.')
 
         await state.finish()
+        await info_handler_two(message)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'no_photo', state=SomeState.waiting_choose)
 async def get_text_without_photo(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(query.message.chat.id, query.message.message_id)
-    await query.message.answer('Отправьте текст для рассылки в чаты: ')
+
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton('Назад', callback_data='back_send_message'))
+
+    await query.message.answer('Отправьте текст для рассылки в чаты: ', reply_markup=markup)
     await SomeState.waiting_for_send_message_without_photo.set()
 
 
