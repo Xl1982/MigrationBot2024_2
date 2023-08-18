@@ -5,7 +5,7 @@ import os
 
 from aiogram import types
 
-from source.run_tasks import del_message_in_time
+from source.modules.del_message_timeout import del_message_in_time
 from source.group_chat.sending_messages.weather_api import WeatherAPI
 from source.bot_init import dp, bot
 from source.modules.get_weather_info import get_weather_forecast

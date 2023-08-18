@@ -1,5 +1,6 @@
 import asyncio
 import os
+import aiogram
 
 from source.data.classes.add_chat import ChatManager
 from source.group_chat.sending_messages.weather_send_in_group import check_weather_time
@@ -45,3 +46,5 @@ def new_tasks(chat_id):
         if chat_info['send_purchase_currency']:
             tasks.append(loop.create_task(send_purchase_currency_notification(chat_id)))
         tasks.append(loop.create_task(send_text_messages(chat_id)))
+
+

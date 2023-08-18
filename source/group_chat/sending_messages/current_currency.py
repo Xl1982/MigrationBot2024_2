@@ -3,7 +3,7 @@ import asyncio
 import pytz
 import random
 
-from source.run_tasks import del_message_in_time
+from source.modules.del_message_timeout import del_message_in_time
 from source.group_chat.sending_messages.config_chat import config_chat, times_to_send
 from ...data.classes.money_sell import CurrencyConverter
 from source.bot_init import dp, bot

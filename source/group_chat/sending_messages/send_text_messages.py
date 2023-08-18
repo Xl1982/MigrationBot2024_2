@@ -9,8 +9,6 @@ from aiogram import types
 
 from source.data.classes.messages import TextMessagesStorage
 from source.bot_init import dp, bot
-from .config_chat import config_chat
-from source.config import CHAT_ID_TORA
 from source.logger_bot import logger
 
 # Настройка логгирования
