@@ -311,10 +311,11 @@ async def add_message_text(message: types.Message, state: FSMContext):
             storage.add_message(chat_id, chosen_day, time_sent, text_message)
         
         await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
+
+        # Завершаем состояние
+        await state.finish()
         await start_chats_settings(message)
     
-    # Завершаем состояние
-    await state.finish()
 
 
 # Обработчик для удаления сообщения по времени отправки
