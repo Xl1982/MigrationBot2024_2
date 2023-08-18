@@ -30,3 +30,18 @@ def create_tasks():
         tasks.append(loop.create_task(send_text_messages(chat_id)))
             
 
+def new_tasks(chat_id):
+    global tasks
+    global loop
+
+    path = os.path.join('source', 'data', 'chats.json')
+    chat_manager = ChatManager(path)  
+    chat_info = chat_manager.get_chat_data(str(chat_id))
+    if str(chat_id) in chat_manager.get_all_chat_ids():
+        if chat_info['send_weather']:
+            tasks.append(loop.create_task(check_weather_time(chat_id)))
+        if chat_info['send_currency']:
+            tasks.append(loop.create_task(send_currency_notification(chat_id)))
+        if chat_info['send_purchase_currency']:
+            tasks.append(loop.create_task(send_purchase_currency_notification(chat_id)))
+        tasks.append(loop.create_task(send_text_messages(chat_id)))

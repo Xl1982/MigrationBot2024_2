@@ -1,14 +1,17 @@
 import datetime
 import asyncio
 import pytz
+import os
 
 from aiogram import types
 
+from source.run_tasks import del_message_in_time
 from source.group_chat.sending_messages.weather_api import WeatherAPI
 from source.bot_init import dp, bot
 from source.modules.get_weather_info import get_weather_forecast
 from source.logger_bot import logger
 from source.config import city_rus, city, WEATHER_API
+from source.data.classes.add_chat import ChatManager
 
 from .config_chat import config_chat, times_to_send
 
@@ -30,12 +33,15 @@ async def send_weather_forecast(chat_id: int, hour=12):
     for i in range(5):
         # Вычисляем дату для текущего дня
         target_date = current_date + datetime.timedelta(days=i)
-
+        chat_manager = ChatManager(os.path.join('source', 'data', 'chats.json'))
+        chat_info = chat_manager.get_chat_data(str(chat_id))
+        weather_chat = chat_info['weather_settings']
         # Проверяем, является ли текущий день первым днем
         is_first_day = (i == 0)
-
+        
         # Получаем прогноз погоды для выбранного дня и времени
-        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name='Torrevieja')
+        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name=weather_chat['city_en'])
+        
 
         # Проверяем, есть ли доступный прогноз погоды для выбранного дня
         if forecast:
@@ -55,7 +61,7 @@ async def send_weather_forecast(chat_id: int, hour=12):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                forecast = api.get_weather(city)
+                forecast = api.get_weather(weather_chat['city_en'])
                 # forecast_message += f"{forecast}\n{'-' * 52}\n\n"
                 forecast_message += f"{forecast}\n"
             else:
@@ -72,8 +78,8 @@ async def send_weather_forecast(chat_id: int, hour=12):
             forecast_message += f"Нет доступного прогноза погоды для {target_date.strftime('%d.%m.%Y')}\n\n"
 
     # Отправляем сообщение в чат Telegram
-    await bot.send_message(chat_id, forecast_message, parse_mode=types.ParseMode.MARKDOWN)
-
+    message = await bot.send_message(chat_id, forecast_message, parse_mode=types.ParseMode.MARKDOWN)
+    await del_message_in_time(message)
 
 # Функция для проверки текущего времени
 async def check_weather_time(chat_id):
@@ -101,6 +107,7 @@ async def check_weather_time(chat_id):
                 await asyncio.sleep(300)
             # Если текущее время не соответствует заданному, ждем 1 минуту и проверяем снова
             await asyncio.sleep(60)
+            
 
 
 # @dp.message_handler(lambda message: message.chat.type in (types.ChatType.GROUP, types.ChatType.SUPERGROUP) and 

@@ -29,6 +29,8 @@ info_text = (
 class ChatEditStates(StatesGroup):
     choose_chat = State()
     get_welcome_text = State()
+    wait_ru_city = State()
+    wait_en_city = State()
 
 
 

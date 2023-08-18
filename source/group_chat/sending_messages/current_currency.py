@@ -3,6 +3,7 @@ import asyncio
 import pytz
 import random
 
+from source.run_tasks import del_message_in_time
 from source.group_chat.sending_messages.config_chat import config_chat, times_to_send
 from ...data.classes.money_sell import CurrencyConverter
 from source.bot_init import dp, bot
@@ -33,13 +34,14 @@ async def send_currency_notification(chat_id):
                 exchange_text, _, _, _ = converter.convert_currency()
 
                 # Отправка уведомления в чат
-                await bot.send_message(chat_id, exchange_text)
+                message = await bot.send_message(chat_id, exchange_text)
 
                 # Логирование отправки уведомления
                 logger.info(f"Отправлено уведомление о курсе валют: {exchange_text}")
 
                 # Переход в режим сна на указанное время
                 await asyncio.sleep(sleep_minutes * 60)
+                await del_message_in_time(message)
 
         # Ожидание 1 минуты перед проверкой времени снова
         await asyncio.sleep(60)

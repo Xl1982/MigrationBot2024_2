@@ -1,4 +1,5 @@
 import json
+import datetime
 
 class ChatManager:
     """
@@ -60,6 +61,10 @@ class ChatManager:
                 "send_currency": True,
                 "send_purchase_currency": True,
                 "sending_messages": True,
+                "weather_settings": {
+                    'city_ru': 'Торревьеха',
+                    'city_en': 'Torrevieja', # надо будет добавить возможность настройки времени для каждой рассылки.
+                    }
                 }
             self.save_chats(chats)
 

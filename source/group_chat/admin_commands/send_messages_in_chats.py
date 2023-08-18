@@ -71,7 +71,6 @@ async def process_photos(message: types.Message, state: FSMContext):
     await SomeState.waiting_for_send_message.set()
 
 
-
 @dp.message_handler(state=SomeState.waiting_for_send_message)
 async def send_message_to_chats_with_photo(message: types.Message, state: FSMContext):
     file_name = os.path.join("source", "data", "chats.json")

@@ -8,7 +8,7 @@ from aiogram.dispatcher import FSMContext
 from source.single_chat.admin_commands.start import ChatEditStates
 from source.data.classes.messages import TextMessagesStorage
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler_two, check_admins
+from source.single_chat.admin_commands.start import info_handler_two, check_admins, start_chats_settings
 from source.config import MAIN_ADMIN
 
 weekdays = {
@@ -58,7 +58,7 @@ def generate_weekdays_keyboard():
 async def exit_from_states(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    await info_handler_two(query.message)
+    await start_chats_settings(query.message)
     await state.finish()
 
 # Для переноса старых сообщений (рекомендуется в следующих апдейтах удалить, смысла не будет в этом коде)
@@ -109,7 +109,7 @@ async def current_messages(query: types.CallbackQuery):
         await MessagesState.delete_messages.set()
     elif choose == 'exit':
         await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-        await info_handler_two(query.message)
+        await start_chats_settings(query.message)
         return
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await query.message.answer('Выберите день недели:', reply_markup=generate_weekdays_keyboard())
@@ -141,7 +141,7 @@ async def choose_day_to_delete_message(query: types.CallbackQuery, state: FSMCon
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
         await state.finish()
-        await info_handler_two(query.message)
+        await start_chats_settings(query.message)
         return
 
     # Отправляем список сообщений и предлагаем выбрать сообщение для удаления
@@ -176,7 +176,7 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
     if not messages:
         await query.message.answer(f"Сообщений на {retranslate_day(chosen_day)} нет.")
         await state.finish()
-        await info_handler_two(query.message)
+        await start_chats_settings(query.message)
         return
 
     # Отправляем каждое сообщение отдельно
@@ -212,7 +212,7 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
 
     # Завершаем состояние
     await state.finish()
-    info_handler_two(query.message)
+    start_chats_settings(query.message)
 
 # Обработчик для получения времени при добавлении сообщения
 @dp.message_handler(state=MessagesState.add_time)
@@ -303,7 +303,7 @@ async def add_message_text(message: types.Message, state: FSMContext):
             if len(videos) + len(photos) > 10:
                 await message.answer('Вложенных файлов вышло больше 10. Пройдите процедуру создания сообщения заново.')
                 await state.finish()
-                await info_handler_two(message)
+                await start_chats_settings(message)
                 return
             
             storage.add_message(chat_id, chosen_day, time_sent, text_message, photos, videos)
@@ -311,7 +311,7 @@ async def add_message_text(message: types.Message, state: FSMContext):
             storage.add_message(chat_id, chosen_day, time_sent, text_message)
         
         await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
-        await info_handler_two(message)
+        await start_chats_settings(message)
     
     # Завершаем состояние
     await state.finish()
@@ -338,4 +338,4 @@ async def delete_message(query: types.CallbackQuery, state: FSMContext):
 
     # Завершаем состояние
     await state.finish()
-    await info_handler_two(query.message)
+    await start_chats_settings(query.message)
