@@ -6,6 +6,8 @@ MAIN_TOKEN_BOT = '6388872864:AAGLIvBG5U3rVUiA2_0JNb9ga2Y2mjKz29I' # Тестов
 # CHAT_ID_TORA = -1001874062984 #https://t.me/torrevieja_migration
 CHAT_ID_TORA = -1001526626022 # Тестовый чат 
 EXCHANGE_TOKEN = "80730760f799bc84a6bc9a06"
+# database_name = 'telegram_database' # Основная база данных
+database_name = 'telegram_database_test' # Тестовая база данных
 
 '''
 Вставь выше свои данные, просто будем комментить туда-сюда я думаю, либо я потом сделаю подгрузку из getenv

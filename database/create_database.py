@@ -5,7 +5,7 @@ import psycopg2
 try:
     conn = psycopg2.connect(
         host="localhost",
-        database="telegram_database",
+        database="telegram_database_test",
         user="postgres",
         password="postgres"
     )
