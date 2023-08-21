@@ -9,7 +9,7 @@ from source.market import handlers
 from source import config
 from source.data.classes.admin_manager import AdminsManager
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler_two
 from source.single_chat.start_handler import start_work
 
 text = '''
@@ -57,7 +57,7 @@ async def admin_mode(message: types.Message):
 async def market_exit_handler(query: types.CallbackQuery, state: dispatcher.FSMContext = None):
     await bot.delete_message(query.message.chat.id, query.message.message_id)
     await query.answer()
-    await info_handler  (query.message)
+    await info_handler_two(query.message)
     if state:
         await state.finish()
 

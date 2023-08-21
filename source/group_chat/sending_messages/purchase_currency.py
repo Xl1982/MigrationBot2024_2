@@ -8,11 +8,11 @@ from source.bot_init import dp, bot
 from source.group_chat.sending_messages.config_chat import config_chat
 from source.logger_bot import logger
 from source.config import ADMIN_LINK
-
+from source.modules.del_message_timeout import del_message_in_time
 from source.group_chat.sending_messages.config_chat import times_to_send
 
 
-async def send_purchase_currency_notification():
+async def send_purchase_currency_notification(chat_id):
     target_times = times_to_send['purchase_currency']
 
     deviation_minutes = [1, 2]  # Время отклонения от графика в минутах
@@ -38,13 +38,14 @@ async def send_purchase_currency_notification():
                 currency_text += f'\nКонтактные данные: {ADMIN_LINK}'
 
                 # Отправка уведомления в чат
-                await bot.send_message(config_chat['chat_id'], currency_text)
+                message = await bot.send_message(chat_id, currency_text)
 
                 # Логирование отправки уведомления
                 logger.info(f"Отправлено уведомление о покупке валюты: {currency_text}")
 
                 # Переход в режим сна на указанное время
                 await asyncio.sleep(sleep_minutes * 60)
+                await del_message_in_time(message)
 
         # Ожидание 1 минуты перед проверкой времени снова
         await asyncio.sleep(60)
