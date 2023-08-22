@@ -26,7 +26,7 @@ weekdays = {
 path = os.path.join('source', 'data', 'messages.json')
 
 # Создайте или работайте с файлом по указанному пути
-storage = TextMessagesStorage(path)
+
 
 # Состояния
 class MessagesState(StatesGroup):
@@ -58,8 +58,8 @@ def generate_weekdays_keyboard():
 async def exit_from_states(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
-    await start_chats_settings(query.message)
     await state.finish()
+    await start_chats_settings(query.message)
 
 # Для переноса старых сообщений (рекомендуется в следующих апдейтах удалить, смысла не будет в этом коде)
 class MigrateStates(StatesGroup):
@@ -73,6 +73,7 @@ async def migrate_json_file(message: types.Message):
 
 @dp.message_handler(state=MigrateStates.wait_id_chat)
 async def migrate_to_chat_id(message: types.Message, state: FSMContext):
+    storage = TextMessagesStorage(path)
     storage.migrate_old_format_for_chat(message.text)
     await message.answer('Старые сообщения успешно перенесены')
     await state.finish()
@@ -134,6 +135,7 @@ async def choose_day_to_delete_message(query: types.CallbackQuery, state: FSMCon
     await query.answer()
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     # Получаем выбранный день недели
+    storage = TextMessagesStorage(path)
     state_data = await state.get_data()
     chosen_day = query.data.split('_')[2].capitalize()
     # Получаем список сообщений на указанный день
@@ -212,7 +214,7 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
 
     # Завершаем состояние
     await state.finish()
-    start_chats_settings(query.message)
+    await start_chats_settings(query.message)
 
 # Обработчик для получения времени при добавлении сообщения
 @dp.message_handler(state=MessagesState.add_time)
@@ -325,7 +327,7 @@ async def delete_message(query: types.CallbackQuery, state: FSMContext):
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     # Получаем время отправки выбранного сообщения
     time_sent = query.data.split('_')[2]
-
+    storage = TextMessagesStorage(path)
     # Получаем выбранный день недели из состояния
     data = await state.get_data()
     chosen_day = data.get('chosen_day')

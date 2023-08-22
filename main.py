@@ -18,7 +18,7 @@ from source.single_chat.admin_commands import start, taxi_orders, translator_ord
 from source.single_chat.admin_commands import settings_chats
 
 from source.group_chat import delete_replays
-from source.group_chat.sending_messages.config_chat import config_chat
+# from source.group_chat.sending_messages.config_chat import config_chat
 from source.group_chat import welcome_message_timeout
 from source.group_chat.sending_messages import weather_send_in_group
 from source.group_chat.admin_commands import add_chat_id, ban_users
