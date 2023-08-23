@@ -217,7 +217,7 @@ async def get_ru_city(message: types.Message, state: FSMContext):
     await message.answer('Название города на русском сохранено. Теперь введите название города на английском. Необходимо для нахождения прогноза погоды.')
     await ChatEditStates.wait_en_city.set()
 
-@dp.message_handler(state=ChatEditStates)
+@dp.message_handler(state=ChatEditStates.wait_en_city)
 async def get_en_city(message: types.Message, state: FSMContext):
     state_data = await state.get_data()
     city_ru = state_data['city_ru']

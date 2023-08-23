@@ -26,8 +26,9 @@ admin_message = 'Админ'
 @dp.callback_query_handler(lambda c: c.data == 'market')
 async def cmd_start_admin(query: types.CallbackQuery):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-
     markup.row(user_message, admin_message)
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+    await query.answer()
     await query.message.answer(text_for_admin, reply_markup=markup)
 
 @dp.message_handler(lambda message: message.chat.type == types.ChatType.PRIVATE, text='Магазин')

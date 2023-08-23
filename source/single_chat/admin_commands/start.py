@@ -49,6 +49,7 @@ def make_keyboard():
     keyboard.add(types.InlineKeyboardButton('Действия с администраторами бота', callback_data='admins'))
     # keyboard.add(types.InlineKeyboardButton('Настройка чатов', callback_data='chats'))
     keyboard.add(types.InlineKeyboardButton('Магазин', callback_data='market'))
+    keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_settings_state'))
 
     # Возвращаем клавиатуру
     return keyboard
@@ -76,12 +77,19 @@ async def start_chats_settings(message: types.Message):
             chat_data = chat_manager.get_chat_data(chat_id)
             chat_title = chat_data.get('title', 'Нет названия')
             keyboard.add(types.InlineKeyboardButton(chat_title, callback_data=str(chat_id))) 
+        keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_settings_state'))
         await message.answer('Выберите чат для настройки:', reply_markup=keyboard)
         await ChatEditStates.choose_chat.set()
     else:
         await message.answer('У вас нет чатов для настройки. Введите /add_chat в чате, где есть бот.')
 
 
+@dp.callback_query_handler(lambda c: c.data == 'exit_settings_state', state='*')
+async def exit_settings_chat(query: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(query.message.chat.id, query.message.message_id)
+    await query.answer()
+    await query.message.answer('Вы вышли из настроек чата. Для действий введите /chats или /info')
+    await state.finish()
 
 
 # Регистрируем обработчик для команды info

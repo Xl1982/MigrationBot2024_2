@@ -50,6 +50,7 @@ def generate_weekdays_keyboard():
     for day_en, day_ru in weekdays.items():
         callback_data = f"messages_day_{day_en.lower()}"
         keyboard.add(types.InlineKeyboardButton(day_ru, callback_data=callback_data))
+    keyboard.add(types.InlineKeyboardButton('На все дни', callback_data='all_days'))
     keyboard.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
     return keyboard
 
@@ -117,16 +118,24 @@ async def current_messages(query: types.CallbackQuery):
 
 
 # Обработчик для выбора дня недели при добавлении сообщений
+@dp.callback_query_handler(lambda c: c.data == 'all_days', state=MessagesState.add_messages)
 @dp.callback_query_handler(lambda c: c.data.startswith('messages_day_'), state=MessagesState.add_messages)
 async def choose_day_to_add_message(query: types.CallbackQuery, state: FSMContext):
     await query.answer()
-
+    
     # Получаем выбранный день недели
-    chosen_day = query.data.split('_')[2].capitalize()
+    if query.data == 'all_days':
+        await state.update_data(all_days=True)
+        chosen_day = 'Monday'
+    else:
+        chosen_day = query.data.split('_')[2].capitalize()
+    markup = types.InlineKeyboardMarkup()
+    markup.add(types.InlineKeyboardButton('Выход', callback_data='messages_exit'))
     await bot.delete_message(chat_id=query.message.chat.id, message_id=query.message.message_id)
     await state.update_data(chosen_day=chosen_day)
+    
     await MessagesState.add_time.set()
-    await query.message.answer('Введите время отправки сообщения в формате ЧЧ:ММ (например, 12:30):')
+    await query.message.answer('Введите время отправки сообщения в формате ЧЧ:ММ (например, 12:30):', reply_markup=markup)
 
 
 # Обработчик для выбора дня недели при удалении сообщений
@@ -292,6 +301,7 @@ async def add_message_text(message: types.Message, state: FSMContext):
         files = data.get('files', [])
         chosen_day = data.get('chosen_day')
         time_sent = data.get('time_sent')
+        all_days = data.get('all_days', False)
         text_message = message.text
         # Определите путь к файлу для хранения текстовых сообщений
         messages_path = os.path.join('source', 'data', 'messages.json')
@@ -308,17 +318,25 @@ async def add_message_text(message: types.Message, state: FSMContext):
                 await start_chats_settings(message)
                 return
             
-            storage.add_message(chat_id, chosen_day, time_sent, text_message, photos, videos)
+            if all_days:
+                for chosen_day in weekdays.keys():
+                    storage.add_message(chat_id, chosen_day, time_sent, text_message, photos, videos)
+                await message.reply(f"Сообщение успешно добавлено на все дни в {time_sent}.")
+            else:
+                storage.add_message(chat_id, chosen_day, time_sent, text_message, photos, videos)
+                await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
         else:
-            storage.add_message(chat_id, chosen_day, time_sent, text_message)
-        
-        await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
-
+            if all_days:
+                for chosen_day in weekdays.keys():
+                    storage.add_message(chat_id, chosen_day, time_sent, text_message)
+                await message.reply(f"Сообщение успешно добавлено на все дни в {time_sent}.")
+            else:
+                storage.add_message(chat_id, chosen_day, time_sent, text_message)
+                await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
         # Завершаем состояние
         await state.finish()
         await start_chats_settings(message)
     
-
 
 # Обработчик для удаления сообщения по времени отправки
 @dp.callback_query_handler(lambda c: c.data.startswith('delete_message_'), state=MessagesState.delete_messages)

@@ -1,11 +1,13 @@
 # Импортируем библиотеку psycopg2
 import psycopg2
 
+from source.config import database_name
+
 
 try:
     conn = psycopg2.connect(
         host="localhost",
-        database="telegram_database_test",
+        database=database_name,
         user="postgres",
         password="postgres"
     )
