@@ -136,15 +136,13 @@ def get_spam_words():
 @dp.message_handler(content_types=types.ContentTypes.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def check_spam_and_warn(message: types.Message):
     chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.is_chat_admin() or chat_member.status == 'left':
-        return
+    if not chat_member.is_chat_admin() and chat_member.status != 'left':
+        words_in_message = message.text.split()
+        for word in words_in_message:
+            if word.lower() in get_spam_words():
+                # Отправляем предупреждение пользователю
+                user_mention = message.from_user.get_mention(as_html=True)
+                await message.reply(f"{user_mention}, ваше сообщение содержит запрещенное слово и было удалено.")
 
-    words_in_message = message.text.split()
-    for word in words_in_message:
-        if word.lower() in get_spam_words():
-            # Отправляем предупреждение пользователю
-            user_mention = message.from_user.get_mention(as_html=True)
-            await message.reply(f"{user_mention}, ваше сообщение содержит запрещенное слово и было удалено.")
-
-            # Удаляем сообщение
-            await message.delete()
+                # Удаляем сообщение
+                await message.delete()
