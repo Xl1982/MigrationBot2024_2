@@ -82,16 +82,20 @@ async def send_order_callback(callback_query: CallbackQuery):
 
         # Parse the products information
         products_info = []
-        product_entries = products.split(',') if products else []
+        product_entries = products.split(' ') if products else []
         for entry in product_entries:
-            idx, quantity = entry.split('=')
-            product_info = db.fetchone('SELECT title, tag FROM products WHERE idx = %s', (idx,))
-            if product_info:
-                product_title = product_info[0]
-                product_tag = product_info[1]
-                products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}')
+            parts = entry.split('=')
+            if len(parts) == 2:
+                idx, quantity = parts
+                product_info = db.fetchone('SELECT title, tag FROM products WHERE idx = %s', (idx,))
+                if product_info:
+                    product_title = product_info[0]
+                    product_tag = product_info[1]
+                    products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}')
+                else:
+                    products_info.append('Товар не найден')
             else:
-                products_info.append('Товар не найден')
+                products_info.append('Некорректная запись товара')
         
         products_info_str = '\n'.join(products_info)
 
