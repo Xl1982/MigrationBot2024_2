@@ -4,6 +4,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram import types
+from aiogram.dispatcher.filters import BoundFilter
 
 from source.single_chat.admin_commands.start import info_handler_two
 from source.bot_init import bot, dp
@@ -133,16 +134,23 @@ def get_spam_words():
     return spam_words
 
 
-@dp.message_handler(content_types=types.ContentTypes.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
-async def check_spam_and_warn(message: types.Message):
-    chat_member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-    if not chat_member.is_chat_admin() and chat_member.status != 'left':
-        words_in_message = message.text.split()
-        for word in words_in_message:
-            if word.lower() in get_spam_words():
-                # Отправляем предупреждение пользователю
-                user_mention = message.from_user.get_mention(as_html=True)
-                await message.reply(f"{user_mention}, ваше сообщение содержит запрещенное слово и было удалено.")
+class NotAdminOrLeftChat(BoundFilter):
+    async def check(self, message: types.Message):
+        chat_member = await message.bot.get_chat_member(message.chat.id, message.from_user.id)
+        return not chat_member.is_chat_admin() and chat_member.status != 'left'
 
-                # Удаляем сообщение
-                await message.delete()
+
+@dp.message_handler(NotAdminOrLeftChat(),
+    content_types=types.ContentTypes.ANY, 
+    chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP],
+    run_task=True)
+async def check_spam_and_warn(message: types.Message):
+    words_in_message = message.text.split()
+    for word in words_in_message:
+        if word.lower() in get_spam_words():
+            # Отправляем предупреждение пользователю
+            user_mention = message.from_user.get_mention(as_html=True)
+            await message.reply(f"{user_mention}, ваше сообщение содержит запрещенное слово и было удалено.")
+
+            # Удаляем сообщение
+            await message.delete()
