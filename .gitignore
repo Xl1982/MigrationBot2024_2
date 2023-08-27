@@ -16,3 +16,4 @@ source/data/admins.json
 source/data/chats.json
 source/data/messages.json
 message_log.txt
+spam_filter.txt

@@ -36,7 +36,6 @@ class ChatEditStates(StatesGroup):
 
 # Создаем функцию для генерации инлайн клавиатуры с кнопками
 def make_keyboard():
-    # keyboard.add(types.InlineKeyboardButton('-' * 25, callback_data='void'))
     # Создаем объект инлайн клавиатуры
     keyboard = types.InlineKeyboardMarkup()
     # Добавляем кнопки с текстом и коллбэк-данными
@@ -44,10 +43,8 @@ def make_keyboard():
     keyboard.add(types.InlineKeyboardButton("Список заказов такси", callback_data="taxi"))
     keyboard.add(types.InlineKeyboardButton("Список заказов для переводчика", callback_data="translator"))
     keyboard.add(types.InlineKeyboardButton('Отправить сообщение в группы', callback_data='send_messages'))
-    # keyboard.add(types.InlineKeyboardButton('Настройка сообщений для рассылки', callback_data='messages'))
-    # if user_id == MAIN_ADMIN:
     keyboard.add(types.InlineKeyboardButton('Действия с администраторами бота', callback_data='admins'))
-    # keyboard.add(types.InlineKeyboardButton('Настройка чатов', callback_data='chats'))
+    keyboard.add(types.InlineKeyboardButton('Спам-фильтр', callback_data='spam_filter'))
     keyboard.add(types.InlineKeyboardButton('Магазин', callback_data='market'))
     keyboard.add(types.InlineKeyboardButton('Выход', callback_data='exit_settings_state'))
 

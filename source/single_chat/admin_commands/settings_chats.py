@@ -146,7 +146,7 @@ async def edit_welcome_message(query: types.CallbackQuery, state: FSMContext):
 
 @dp.message_handler(state=ChatEditStates.get_welcome_text)
 async def save_new_welcome_message(message: types.Message, state: FSMContext):
-    await bot.delete_message(message.chat.id, message.message_id - 1)
+    # await bot.delete_message(message.chat.id, message.message_id)
     # Получем данные чата
     state_data = await state.get_data()
     chat_manager = ChatManager(PATH)

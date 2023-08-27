@@ -144,5 +144,5 @@ from source.group_chat.sending_messages.weather_send_in_group import send_weathe
 
 @dp.message_handler(lambda message: message.chat.type == types.ChatType.PRIVATE and message.text == 'Погода')
 async def send_weather_info(message: types.Message):
-    await send_weather_forecast(message.chat.id, hour=21)
+    await send_weather_forecast(message.chat.id, hour=21, city_en='Torrevieja')
     await start_work(message)

@@ -19,7 +19,7 @@ from .config_chat import config_chat, times_to_send
 api = WeatherAPI(api_key=WEATHER_API)
 
 # Функция для формирования и отправки сообщения с прогнозом погоды
-async def send_weather_forecast(chat_id: int, hour=12):
+async def send_weather_forecast(chat_id: int, hour=12, city_en=None, city_ru=None):
     # Создаем список с доступными временными значениями для выбора
     times = ["09:00", "12:00", "15:00", "18:00", "21:00"]
 
@@ -33,14 +33,16 @@ async def send_weather_forecast(chat_id: int, hour=12):
     for i in range(5):
         # Вычисляем дату для текущего дня
         target_date = current_date + datetime.timedelta(days=i)
-        chat_manager = ChatManager(os.path.join('source', 'data', 'chats.json'))
-        chat_info = chat_manager.get_chat_data(str(chat_id))
-        weather_chat = chat_info['weather_settings']
+        if city_en != 'Torrevieja':
+            chat_manager = ChatManager(os.path.join('source', 'data', 'chats.json'))
+            chat_info = chat_manager.get_chat_data(str(chat_id))
+            weather_chat = chat_info['weather_settings']
+            city_en = weather_chat['city_en']
         # Проверяем, является ли текущий день первым днем
         is_first_day = (i == 0)
-        
+
         # Получаем прогноз погоды для выбранного дня и времени
-        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name=weather_chat['city_en'])
+        forecast = get_weather_forecast(target_date, datetime.time(hour, 0), city_name=city_en)
         
 
         # Проверяем, есть ли доступный прогноз погоды для выбранного дня
@@ -61,7 +63,7 @@ async def send_weather_forecast(chat_id: int, hour=12):
 
             # Формируем текст сообщения на основе шаблона
             if is_first_day:
-                forecast = api.get_weather(weather_chat['city_en'])
+                forecast = api.get_weather(city_en)
                 # forecast_message += f"{forecast}\n{'-' * 52}\n\n"
                 forecast_message += f"{forecast}\n"
             else:
