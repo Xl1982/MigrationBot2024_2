@@ -91,7 +91,7 @@ async def send_message_to_chats_with_photo(message: types.Message, state: FSMCon
         chat_ids = chat_manager.get_all_chat_ids()
 
         for chat_id in chat_ids:
-            chat_info = chat_manager(chat_id)
+            chat_info = chat_manager.get_chat_data(chat_id)
             if chat_info['sending_messages']:
                 # Отправляем группу фотографий как альбом в каждый чат
                 await bot.send_media_group(chat_id, media=media_group)
