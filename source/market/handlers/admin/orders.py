@@ -37,15 +37,19 @@ async def process_orders(message: Message):
             if products:
                 product_entries = products.split(',')
                 for entry in product_entries:
-                    idx, quantity = entry.split('=')
-                    product_info = db.fetchone('SELECT title, tag, price FROM products WHERE idx = %s', (idx,))
-                    if product_info:
-                        product_title = product_info[0]
-                        product_tag = product_info[1]
-                        product_price = product_info[2]
-                        products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}, Цена: {product_price}')
+                    parts = entry.split('=')
+                    if len(parts) == 2:
+                        idx, quantity = parts
+                        product_info = db.fetchone('SELECT title, tag, price FROM products WHERE idx = %s', (idx,))
+                        if product_info:
+                            product_title = product_info[0]
+                            product_tag = product_info[1]
+                            product_price = product_info[2]
+                            products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}, Цена: {product_price}')
+                        else:
+                            products_info.append('Товар не найден')
                     else:
-                        products_info.append('Товар не найден')
+                        products_info.append('Некорректная запись товара')
             
             products_info_str = '\n'.join(products_info)
 
