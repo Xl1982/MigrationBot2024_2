@@ -60,7 +60,6 @@ async def ban_user(message: types.Message):
         await message.reply("Вы не можете банить пользователей в этом чате.")
 
 
-# Обработчик команды /unban, которая принимает ID пользователя в качестве аргумента
 @dp.message_handler(lambda message: message.chat.type in [types.ChatType.GROUP, types.ChatType.SUPERGROUP],
                     commands=["unban"])
 async def unban_user(message: types.Message):
@@ -71,20 +70,24 @@ async def unban_user(message: types.Message):
         user_id = message.get_args()
         # Проверяем, что аргумент не пустой
         if user_id:
-            # Возвращаем его в чат
-            await bot.unban_chat_member(message.chat.id, user_id)
-            # Отправляем сообщение об успешном разбане
-            await message.reply(f"Пользователь {user_id} может вернуться в чат.")
-            # Пытаемся отправить ему уведомление в личные сообщения с ссылкой на чат
             try:
-                updated_chat = await bot.get_chat(message.chat.id)
-                await bot.send_message(user_id, f"Вы были разбанены в чате {message.chat.title}. Ссылка приглашение - {updated_chat.invite_link}")
-            except BotBlocked:
-                # Если бот заблокирован пользователем, отправляем сообщение об этом в общий чат
-                await message.reply(f"Пользователь {user_id} заблокировал бота и не получил уведомление о разбане.")
-            except CantInitiateConversation:
-                # Если бот не может начать разговор с пользователем, отправляем сообщение об этом в общий чат
-                await message.reply(f"Бот не может начать разговор с пользователем {user_id} и не отправил ему уведомление о разбане.")
+                # Возвращаем его в чат
+                await bot.unban_chat_member(message.chat.id, user_id)
+                # Отправляем сообщение об успешном разбане
+                await message.reply(f"Пользователь {user_id} может вернуться в чат.")
+                # Пытаемся отправить ему уведомление в личные сообщения с ссылкой на чат
+                try:
+                    updated_chat = await bot.get_chat(message.chat.id)
+                    await bot.send_message(user_id, f"Вы были разбанены в чате {message.chat.title}. Ссылка на приглашение - {updated_chat.invite_link}")
+                except BotBlocked:
+                    # Если бот заблокирован пользователем, отправляем сообщение об этом в общий чат
+                    await message.reply(f"Пользователь {user_id} заблокировал бота и не получил уведомление о разбане.")
+                except CantInitiateConversation:
+                    # Если бот не может начать разговор с пользователем, отправляем сообщение об этом в общий чат
+                    await message.reply(f"Бот не может начать разговор с пользователем {user_id} и не отправил ему уведомление о разбане.")
+            except Exception as e:
+                # Если возникла ошибка BadRequest, отправляем сообщение об этом
+                print(f"Произошла ошибка при разбане пользователя: {e}")
         else:
             # Отправляем сообщение с инструкцией по использованию команды
             await message.reply("Чтобы разбанить пользователя, нужно указать его ID в качестве аргумента команды.\n"
@@ -121,7 +124,6 @@ async def mute_user(message: types.Message):
         await message.reply("Вы не можете мьютить пользователей в этом чате.")
 
 
-# Обработчик команды /unmute, которая может быть ответом на сообщение пользователя или принимать ID пользователя в качестве аргумента
 @dp.message_handler(lambda message: message.chat.type in [types.ChatType.GROUP, types.ChatType.SUPERGROUP],
                     commands=["unmute"])
 async def unmute_user(message: types.Message):
@@ -145,17 +147,21 @@ async def unmute_user(message: types.Message):
         # Если команда принимает ID пользователя в качестве аргумента
         else:
             # Получаем ID пользователя из аргумента
-            user_id = int(message.get_args())
-            # Проверяем, что аргумент не пустой
-            if user_id:
-                # Возвращаем ему полные права в чате
-                await bot.restrict_chat_member(message.chat.id, user_id, types.ChatPermissions(True))
-                # Отправляем сообщение об успешном размьюте
-                await message.reply(f"Пользователь {user_id} размьючен.")
-            else:
-                # Отправляем сообщение с инструкцией по использованию команды
+            args = message.get_args()
+            try:
+                user_id = int(args)
+                if user_id <= 0:
+                    raise ValueError()
+            except ValueError:
+                # Отправляем инструкцию по использованию команды
                 await message.reply("Чтобы размьютить пользователя, нужно ответить на его сообщение командой /unmute или указать его ID в качестве аргумента команды.\n"
                                     "Например: /unmute 123456789")
+                return
+
+            # Возвращаем ему полные права в чате
+            await bot.restrict_chat_member(message.chat.id, user_id, permissions=unmute_permissions())
+            # Отправляем сообщение об успешном размьюте
+            await message.reply(f"Пользователь {user_id} размьючен.")
     else:
         # Отправляем сообщение об ошибке
         await message.reply("Вы не можете размьютить пользователей в этом чате.")

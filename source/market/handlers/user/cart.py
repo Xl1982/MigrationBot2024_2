@@ -236,20 +236,23 @@ async def process_confirm(message: Message, state: FSMContext):
             products = [idx + '=' + str(quantity)
                         for idx, quantity in db.fetchall('''SELECT idx, quantity FROM cart
             WHERE cid=%s''', (cid,))]  # idx=quantity
-            await bot.send_message(chat_id=MAIN_ADMIN, text=f'Создан заказ:\nИмя: <b>{data["name"]}</b>\nАдрес: <b>{data["address"]}</b>')
+
+            # Insert the order into the orders table and get the generated order_id
+            db.query('INSERT INTO orders (cid, usr_name, usr_address, products) VALUES (%s, %s, %s, %s) RETURNING order_id',
+                     (cid, data['name'], data['address'], ' '.join(products)))
+
+            order_id = db.fetchone('SELECT order_id FROM orders WHERE cid = %s ORDER BY order_id DESC LIMIT 1', (cid,))[0]
+
             for product in products:
                 product = product.split('=')
                 count = product[1]
                 tag = product[0]
                 name = db.fetchall('''SELECT title FROM products WHERE idx=%s''', (tag,))
-                await bot.send_message(chat_id=MAIN_ADMIN, text=f'Товар: <b>{name[0][0]}</b>\nКоличество: <b>{count}</b>\nКуда: <b>{data["address"]}</b>\nИмя:  <b>{data["name"]}</b>')
-
-            db.query('INSERT INTO orders VALUES (%s, %s, %s, %s)',
-                     (cid, data['name'], data['address'], ' '.join(products)))
+                await bot.send_message(chat_id=MAIN_ADMIN, text=f'Создан заказ:\nТовар: <b>{name[0][0]}</b>\nКоличество: <b>{count}</b>\nКуда: <b>{data["address"]}</b>\nИмя:  <b>{data["name"]}</b>')
 
             db.query('DELETE FROM cart WHERE cid=%s', (cid,))
 
-            await message.answer('Ок! Ваш заказ уже в пути 🚀\nИмя: <b>{}</b>\nАдрес: <b>{}</b>'.format(data['name'], data['address']),
+            await message.answer(f'Ок! Ваш заказ с номером {order_id} в обработке!\nИмя: <b>{data["name"]}</b>\nАдрес: <b>{data["address"]}</b>',
                     parse_mode='HTML', reply_markup=markup)
             await start_work(message)
             await state.finish()
@@ -257,6 +260,6 @@ async def process_confirm(message: Message, state: FSMContext):
     else:
 
         await message.answer('У вас недостаточно денег на счете. Пополните баланс!',
-                             reply_markup=  markup)
+                             reply_markup=markup)
 
     await state.finish()

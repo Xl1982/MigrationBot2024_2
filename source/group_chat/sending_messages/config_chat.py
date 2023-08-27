@@ -1,10 +1,8 @@
 import datetime
 
 
-from source.config import CHAT_ID_TORA
-
 config_chat = {
-    'chat_id': CHAT_ID_TORA,
+    # 'chat_id': CHAT_ID_TORA,
     'weather_message': True,
     'purchase_message': True,
     'money_cource_message': True,

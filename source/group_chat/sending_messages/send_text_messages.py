@@ -9,14 +9,12 @@ from aiogram import types
 
 from source.data.classes.messages import TextMessagesStorage
 from source.bot_init import dp, bot
-from .config_chat import config_chat
-from source.config import CHAT_ID_TORA
 from source.logger_bot import logger
 
 # Настройка логгирования
 
 
-async def send_text_messages():
+async def send_text_messages(chat_id):
     logger.info('Функция для отправки текстовых сообщений запущена')
     while True:
         # Определите путь к файлу для хранения текстовых сообщений, используя модуль os
@@ -31,7 +29,7 @@ async def send_text_messages():
         now = datetime.datetime.now(pytz.timezone('Europe/Madrid')).time()
         # now = datetime.datetime.now().time()
 
-        messages_for_current_day = storage.get_messages_for_day(current_day)
+        messages_for_current_day = storage.get_messages_for_day(chat_id, current_day)
 
         for info_message in messages_for_current_day:
             message_time = datetime.datetime.strptime(info_message['time_sent'], '%H:%M').time()
@@ -58,9 +56,9 @@ async def send_text_messages():
                         media_group.append(types.InputMediaVideo(media=video_id, caption=caption))
 
                 if media_group:
-                    await bot.send_media_group(CHAT_ID_TORA, media=media_group)
+                    await bot.send_media_group(chat_id, media=media_group)
                 else:
-                    await bot.send_message(CHAT_ID_TORA, info_message['text'])
+                    await bot.send_message(chat_id, info_message['text'])
                 
                 log_message = f"Sent message: Time={message_time}, SentTime={now:%H:%M}, Day={current_day}, Text={info_message['text']}"
                 await log_to_file('message_log.txt', log_message)

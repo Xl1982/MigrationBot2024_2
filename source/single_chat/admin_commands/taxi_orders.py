@@ -9,7 +9,7 @@ from aiogram.dispatcher import FSMContext
 from database.operations.taxi_orders import TaxiOrder
 
 from source.bot_init import dp, bot
-from source.single_chat.admin_commands.start import info_handler
+from source.single_chat.admin_commands.start import info_handler_two
 
 
 def make_back_button():
@@ -64,7 +64,7 @@ class OrderStates(StatesGroup):
 async def exit_from_taxi_info(callback: types.CallbackQuery, state: FSMContext):
     # Удаляем сообщение с предыдущей клавиатурой
     await bot.delete_message(callback.message.chat.id, callback.message.message_id)
-    await info_handler(callback.message)
+    await info_handler_two(callback.message)
     await state.finish()
 
 
@@ -72,7 +72,7 @@ async def exit_from_taxi_info(callback: types.CallbackQuery, state: FSMContext):
 async def exit_from_taxi_info(callback: types.CallbackQuery):
     # Удаляем сообщение с предыдущей клавиатурой
     await bot.delete_message(callback.message.chat.id, callback.message.message_id)
-    await info_handler(callback.message)
+    await info_handler_two(callback.message)
     
         
 

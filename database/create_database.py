@@ -2,10 +2,11 @@
 import psycopg2
 
 
+
 try:
     conn = psycopg2.connect(
         host="localhost",
-        database="telegram_database",
+        database='telegram_database',
         user="postgres",
         password="postgres"
     )
@@ -77,7 +78,7 @@ try:
 
 
     cur.execute('CREATE TABLE IF NOT EXISTS products (idx text PRIMARY KEY, title text, body text, photo bytea, price real, tag text)')
-    cur.execute('CREATE TABLE IF NOT EXISTS orders (cid BIGINT, usr_name text, usr_address text, products text)')
+    cur.execute('CREATE TABLE IF NOT EXISTS orders (order_id SERIAL PRIMARY KEY, cid BIGINT, usr_name text, usr_address text, products text, sending BOOLEAN DEFAULT false)')
     cur.execute('CREATE TABLE IF NOT EXISTS cart (cid BIGINT, idx text REFERENCES products (idx), quantity int)')
     cur.execute('CREATE TABLE IF NOT EXISTS categories (idx text PRIMARY KEY, title text)')
     cur.execute('CREATE TABLE IF NOT EXISTS wallet (cid BIGINT, balance real)')
