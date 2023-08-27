@@ -35,29 +35,25 @@ async def process_orders(message: Message):
             products_info = []
 
             if products:
-                product_entries = products.split(',')
+                product_entries = products.split(' ')  # Разделяем по пробелу
                 for entry in product_entries:
-                    parts = entry.split('=')
-                    if len(parts) == 2:
-                        idx, quantity = parts
-                        product_info = db.fetchone('SELECT title, tag, price FROM products WHERE idx = %s', (idx,))
-                        if product_info:
-                            product_title = product_info[0]
-                            product_tag = product_info[1]
-                            product_price = product_info[2]
-                            products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}, Цена: {product_price}')
-                        else:
-                            products_info.append('Товар не найден')
+                    idx, quantity = entry.split('=')  # Разделяем по "="
+                    product_info = db.fetchone('SELECT title, tag, price FROM products WHERE idx = %s', (idx,))
+                    if product_info:
+                        product_title = product_info[0]
+                        product_tag = product_info[1]
+                        product_price = product_info[2]
+                        products_info.append(f'{product_title} ({product_tag}), Количество: {quantity}, Цена: {product_price}')
                     else:
-                        products_info.append('Некорректная запись товара')
+                        products_info.append('Товар не найден')
 
             status = "лежит на складе." if not sending else "уже в пути!"
-            escape_var = '\n'
+            escape_val = '\n'
             res = (
                 f'Заказ №{order_id}\n'
                 f'Имя: {usr_name}\n'
                 f'Адрес: {usr_address}\n'
-                f'Товары:\n{escape_var.join(products_info)}\n'  # Выводим все товары
+                f'Товары:\n{escape_val.join(products_info)}\n'  # Выводим все товары
                 f'Статус: {status}\n\n'
             )
 
@@ -70,6 +66,7 @@ async def process_orders(message: Message):
             markup.add(button)
 
             await message.answer(res, parse_mode='HTML', reply_markup=markup)
+
 
 
 @dp.callback_query_handler(lambda c: c.data.startswith('send_order'))
