@@ -50,16 +50,14 @@ async def process_orders(message: Message):
                             products_info.append('Товар не найден')
                     else:
                         products_info.append('Некорректная запись товара')
-            
-            products_info_str = '\n'.join(products_info)
 
-            status = "лежит на складе." if not sending else "уже в пути!"  # Define the status message based on sending flag
-
+            status = "лежит на складе." if not sending else "уже в пути!"
+            escape_var = '\n'
             res = (
                 f'Заказ №{order_id}\n'
                 f'Имя: {usr_name}\n'
                 f'Адрес: {usr_address}\n'
-                f'Товары:\n{products_info_str}\n'
+                f'Товары:\n{escape_var.join(products_info)}\n'  # Выводим все товары
                 f'Статус: {status}\n\n'
             )
 
