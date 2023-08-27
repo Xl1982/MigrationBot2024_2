@@ -74,11 +74,12 @@ async def send_order_callback(callback_query: CallbackQuery):
     order_id = callback_query.data.split(':')[1]  # Extract order ID from the callback data
     
     # Get the order details based on order_id
-    order_details = db.fetchone('SELECT usr_name, usr_address, products FROM orders WHERE order_id = %s', (order_id,))
+    order_details = db.fetchone('SELECT usr_name, usr_address, products, cid FROM orders WHERE order_id = %s', (order_id,))
     if order_details:
         usr_name = order_details[0]
         usr_address = order_details[1]
         products = order_details[2]
+        user_chat_id = order_details[3]  # Get the chat_id from the order details
 
         # Parse the products information
         products_info = []
@@ -103,8 +104,9 @@ async def send_order_callback(callback_query: CallbackQuery):
         db.query('UPDATE orders SET sending = TRUE WHERE order_id = %s', (order_id,))
         await bot.answer_callback_query(callback_query.id, text='Заказ отправлен', show_alert=True)
         
+        # Send the notification to the user using user_chat_id
         await bot.send_message(
-            callback_query.message.chat.id,
+            user_chat_id,
             f'Уважаемый(ая) {usr_name}, ваш заказ №{order_id} с товарами:\n{products_info_str}\n'
             f'передан в доставку на адрес {usr_address}.',
             parse_mode='HTML'
@@ -113,3 +115,4 @@ async def send_order_callback(callback_query: CallbackQuery):
         await bot.delete_message(callback_query.message.chat.id, callback_query.message.message_id)  # Delete the message
     else:
         await bot.answer_callback_query(callback_query.id, text='Данные о заказе не найдены', show_alert=True)
+
