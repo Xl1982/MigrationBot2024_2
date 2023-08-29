@@ -69,10 +69,10 @@ async def send_text_messages(chat_id):
                     chat_data = chat_manager.get_chat_data(chat_id)
 
                     text = ('Возникла ошибка при отправке сообщения:\n'
-                            f'Чат: {chat_data["tilte"]}\nВремя сообщения {info_message["time_sent"]}\nДень: {current_day}.\n\nРекомендуется посмотреть логи, или '
+                            f'Чат: {chat_data["title"]}\nВремя сообщения {info_message["time_sent"]}\nДень: {current_day}.\n\nРекомендуется посмотреть логи, или '
                             'попробовать вновь добавить сообщение, перед этим его удалив. Для этого воспользуйтесь командой /chats, выберите нужный чат и выбрав день,'
                             ' удалите сообщение по его времени')
-                    await bot.send_message(MAIN_ADMIN, 'Возникла ошибка при отправке сообщения')
+                    await bot.send_message(MAIN_ADMIN, text)
                     print(e) 
 
 
