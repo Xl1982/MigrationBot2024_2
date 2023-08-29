@@ -4,6 +4,7 @@ import os
 from aiogram import types
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
+from aiogram.utils.exceptions import MessageCaptionTooLong
 
 from source.single_chat.admin_commands.start import ChatEditStates
 from source.data.classes.messages import TextMessagesStorage
@@ -25,7 +26,8 @@ weekdays = {
 # Определите путь к файлу, используя модуль os
 path = os.path.join('source', 'data', 'messages.json')
 
-# Создайте или работайте с файлом по указанному пути
+MAX_MESSAGE_LENGTH = 4096
+MAX_MESSAGE_LENGTH_WITH_PHOTO = 1024 
 
 
 # Состояния
@@ -190,7 +192,6 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
         await start_chats_settings(query.message)
         return
 
-    # Отправляем каждое сообщение отдельно
     for message in messages:
         time_sent = message['time_sent']
         text = message['text']
@@ -213,6 +214,17 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
                 else:
                     caption = None
                 media_group.append(types.InputMediaVideo(media=video_id, caption=caption))
+
+        try:
+            if not media_group:
+                # Отправляем время отправки и текст
+                await query.message.answer(message_text, parse_mode='HTML')
+            else:
+                # Отправляем группу медиафайлов
+                await query.message.answer_media_group(media_group) 
+        except MessageCaptionTooLong:
+            error_message = f"Сообщение на время {time_sent} некорректно. Рекомендуется его удалить."
+            await query.message.answer(error_message)
 
         if not media_group:
             # Отправляем время отправки и текст
@@ -310,6 +322,10 @@ async def add_message_text(message: types.Message, state: FSMContext):
         storage = TextMessagesStorage(messages_path)
         chat_id = data.get('chat_id')
         if files:
+            # Проверяем длину текстового сообщения
+            if len(text_message) > MAX_MESSAGE_LENGTH_WITH_PHOTO:
+                await message.answer("Ваше сообщение слишком длинное. Пожалуйста, отправьте более короткий текст. При отправке сообщений с фото длина текста не должна превышать 1024 символа")
+                return
             photos = files.get('photos', [])
             videos = files.get('videos', [])
             if len(videos) + len(photos) > 10:
@@ -326,6 +342,10 @@ async def add_message_text(message: types.Message, state: FSMContext):
                 storage.add_message(chat_id, chosen_day, time_sent, text_message, photos, videos)
                 await message.reply(f"Сообщение успешно добавлено на {retranslate_day(chosen_day)} в {time_sent}.")
         else:
+            # Проверяем длину текстового сообщения
+            if len(text_message) > MAX_MESSAGE_LENGTH:
+                await message.answer("Ваше сообщение слишком длинное. Пожалуйста, отправьте более короткий текст. При отправке сообщений с фото длина текста не должна превышать 1024 символа")
+                return
             if all_days:
                 for chosen_day in weekdays.keys():
                     storage.add_message(chat_id, chosen_day, time_sent, text_message)
