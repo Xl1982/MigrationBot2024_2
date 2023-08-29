@@ -226,6 +226,9 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
             error_message = f"Возникли проблемы с сообщением на время {time_sent}. Рекомендуется его удалить и попробовать добавить снова."
             print(e)
             await query.message.answer(error_message)
+            # Завершаем состояние
+            await state.finish()
+            await start_chats_settings(query.message)
 
         if not media_group:
             # Отправляем время отправки и текст
