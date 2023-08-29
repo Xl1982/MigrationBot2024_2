@@ -4,7 +4,7 @@ import os
 from aiogram import types
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext
-from aiogram.utils.exceptions import MessageCaptionTooLong
+
 
 from source.single_chat.admin_commands.start import ChatEditStates
 from source.data.classes.messages import TextMessagesStorage
@@ -222,8 +222,9 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
             else:
                 # Отправляем группу медиафайлов
                 await query.message.answer_media_group(media_group) 
-        except MessageCaptionTooLong:
-            error_message = f"Сообщение на время {time_sent} некорректно. Рекомендуется его удалить."
+        except Exception as e:
+            error_message = f"Возникли проблемы с сообщением на время {time_sent}. Рекомендуется его удалить и попробовать добавить снова."
+            print(e)
             await query.message.answer(error_message)
 
         if not media_group:
