@@ -229,6 +229,7 @@ async def choose_day_to_current_message(query: types.CallbackQuery, state: FSMCo
             # Завершаем состояние
             await state.finish()
             await start_chats_settings(query.message)
+            return
 
         if not media_group:
             # Отправляем время отправки и текст
