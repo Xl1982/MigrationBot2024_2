@@ -7,7 +7,9 @@ import aiofiles
 
 from aiogram import types
 
+from source.config import MAIN_ADMIN
 from source.data.classes.messages import TextMessagesStorage
+from source.data.classes.add_chat import ChatManager
 from source.bot_init import dp, bot
 from source.logger_bot import logger
 
@@ -54,14 +56,25 @@ async def send_text_messages(chat_id):
                         else:
                             caption = None
                         media_group.append(types.InputMediaVideo(media=video_id, caption=caption))
-
-                if media_group:
-                    await bot.send_media_group(chat_id, media=media_group)
-                else:
-                    await bot.send_message(chat_id, info_message['text'])
+                try:
+                    if media_group:
+                        await bot.send_media_group(chat_id, media=media_group)
+                    else:
+                        await bot.send_message(chat_id, info_message['text'])
                 
-                log_message = f"Sent message: Time={message_time}, SentTime={now:%H:%M}, Day={current_day}, Text={info_message['text']}"
-                await log_to_file('message_log.txt', log_message)
+                    log_message = f"Sent message: Time={message_time}, SentTime={now:%H:%M}, Day={current_day}, Text={info_message['text']}"
+                    await log_to_file('message_log.txt', log_message)
+                except Exception as e:
+                    chat_manager = ChatManager(os.path.join('source', 'data', 'chats.json'))
+                    chat_data = chat_manager.get_chat_data(chat_id)
+
+                    text = ('Возникла ошибка при отправке сообщения:\n'
+                            f'Чат: {chat_data["tilte"]}\nВремя сообщения {info_message["time_sent"]}\nДень: {current_day}.\n\nРекомендуется посмотреть логи, или '
+                            'попробовать вновь добавить сообщение, перед этим его удалив. Для этого воспользуйтесь командой /chats, выберите нужный чат и выбрав день,'
+                            ' удалите сообщение по его времени')
+                    await bot.send_message(MAIN_ADMIN, 'Возникла ошибка при отправке сообщения')
+                    print(e) 
+
 
         await asyncio.sleep(60 * 1)
 
