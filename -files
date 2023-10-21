@@ -1,0 +1,808 @@
+[33mcommit 0492ee08c23ec6b7ad254a6670b2ce388e6bacff[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Migration bot <xl19841984@gmail.com>
+Date:   Mon Oct 2 13:38:12 2023 +0300
+
+    back02102023
+
+[33mcommit ad90e8d1345a710d7a17ab8319fa87067dda2ea3[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 17:19:39 2023 +0300
+
+    Фикс отправки сообщения о неудачной рассылке
+
+[33mcommit 979d7a2219dace7d7ce77a7b724ec28117038710[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 15:03:12 2023 +0300
+
+    Фикс двойной отправки сообщений при выводе текущих текстовых сообщений
+
+[33mcommit 1bb2a7726a34c909047941a5330899a9cece0f25[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 14:59:34 2023 +0300
+
+    Сделана обработка в случае ошибок при отправке рассылки
+
+[33mcommit 547fd6abfe4892ab13bf89bd91ae1bc2b20668e8[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 14:18:15 2023 +0300
+
+    Выход из функции
+
+[33mcommit e1f7460431bb646e06dd9f40aca0ee8557fb4640[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 14:16:54 2023 +0300
+
+    Выход из состояния
+
+[33mcommit eb55544be8b29af9ec64904d5a83a803be7b7f42[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 14:15:01 2023 +0300
+
+    Фикс импорта
+
+[33mcommit 0bb65cbe55a70d5ca6e5cd600e9f0fcb54bf7bae[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 29 14:11:39 2023 +0300
+
+    предупреждение о превышении длины сообщения и обработка ошибки
+
+[33mcommit abc71a52aaf99f1720ac5afdb0dd3b3a6bb67292[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 15:42:09 2023 +0300
+
+    Фикс работы спам-фильтра. Теперь удаляет в том числе и предложения
+
+[33mcommit 18aa50f583b4d727deb93cbee4493d43e7a97594[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 01:48:46 2023 +0300
+
+    фикс отправки сообщения пользователю по нажатию на кнопку отправить заказ
+
+[33mcommit 6f0829c14e0341111935dfcb60ab98dd9bca4026[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 01:32:35 2023 +0300
+
+    Фикс кнопки отправить заказ
+
+[33mcommit a5bc23e4fb52018c78c1897a4787e92af9734e4e[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 01:30:16 2023 +0300
+
+    Конфиг
+
+[33mcommit a0c06c41ebcfa45d77b96e6c82ee7a8749ff09c9[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 01:29:14 2023 +0300
+
+    Фикс вывода заказанных товаров
+
+[33mcommit 6e90337f3e04ef24e7d1a9b62f0fe532c407aea3[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 01:09:57 2023 +0300
+
+    Фикс ошибки в маркете
+
+[33mcommit bd85abb139fed15c9cc9eadbbd82d5f0727e2103[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Mon Aug 28 00:56:01 2023 +0300
+
+    Фикс ошибки в маркете
+
+[33mcommit cb17ebc17ebd15699d3cffccf32c0dcc3dd5c8f8[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sun Aug 27 19:08:38 2023 +0300
+
+    Фикс вызова метода
+
+[33mcommit e16fd7576d293358f300b3a5fa11e35bf2ad626c[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sun Aug 27 14:25:35 2023 +0300
+
+    конфиг
+
+[33mcommit 9faa5c73252a87c61eaec38b63c10d65d6b4664c[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sun Aug 27 14:24:00 2023 +0300
+
+    Фикс блокировки функций
+
+[33mcommit 586d324e0f44653b5098a08fa17b922c09bd4623[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sun Aug 27 13:23:13 2023 +0300
+
+    Фикс блокировки выполнения команд
+
+[33mcommit c23c4c228e350ac12030aacf3e52e87df8f87189[m
+Merge: 7e1ee89 f77dadd
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Sun Aug 27 12:27:11 2023 +0300
+
+    Merge pull request #8 from Xl1982/add_photo
+    
+    Новая версия
+
+[33mcommit f77daddc10a5768386f1afa7f0d49a2bfe0edf87[m[33m ([m[1;31morigin/add_photo[m[33m)[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sun Aug 27 12:18:48 2023 +0300
+
+    Фикс множества багов. Косметика в маркете. Спам-фильтр
+
+[33mcommit aa844ebf814c693dc8576340473ba6eedbd269f9[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 24 10:12:51 2023 +0300
+
+    конфиг
+
+[33mcommit 8e7c65d0818f62bd87fc7a3c54fbbd64c8358b33[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 24 01:59:25 2023 +0300
+
+    Промежуточные изменения, добавление возможности сделать сообщение сразу на все дни недели
+
+[33mcommit 4a86ab414a584d0587b31a63fdaeae7a4f0d8198[m[33m ([m[1;31morigin/fixs[m[33m)[m
+Author: Leganyst <legan.16@rambler.ru>
+Date:   Tue Aug 22 16:52:58 2023 +0300
+
+    Решены некоторые проблемы (при настройке сообщений только что созданные нельзя было удалить например)
+
+[33mcommit 0e8eedcc855ebbe4b6953a0a4ed73472a272a50f[m
+Merge: 7e1ee89 09fe57d
+Author: Leganyst <legan.16@rambler.ru>
+Date:   Mon Aug 21 22:34:50 2023 +0300
+
+    Merge branch 'add_photo' of https://github.com/Xl1982/Migration_bot
+
+[33mcommit 09fe57d36b9ad01fdd646e87b26e17ce0f569afd[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sat Aug 19 16:11:26 2023 +0300
+
+    Создание тестовой базы данных во избежание конфликтов на сервере
+
+[33mcommit e5d42d7ba6f7e324582fde8d3c61b3eb3bd882fb[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 21:02:37 2023 +0300
+
+    Фикс зависания состояния при завершении создания сообщения
+
+[33mcommit 3ad8344efc8691019aea2ff910838a9c0d269d5a[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 20:56:13 2023 +0300
+
+    Конфиг
+
+[33mcommit 7c8db0fff797ae3f078b83cf3be22b1184b5b36e[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 20:54:34 2023 +0300
+
+    Фикс циклического импорта
+
+[33mcommit f6e23781a05466253636eecf8efa7f7d332fa436[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 20:37:41 2023 +0300
+
+    Первый билд
+
+[33mcommit 3e9ef1a6e31761a6472bbed5aeac899fca4ac70e[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 02:17:19 2023 +0300
+
+    Теперь приветственные сообщения настраиваемы
+
+[33mcommit 8d5c392314fbd8957e8ca584ec789d754035f2d2[m
+Merge: 6286a47 2717b73
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 18 01:11:12 2023 +0300
+
+    Merge branch 'fix_button' into add_photo
+
+[33mcommit 2717b738bb5f5ea73160fc537de9579df5916926[m[33m ([m[1;31morigin/fix_button[m[33m)[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 21:51:03 2023 +0300
+
+    Фикс багов, косметический апдейт
+
+[33mcommit a3641ecd94e1a40a67c0b1185d6870ab844244bd[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 19:31:57 2023 +0300
+
+    Косметическое изменение
+
+[33mcommit e9b0c3de328a62b12926355bc7c37e6439374228[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 19:30:13 2023 +0300
+
+    Добавлены ещё кнопки выхода на каждом этапе
+
+[33mcommit 26e8e3084742da824968030d13eabdbc1b71aaa7[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 19:09:05 2023 +0300
+
+    Хотфикс кнопки НАЗАД
+
+[33mcommit 6286a473b981cefea0ea17f0120d710742c9889d[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 17:24:58 2023 +0300
+
+    Сделано создание асинхронных тасков для каждого чата
+
+[33mcommit 7e1ee89f8b5497cdc371afc7f93eb93e9bac18c1[m
+Merge: 2136496 008f114
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Thu Aug 17 13:56:53 2023 +0300
+
+    Merge pull request #7 from Xl1982/fix_back
+    
+    Фикс ветки рассылки сообщений, а именно неработающих кнопок НАЗАД
+
+[33mcommit 008f114979d07b8b4c957f78809d73b53eb8e3e5[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 13:55:36 2023 +0300
+
+    Фикс ветки рассылки сообщений, а именно неработающих кнопок НАЗАД
+
+[33mcommit a3eec2c88420944b5ffe130c3e214b7c688ff5f8[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 13:49:14 2023 +0300
+
+    Исправлена ошибка с неработающими кнопками Назад при рассылке в чаты
+
+[33mcommit 2136496336333df7dc9ed011df6ffb15a6c61b91[m
+Merge: 9e7a05c ce68920
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Thu Aug 17 13:47:59 2023 +0300
+
+    Merge pull request #6 from Xl1982/add_photo
+    
+    Добавление фото и видео в рассылки
+
+[33mcommit b97df756e3571fba655459d4285a6b84a2eeb6b4[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 17 11:51:52 2023 +0300
+
+    Добавлена панель с чатами. Функции-рассылки теперь создаются для каждого чата. Не дописан полностью функционал.
+
+[33mcommit ce689206124c922f6611e0fd3990caeca8756fe6[m
+Merge: dbca3b1 2d00121
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 15 14:08:37 2023 +0300
+
+    Merge branch 'new_welcome_messages' into add_photo
+
+[33mcommit dbca3b1c094f40c54bcf6220f7412d1c243fa759[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 15 12:15:35 2023 +0300
+
+    Добавлена возможность отправлять видео через рассылку
+
+[33mcommit 094ab15ede7ed7186a72ba24b8dfaabb777ce9cf[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sat Aug 12 20:54:18 2023 +0300
+
+    Фикс удаления сообщений
+
+[33mcommit d78ead74b40fb94d1d149f35c94a1e1652e72f69[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sat Aug 12 18:28:11 2023 +0300
+
+    Тестовый вариант рассылки с фото
+
+[33mcommit 2d001218a3db4c29a2cd45e616fb6db4e7f4a742[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Sat Aug 12 13:04:39 2023 +0300
+
+    Изменение класса для работы с чатами. Переписаны вызовы необходимых
+    методов из данного класса
+
+[33mcommit 1a237f8dda8134f939c362665c7cce565c606f17[m[33m ([m[1;31morigin/develop[m[33m)[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Fri Aug 11 01:28:02 2023 +0300
+
+    Возможность отправки фото при рассылке в различные группы
+
+[33mcommit 98e41e256aa09224c2cd08e1c5bf6abad0326803[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 21:22:48 2023 +0300
+
+    Конфиг
+
+[33mcommit b0f3276eb0e654fe1c1dcfb60d148f7039cf9097[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 21:21:28 2023 +0300
+
+    Попытка исправить беду с тегами при отправке сообщения администратору
+
+[33mcommit a7891596d273d249a74ffe8f16058473ccdbab49[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 21:17:10 2023 +0300
+
+    Попытка исправить беду с тегами при отправке сообщения администратору
+
+[33mcommit dbed418dd2bcff64a2ff6606fc074eb3bbf62972[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 20:22:30 2023 +0300
+
+    Исправление пути к файлу при проверке на админа
+
+[33mcommit 0378d1c6ffba5ced12f2fd38a5df9ef0efdc9227[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 20:12:03 2023 +0300
+
+    Фикс багов, исправление выхода при добавлении админов
+
+[33mcommit c5d72c4a751c180b17c412d0fa39749b00965683[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 18:57:22 2023 +0300
+
+    Изменение путей к json файлам (фикс для учета Ubuntu)
+
+[33mcommit 6aad3e3026da484bf48e3e157786b978b70574f4[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 18:44:18 2023 +0300
+
+    Поправка конфига
+
+[33mcommit a265d1b2dfa3bf6b22483282ab88351bd840ebd6[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 17:54:01 2023 +0300
+
+    Возврат рабочего конфига
+
+[33mcommit bd31b8e7e4e78242cc3a1924c7f02c9effc6043b[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 17:53:29 2023 +0300
+
+    Фикс механизма отправки сообщений
+
+[33mcommit 19292cad4da6989e9ebfb6226fe84d5249bd8fc3[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Thu Aug 10 01:53:33 2023 +0300
+
+    Добавлены кнопки выхода и сброса состояния
+
+[33mcommit 966bfbff5123d8408379734be6abae5da0173c6a[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 8 17:39:10 2023 +0300
+
+    Фикс бана и дополнение более информативное к админам
+
+[33mcommit 48006c581a02987aea9078532ee7ce4168836f98[m
+Author: Олег <Leganyst@yandex.ru>
+Date:   Tue Aug 8 01:32:46 2023 +0300
+
+    Фикс багов
+
+[33mcommit ee1ec32fcad2c00d06c641d3b88047ad1171abd5[m[33m ([m[1;31morigin/sending_messages[m[33m)[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 27 15:07:57 2023 +0300
+
+    изменение формата текста сообщения с отправкой погоды
+
+[33mcommit a0a7b44552363564dddd298aa457405c23b1f88f[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 26 16:26:25 2023 +0300
+
+    обновление привественного сообщения. фикс функции отправки сообщений
+
+[33mcommit 3dadc67a0d83b5fd50905f3dc066996ccf6742ba[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 26 15:52:06 2023 +0300
+
+    фикс выбора
+
+[33mcommit 5ccb4dd4815224064ef971ccbd4a9da9a957cce6[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 26 15:49:09 2023 +0300
+
+    изменение функционала по созданию сообщений для ежедневной рассылки
+
+[33mcommit 9e7a05c9c14c8aafefdc2f22e05873e0918c8eb1[m[33m ([m[1;33mtag: bot[m[33m)[m
+Merge: 9accac5 21f3449
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Tue Jul 25 15:00:43 2023 +0300
+
+    Merge pull request #5 from Xl1982/market
+    
+    release 1.0
+
+[33mcommit 21f3449e05f6f05c49fc55c8de3d2000f63109bb[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 25 14:59:08 2023 +0300
+
+    1.0
+
+[33mcommit b2966d74ba9737ea328c8ba47db17bb5d7e434cc[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sun Jul 23 17:50:46 2023 +0300
+
+    Фикс фильтра на рассылке
+
+[33mcommit 03f560195cfb56cdb4d3b8186e6207781118b957[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sun Jul 23 00:56:00 2023 +0300
+
+    Фикс фильтра на рассылке сообщений
+
+[33mcommit 558285a9d273aaa4a35fcde2cd8d2882fbe768c9[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sat Jul 22 18:50:30 2023 +0300
+
+    Фикс фильтров при настройке маркета
+
+[33mcommit b2f7008249886af999160c001f2dc6e2e557f973[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sat Jul 22 18:50:08 2023 +0300
+
+    Фикс фильтров при настройке маркета
+
+[33mcommit 0e842f3e3edc58bf15b4bb3dc6963ab17fc32b30[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sat Jul 22 17:53:19 2023 +0300
+
+    Интеграция маркета в бота
+
+[33mcommit 77b4ddc0bc8e145b096129736c1068194f1a91c3[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 20 20:57:33 2023 +0300
+
+    Данные конфига изменены
+
+[33mcommit bc5dcf203d4dd991ab6638980110bc72ae41f922[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 20 20:41:08 2023 +0300
+
+    Данные конфига изменены
+
+[33mcommit ef1540aa1e57824ff59f42c6dde300a1630ee4b5[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 20 20:36:52 2023 +0300
+
+    Реализация админ панели с возможностью расширения списка пользователей которым доступны адмниские права бота
+
+[33mcommit c0e15a5665ddb5e7e8f242d64a1d56f2c2e31370[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 19 23:49:44 2023 +0300
+
+    Обновление одного файла...
+
+[33mcommit 7a19f142b837015f7431d7d79d5392a1d1903908[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 19 23:49:06 2023 +0300
+
+    Реализация функции рассылки через личные сообщения с ботом, возможность включать группы в рассылку и выключать из неё
+
+[33mcommit 71a79496e6a544f8e2eb5496b4c9d6c9f22a99a7[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 19 15:54:45 2023 +0300
+
+    Добавил рассылку сообщений в заранее прописанный список групп, подправил текст в некоторых функциях
+
+[33mcommit 9accac56a85ba6ff853fc41a3cd8c4faa4d039a2[m
+Merge: c680832 751e213
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Wed Jul 19 10:23:34 2023 +0300
+
+    Merge pull request #4 from Xl1982/new_branch
+    
+    Релиз?
+
+[33mcommit 751e2135f79c0b08cd6af180025d1d4fa507385b[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 19 10:05:05 2023 +0300
+
+    Реорганизация работы функции по отправке погоды в личных сообщениях
+
+[33mcommit 1eee1c4919bc0ea83316d8fffbcdf7dc7aa05950[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 18 16:13:36 2023 +0300
+
+    Возвращение к исходному состоянию с реформированием системы времени отправки сообщения с прогнозом погоды
+
+[33mcommit c26b3cf1e17c12f7bbbd16089206da70cc2367bb[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 18 12:35:38 2023 +0300
+
+    Рассылка сообщений, правка тестового времени
+
+[33mcommit 2c714e05bd019a9da1debbacc44e79fa0924e84d[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 18 12:22:45 2023 +0300
+
+    Тестовые настройки рассылки
+
+[33mcommit ff9405c39f56f268a00eca1e24a1160f56a23c9b[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 18 11:17:25 2023 +0300
+
+    Фикс времени сна у функции отправки сообщения с прогнозом погоды
+
+[33mcommit 4992193282fc1daa0cdb99a1ef5e1e370d8a3607[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 19:37:30 2023 +0300
+
+    Запретил пересылку сообщений пользователям в чат
+
+[33mcommit 9bf1b036b7062e6643c79588872797c55b158af9[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 18:20:25 2023 +0300
+
+    Реструктуризация
+
+[33mcommit 389e53552dd220efdd1ae518f303a27549e329b9[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 17:33:24 2023 +0300
+
+    Изменение формата времени в сообщениях с погодой и курсом валют
+
+[33mcommit 40fb608216af901216bd40dc60c1bb6d1e91e839[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 17:18:41 2023 +0300
+
+    Изменение формата отправки погоды в личные сообщения
+
+[33mcommit 739c633d9626e106490b98e4cb089ba55b167872[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 16:50:02 2023 +0300
+
+    Изменение вывода сообщений с погодой
+
+[33mcommit a02077dd5e3b1a1ecdbfba7cedcc7f954b135710[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 17 14:02:26 2023 +0300
+
+    Фикс багов в отправке запланированных сообщений
+
+[33mcommit 5bf7b145b3b682d17c1db236652907e2a983863c[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sun Jul 16 20:30:18 2023 +0300
+
+    Фикс багов в механизме запланированных сообщений
+
+[33mcommit 05eba482c7e854c86265b72bf430a2640b5ee237[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sat Jul 15 18:47:14 2023 +0300
+
+    Настройка конфига для тестов
+
+[33mcommit 9db7bab20541853ffb1e5da60748b7849b962ddb[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Sat Jul 15 18:40:21 2023 +0300
+
+    Механизм отправки сообщений в течение дня каждый день
+
+[33mcommit edd9d9f89e1a41c26f994dbeaae5605f2d101def[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 13 13:32:55 2023 +0300
+
+    вернул время рассылки погоды
+
+[33mcommit 5e3a2643d65904b0103131794701f71ee194acfd[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 13 11:44:56 2023 +0300
+
+    Добавление вывода в консоль для погоды
+
+[33mcommit f0ff700483b72ec0ab99c4e885adbb47b01bdf4f[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 13 11:32:19 2023 +0300
+
+    Проверка на рассылку погоды
+
+[33mcommit e9332d0fb6d26fe50e6bb38eca68b3a67d3c1ae8[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 12 20:56:47 2023 +0300
+
+    Конфиг
+
+[33mcommit 909a3d79d0592f522bd2a7817a9e771ffb00d8b7[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 12 20:52:14 2023 +0300
+
+    Сделал выведение информации о заказах переводчика в личке админу
+
+[33mcommit c680832ef3386209417f1c70d2145e046747c008[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 11 21:54:31 2023 +0300
+
+    Фикс мелких багов
+
+[33mcommit 099251965fd52e09b157e836cba6d0ac5200e10b[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 11 21:10:18 2023 +0300
+
+    Конфиг данных для тестового бота
+
+[33mcommit 5d75db9cdd074ca28b1b0bf612fc516017c1b5c7[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 11 16:58:48 2023 +0300
+
+    Добавил таймаут на приветсвенные сообщения
+
+[33mcommit 2a0cca6a54fe4e4dbce008cde023b915f489890b[m
+Merge: 20cfb05 37c2576
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Tue Jul 11 13:32:24 2023 +0300
+
+    Merge pull request #3 from Xl1982/weather_branch
+    
+    Добавил кнопку для получения автобусного расписания в лс
+
+[33mcommit 37c25764994c3074f7788b73c4c3610ce0c2ae17[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 11 13:23:05 2023 +0300
+
+    Добавил кнопку для получения автобусного расписания в лс
+
+[33mcommit 20cfb059807bab016d7dd6b852f18965bd5e5789[m
+Merge: d8f8588 4608969
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Fri Jul 7 20:28:48 2023 +0300
+
+    Merge pull request #2 from Xl1982/weather_branch
+    
+    Weather branch
+
+[33mcommit 46089691dd1492fc2cd612b5aaf6bc2f7ce479c5[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Fri Jul 7 20:20:59 2023 +0300
+
+    Конфиги
+
+[33mcommit 3f544334e942db05c88d456ada94f6ec21267b0d[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Fri Jul 7 20:15:58 2023 +0300
+
+    Отправка прогноза погоды в 8:50 утра в группе
+
+[33mcommit b86f4c605e3a218feea9b2077f2aa1270357d6e2[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Fri Jul 7 00:01:54 2023 +0300
+
+    закоментил свои данные в конфиге
+
+[33mcommit aa711730646c13277767893203d51668f717b40f[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 6 23:53:42 2023 +0300
+
+    Обновил работу с погодой, сделал возможность просмотра погоды как на сегодняшний день, так и на несколько дней вперёд
+
+[33mcommit d8f8588d7e0ba2aaef46e5d540caf3efae46643c[m
+Merge: d4f1d5d 1d2dd6d
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Thu Jul 6 20:00:07 2023 +0300
+
+    Merge pull request #1 from Xl1982/oleg_main_branch
+    
+    Oleg main branch
+
+[33mcommit 1d2dd6dc25195a6b3be1be97a7a5e4caa8b4e579[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 6 16:09:45 2023 +0300
+
+    Добавил погоду в личных сообщениях
+
+[33mcommit d016bb5d0e0067b76d463185fdb0ab7b8c11aa29[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 6 11:57:46 2023 +0300
+
+    Добавление базы данных Postgres, добавление ООП для работы с ней, добавление методов для записи информации о пользователях в уже существующие ветки событий (такси, старт) и добавление возможности получения администратором информации о заказах такси в удобном виде через инлайн кнопки
+
+[33mcommit 4fbc515d0600700ccdc272143fd6ecd309db0787[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Thu Jul 6 11:56:09 2023 +0300
+
+    Добавление базы данных Postgres, добавление ООП для работы с ней, добавление методов для записи информации о пользователях в уже существующие ветки событий (такси, старт) и добавление возможности получения администратором информации о заказах такси в удобном виде через инлайн кнопки
+
+[33mcommit 0042d1f3cb53a3c9d82001b8297ead5402d9358e[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 5 15:38:32 2023 +0300
+
+    Фикс бага в meeting_with_translator, строка 14, декоратор
+
+[33mcommit 4f4302560b372a85ed032f49b1161d1d20d34fc2[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 5 15:34:34 2023 +0300
+
+    Добавил проверку на тип чата на точках входа в ветки при действиях с команды /start в личных сообщениях (касается всех веток действий, типа загрузки с ютуба, переводчика, такси и прочее)
+
+[33mcommit 1161886f328d59867fc2d5ec60039da128787424[m
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Wed Jul 5 13:56:44 2023 +0300
+
+    Update ban_users.py
+
+[33mcommit dfea0881dfcb9fb7e8f52c927776044dac6c2f84[m
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Wed Jul 5 13:53:13 2023 +0300
+
+    Update ban_users.py
+
+[33mcommit 11713dc54fee5973c15bbd6a52adf1a676d8708e[m
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Wed Jul 5 13:52:33 2023 +0300
+
+    Update config.py
+
+[33mcommit 56c3932a6d4cacccdac73d46fe9f02c9c2a9495d[m
+Merge: d7d8a71 c0a5194
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 5 13:47:53 2023 +0300
+
+    Merge branch 'oleg_main_branch' of github.com:Xl1982/Migration_bot into oleg_main_branch
+
+[33mcommit d7d8a7153bb0b2ffc80b88230f4b9f336f4a68a2[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Wed Jul 5 13:40:46 2023 +0300
+
+    Реструктуризация (разделение файлов на сингл и групповые чаты) и добавление возможности мута и бана пользователей администраторами чатов)
+
+[33mcommit c0a5194173f04930f4b9d3de4802451b87203f6f[m
+Author: Oleg <81248012+Leganyst@users.noreply.github.com>
+Date:   Tue Jul 4 18:51:26 2023 +0300
+
+    Удаление и изменение комментариев
+
+[33mcommit 9a70678ce4036ff07d8e3f389b301d6b9094c637[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 4 18:48:55 2023 +0300
+
+    Встреча с переводчиком (на манер заказа такси)
+
+[33mcommit 9d7180e4af57bd3742405c047a0583af1963f095[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 4 17:34:49 2023 +0300
+
+    Добавил возможность обмениваться сообщениями админу и пользователю через бота
+
+[33mcommit 6ca510ffe3b8e6eed0e0039cd49393449d92c734[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 4 16:18:17 2023 +0300
+
+    Кнопка сброса заявки на такси
+
+[33mcommit 94d9ad9f23b9134a66aa53d3ba3d6879c06cc86e[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 4 13:51:53 2023 +0300
+
+    Удалил свой токен, обновил список библиотек
+
+[33mcommit f0a53bb4db5d5fc9f9c17cd85389a53009978254[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Tue Jul 4 13:41:14 2023 +0300
+
+    Изменение работы с ютубом (поправил проверку на вес), установление стартовой точки юзера (/start), добавление кнопок возврата при работе с ютубом
+
+[33mcommit cef797ae659ee514ff5cd595c37c738f5d84013b[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 3 20:08:36 2023 +0300
+
+    Обновление gitignore
+
+[33mcommit a4a3ffbc8cacb52f0f391db7719c5581a45090ed[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 3 20:07:55 2023 +0300
+
+    Удаление мусора
+
+[33mcommit 2546cc479d8910acbad274f68a410d378bad3f1f[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 3 20:03:19 2023 +0300
+
+    Удаление и игнорирование лишнего
+
+[33mcommit e7420aaecf7d02ce062052e9d9d541a7aae06885[m
+Author: Legan <legan.16@rambler.ru>
+Date:   Mon Jul 3 20:02:48 2023 +0300
+
+    Реорганизация структуры, добавление фич для работы с ютубом
+
+[33mcommit d4f1d5d49a050ff37bcf0e2fc01076e4a027e209[m
+Author: Aleksandr Eremin <xl1984@mail.ru>
+Date:   Mon Jul 3 13:55:22 2023 +0300
+
+    init
+
+[33mcommit cb59032a6c32be7f89c3de4768783d31f56dc8d2[m
+Author: Aleksandr Eremin <xl1984@mail.ru>
+Date:   Fri May 26 13:54:09 2023 +0300
+
+    Initial commit
