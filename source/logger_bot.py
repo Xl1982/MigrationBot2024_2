@@ -1,16 +1,14 @@
 import logging
 
-# Создание объекта логгера
+# Получение вашего логгера
 logger = logging.getLogger('bot_notification')
-logger.setLevel(logging.INFO)
 
-# Создание обработчика для вывода логов в консоль
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
+# Удаление всех текущих обработчиков
+logger.handlers = []
 
-# Создание форматировщика логов
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-console_handler.setFormatter(formatter)
+# (Опционально) Отключение пропагации логов к родительскому логгеру,
+# если вы не хотите, чтобы сообщения передавались выше по иерархии логгеров
+logger.propagate = False
 
-# Добавление обработчика к логгеру
-logger.addHandler(console_handler)
+# ... ваш код ...
+

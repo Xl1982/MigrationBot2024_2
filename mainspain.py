@@ -21,7 +21,14 @@ from source.market import app
 
 from source.data.classes.add_chat import ChatManager
 from source.data.classes.messages import TextMessagesStorage
-            
+
+
+logging.basicConfig(
+    filename='bot_debug.log',  # Можно изменить имя файла, чтобы отличать от обычного лога
+    filemode='a',  # Режим добавления, чтобы не перезаписывать существующие логи
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  # Формат логов
+    level=logging.DEBUG  # Уровень логирования изменен на DEBUG
+)
 
 # Запуск бота
 if __name__ == '__main__':
