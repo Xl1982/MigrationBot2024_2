@@ -1,0 +1,98 @@
+{
+    "-1001883125078": {
+        "title": "Аликанте - объявления, миграция",
+        "welcome_message": "Приветствую тебя в нашем чате Аликанте - объявления, миграция!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Аликанте",
+            "city_en": "Alicante"
+        }
+    },
+    "-1001874062984": {
+        "title": "Торревьеха - объявления, миграция🇪🇸",
+        "welcome_message": "Приветствую тебя в нашем чате Торревьеха - объявления, миграция🇪🇸!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Торревьеха",
+            "city_en": "Torrevieja"
+        }
+    },
+    "-1001747376590": {
+        "title": "Барселона - объявления, миграция",
+        "welcome_message": "Приветствую тебя в нашем чате Барселона - объявления, миграция!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Барселона",
+            "city_en": "Barcelona"
+        }
+    },
+    "-1001878665157": {
+        "title": "Марбелья - объявления, миграция",
+        "welcome_message": "Приветствую тебя в нашем чате Марбелья - объявления, миграция!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Марбелья",
+            "city_en": "Marbella"
+        }
+    },
+    "-1001921856379": {
+        "title": "Валенсия - объявления, миграция",
+        "welcome_message": "Приветствую тебя в нашем чате Валенсия - объявления, миграция!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Валенсия",
+            "city_en": "Valencia"
+        }
+    },
+    "-1001719480820": {
+        "title": "Мадрид - объявления, миграция",
+        "welcome_message": "Приветствую тебя в нашем чате Мадрид - объявления, миграция!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Мадрид",
+            "city_en": "Madrid"
+        }
+    },
+    "-1001836452977": {
+        "title": "Чат Тест",
+        "welcome_message": "Приветствую тебя в нашем чате Чат Тест!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Торревьеха",
+            "city_en": "Torrevieja"
+        }
+    },
+    "-1001962045943": {
+        "title": "Объявления Вся Испания",
+        "welcome_message": "Приветствую тебя в нашем чате Объявления Вся Испания!",
+        "send_weather": true,
+        "send_currency": true,
+        "send_purchase_currency": true,
+        "sending_messages": true,
+        "weather_settings": {
+            "city_ru": "Торревьеха",
+            "city_en": "Torrevieja"
+        }
+    }
+}
